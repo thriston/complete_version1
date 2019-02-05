@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--<item-->
+        <!--android:id="@+id/miCompose"-->
+        <!--android:icon="@drawable/ic_compose"-->
+        <!--app:showAsAction="ifRoom"-->
+        <!--android:title="@string/compose">-->
+    <!--</item>-->
+    <item
+        android:id="@+id/miProfile"
+        android:icon="@drawable/ic_profile"
+        app:showAsAction="ifRoom"
+        android:title="@string/profile">
+    </item>
+
+
+
+
+
+
+
+
+    <!--<item-->
+        <!--android:id="@+id/action_settings"-->
+        <!--android:icon="@drawable/settings3"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="@string/settings"-->
+        <!--android:visible="true"-->
+        <!--app:showAsAction="always" />-->
+    <!--<item-->
+        <!--android:id="@+id/action_login"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="@string/login"-->
+        <!--app:showAsAction="never"-->
+        <!--android:visible="true" />-->
+</menu>

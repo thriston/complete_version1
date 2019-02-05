@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignUp">
+
+    <EditText
+        android:id="@+id/emailAddressEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Email Address"
+        android:inputType="textEmailAddress"
+        android:layout_above="@id/passwordEditText"
+        android:layout_centerHorizontal="true"
+        tools:layout_editor_absoluteY="221dp" />
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Passowrd"
+        android:inputType="textPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/phoneEditText"
+        tools:layout_editor_absoluteY="279dp" />
+
+    <EditText
+        android:id="@+id/phoneEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Contact Number"
+        android:inputType="phone"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/signUpButton"
+        tools:layout_editor_absoluteX="99dp"
+        tools:layout_editor_absoluteY="342dp" />
+
+    <Button
+        android:id="@+id/signUpButton"
+        style="@android:style/Widget.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"
+        android:onClick="createUser"
+        android:layout_above="@id/loginLinkTextView"
+        android:layout_centerHorizontal="true"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="421dp" />
+
+    <TextView
+        android:id="@+id/signUpText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="SignUp"
+        android:layout_above="@id/emailAddressEditText"
+        android:layout_centerHorizontal="true"
+
+        tools:layout_editor_absoluteY="141dp" />
+
+    <TextView
+        android:id="@+id/loginLinkTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="ALREADY HAVE AN ACCOUNT - LOGIN HERE"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        tools:layout_editor_absoluteY="500dp" />
+</RelativeLayout>

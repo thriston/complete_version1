@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1090685421584",
+    "firebase_url": "https://bookster-77652.firebaseio.com",
+    "project_id": "bookster-77652",
+    "storage_bucket": "bookster-77652.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090685421584:android:95c7191605e20574",
+        "android_client_info": {
+          "package_name": "com.example.bookster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1090685421584-ai8et6bujmvrvmplq63nbqi1ve9nf671.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1FnNx6QRkqL5KvKnINnNw_RWmHXL7CJs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
