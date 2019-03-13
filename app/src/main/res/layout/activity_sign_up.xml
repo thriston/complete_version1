@@ -6,18 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".SignUp">
 
+
+    <TextView
+        android:id="@+id/signUpText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SignUp"
+        android:layout_centerHorizontal="true"
+        android:textSize="10pt"
+        android:fontFamily="times new roman"
+        android:textStyle="bold"
+        android:layout_marginTop="95dp"/>
+
+    <EditText
+        android:id="@+id/fullNameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Full Name"
+        android:inputType="text"
+        android:layout_marginTop="180dp" />
+
     <EditText
         android:id="@+id/emailAddressEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Email Address"
         android:inputType="textEmailAddress"
-        android:layout_above="@id/passwordEditText"
-        android:layout_centerHorizontal="true"
-        tools:layout_editor_absoluteY="221dp" />
+        android:layout_marginTop="250dp" />
 
     <EditText
         android:id="@+id/passwordEditText"
@@ -26,12 +49,22 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="Passowrd"
+        android:hint="Password"
         android:inputType="textPassword"
         android:layout_centerHorizontal="true"
-        android:layout_above="@id/phoneEditText"
-        tools:layout_editor_absoluteY="279dp" />
+        android:layout_marginTop="320dp" />
 
+    <EditText
+        android:id="@+id/retypePasswordEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Re-Enter Password"
+        android:inputType="textPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="390dp" />
     <EditText
         android:id="@+id/phoneEditText"
         android:layout_width="wrap_content"
@@ -40,9 +73,7 @@
         android:hint="Contact Number"
         android:inputType="phone"
         android:layout_centerHorizontal="true"
-        android:layout_above="@id/signUpButton"
-        tools:layout_editor_absoluteX="99dp"
-        tools:layout_editor_absoluteY="342dp" />
+        android:layout_marginTop="460dp"/>
 
     <Button
         android:id="@+id/signUpButton"
@@ -51,23 +82,11 @@
         android:layout_height="wrap_content"
         android:text="Sign Up"
         android:onClick="createUser"
-        android:layout_above="@id/loginLinkTextView"
         android:layout_centerHorizontal="true"
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="421dp" />
+        android:layout_marginTop="525dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"/>
 
-    <TextView
-        android:id="@+id/signUpText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:text="SignUp"
-        android:layout_above="@id/emailAddressEditText"
-        android:layout_centerHorizontal="true"
-
-        tools:layout_editor_absoluteY="141dp" />
 
     <TextView
         android:id="@+id/loginLinkTextView"
@@ -77,6 +96,7 @@
         android:layout_marginEnd="8dp"
         android:text="ALREADY HAVE AN ACCOUNT - LOGIN HERE"
         android:layout_centerHorizontal="true"
-        android:layout_centerInParent="true"
-        tools:layout_editor_absoluteY="500dp" />
+        android:layout_marginTop="590dp"
+        />
+
 </RelativeLayout>

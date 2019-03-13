@@ -7,25 +7,38 @@
     tools:context=".Login">
 
     <TextView
-        android:id="@+id/signUpLinkTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="DON'T HAVE AN ACCOUNT - SIGNUP HERE"
-        android:layout_centerInParent="true"
-        tools:layout_editor_absoluteY="500dp" />
-
-    <TextView
         android:id="@+id/loginText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:fontFamily="sans-serif-condensed-medium"
         android:text="Login"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/emailAddressEditText2" />
+        android:textSize="10pt"
+        android:fontFamily="times new roman"
+        android:textStyle="bold"
+        android:layout_marginTop="95dp"
+        />
+
+    <EditText
+        android:id="@+id/emailAddressEditText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Email Address"
+        android:ems="10"
+        android:layout_centerHorizontal="true"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="240dp" />
+
+    <EditText
+        android:id="@+id/passwordEditText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="310dp" />
 
     <Button
         android:id="@+id/loginButton"
@@ -36,34 +49,26 @@
         android:layout_marginEnd="8dp"
         android:text="Login"
         android:onClick="signIn"
-        android:layout_above="@id/signUpLinkTextView"
         android:layout_centerHorizontal="true"
-        tools:layout_editor_absoluteY="412dp" />
+        android:layout_marginTop="370dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"/>
 
-    <EditText
-        android:id="@+id/passwordEditText2"
+    <TextView
+        android:id="@+id/resetPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="Passowrd"
-        android:inputType="textPassword"
         android:layout_centerHorizontal="true"
-        android:layout_above="@id/loginButton"
-        tools:layout_editor_absoluteY="333dp" />
+        android:onClick="sendPasswordReset"
+        android:text="FORGOT YOUR PASSWORD? - CLICK HERE"
+        android:layout_marginTop="430dp"/>
 
-    <EditText
-        android:id="@+id/emailAddressEditText2"
+    <TextView
+        android:id="@+id/signUpLinkTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="Email Address"
-        android:layout_above="@id/passwordEditText2"
+        android:text="DON'T HAVE AN ACCOUNT - SIGNUP HERE"
         android:layout_centerHorizontal="true"
-        android:inputType="textEmailAddress"
+        android:layout_marginTop="480dp" />
 
-        tools:layout_editor_absoluteY="273dp" />
 </RelativeLayout>

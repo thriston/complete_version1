@@ -1,29 +1,38 @@
 package com.example.bookster;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     Button button;
     Toolbar toolbar;
+    User myUserProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FirebaseUser auth;
+
 
         ListView mListView = (ListView) findViewById(R.id.listView);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle("Bookster");
         setSupportActionBar(toolbar);
         fadeIn(toolbar);
@@ -38,13 +47,44 @@ public class MainActivity extends AppCompatActivity {
         //Add the categories objects to an ArrayList
         final ArrayList<Category> categoryList = new ArrayList<>();
         categoryList.add(school);
-        categoryList.add(electronics);
-        categoryList.add(clothing);
-        categoryList.add(gaming);
-        categoryList.add(food);
+//        categoryList.add(electronics);
+//        categoryList.add(clothing);
+//        categoryList.add(gaming);
+//        categoryList.add(food);
 
         CategoryListAdapter adapter = new CategoryListAdapter(this, R.layout.adapter_view_layout, categoryList);
         mListView.setAdapter(adapter);
+
+
+
+
+//        DatabaseReference db;
+//        db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+//        db.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                myUserProfile = (UserProfile) dataSnapshot.getValue();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
+        //LIST ONCLICK LISTENER
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //if(position==0){
+                    Intent myintent = new Intent(view.getContext(), ProductListActivity.class);
+                    myintent.putExtra("category", categoryList.get(position).getName() );
+                    //System.out.println("CATEGORY: "+categoryList.get(position).getName());
+                    startActivityForResult(myintent, 0);
+                //}
+            }
+        });
 
     }
 
@@ -57,20 +97,53 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void checkCurrentUser() {
+        // [START check_current_user]
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null)
+        {
+            Toast.makeText(getApplicationContext(),"User Signed In",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(getApplicationContext(),"User Not Signed in",Toast.LENGTH_SHORT).show();
+        }
+        // [END check_current_user]
+    }
+
 
     // Respond to menu item clicks
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.miProfile:
-                Intent i=new Intent(getApplicationContext(),Login.class);
-                startActivity(i);
-                return true;
-            default:
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        int id = item.getItemId();
+        //Signed in
+        if (user != null) {
+            //Uri photoUrl = user.getPhotoUrl();
+
+            // Check if user's email is verified
+            boolean emailVerified = user.isEmailVerified();
+            System.out.println("USER: "+user.getEmail());
+            String uid = user.getUid();
+            //Toast.makeText(getApplicationContext(),email+" Signed in",Toast.LENGTH_SHORT).show();
+            Intent i= new Intent(getApplicationContext(),Profile.class);
+            //i.putExtra("receiverUID", receiverUID);
+            startActivity(i);
+
+        }
+        else {
+            Intent i=new Intent(getApplicationContext(), Login.class);
+            startActivity(i);
+        }
+
+//        switch (item.getItemId()) {
+//            case R.id.miProfile:
+//
+//                return true;
+//            default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+
     private void fadeIn(View view) {
         // Create an AlphaAnimation variable
         // 0.0f makes the view invisible
