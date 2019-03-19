@@ -14,6 +14,13 @@
         android:title="@string/profile">
     </item>
 
+    <item
+        android:id="@+id/chat"
+        android:icon="@drawable/chat_icon"
+        app:showAsAction="ifRoom"
+        android:title="">
+    </item>
+
 
 
 

@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     Toolbar toolbar;
     User myUserProfile;
+    String receiverName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,14 +57,38 @@ public class MainActivity extends AppCompatActivity {
         mListView.setAdapter(adapter);
 
 
-
-
-//        DatabaseReference db;
-//        db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-//        db.addValueEventListener(new ValueEventListener() {
+//        DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+//        myDatabase.child("Conversations").addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot dataSnapshot) {
-//                myUserProfile = (UserProfile) dataSnapshot.getValue();
+//                ListView mListView = findViewById(R.id.chatListView);
+//                final ArrayList<Conversation> conversationsModel= new ArrayList<>();
+//                for(DataSnapshot ds : dataSnapshot.getChildren())
+//                {
+//
+//
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError)
+//            {
+//            }
+//
+//
+//        });
+
+//        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("fullName");
+//
+//        db.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                receiverName = (String) dataSnapshot.getValue();
+//
+//                //firebaseCallback.onCallBack(receiverName);
+////                Conversation conversation = new Conversation(key,time, receiverName);
+////                conversationsModel.add(conversation);
 //            }
 //
 //            @Override
@@ -71,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
+
+
+
+
+
+
 
         //LIST ONCLICK LISTENER
 
@@ -114,35 +145,42 @@ public class MainActivity extends AppCompatActivity {
     // Respond to menu item clicks
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         int id = item.getItemId();
-        //Signed in
-        if (user != null) {
-            //Uri photoUrl = user.getPhotoUrl();
 
-            // Check if user's email is verified
-            boolean emailVerified = user.isEmailVerified();
-            System.out.println("USER: "+user.getEmail());
-            String uid = user.getUid();
-            //Toast.makeText(getApplicationContext(),email+" Signed in",Toast.LENGTH_SHORT).show();
-            Intent i= new Intent(getApplicationContext(),Profile.class);
-            //i.putExtra("receiverUID", receiverUID);
+        if(id == R.id.miProfile)
+        {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                //Uri photoUrl = user.getPhotoUrl();
+
+                // Check if user's email is verified
+                boolean emailVerified = user.isEmailVerified();
+                System.out.println("USER: " + user.getEmail());
+                String uid = user.getUid();
+                //Toast.makeText(getApplicationContext(),email+" Signed in",Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplicationContext(), Profile.class);
+                //i.putExtra("receiverUID", receiverUID);
+                startActivity(i);
+
+            }
+            else {
+                Intent i = new Intent(getApplicationContext(), Login.class);
+                startActivity(i);
+            }
+            return true;
+        }
+
+
+        if(id == R.id.chat)
+        {
+            //Toast.makeText(MainActivity.this, "Chat clicked", Toast.LENGTH_LONG).show();
+            Intent i = new Intent(getApplicationContext(), ConversationChatActivity.class);
             startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-        }
-        else {
-            Intent i=new Intent(getApplicationContext(), Login.class);
-            startActivity(i);
-        }
-
-//        switch (item.getItemId()) {
-//            case R.id.miProfile:
-//
-//                return true;
-//            default:
-                return super.onOptionsItemSelected(item);
-        }
 
     private void fadeIn(View view) {
         // Create an AlphaAnimation variable

@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MessageActivity extends AppCompatActivity {
+public class ConversationMessageActivity extends AppCompatActivity {
 
     private DatabaseReference myDatabase;
     private String receiverUID;
@@ -27,8 +27,9 @@ public class MessageActivity extends AppCompatActivity {
     private String key;
     private String myUID;
     private String myUserName;
-    private User myUserProfile;
+    //private User myUserProfile;
     private String receiverName;
+    private Conversation receiverConvo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,12 +39,12 @@ public class MessageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        final Product product = (Product) intent.getSerializableExtra("productObj");
-        myUserName = intent.getStringExtra("myUserName");
-        myUserProfile = (User) intent.getSerializableExtra("myUserProfile");
+        receiverConvo = (Conversation) intent.getSerializableExtra("receiverConvoObj");
+        myUserName = receiverConvo.getMyUserName();
+        //myUserProfile = (User) intent.getSerializableExtra("myUserProfile");
         //final myUse = (Product) intent.getSerializableExtra("productObj");
 
-        receiverUID = myUserProfile.getMyUID();
+        receiverUID = receiverConvo.getReceiverUID();
         //receiverUID = product.getSeller().getUID();
         myUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -104,7 +105,7 @@ public class MessageActivity extends AppCompatActivity {
                                 }
                                 System.out.println("HERE-HE...IN 1");
                                 System.out.println("HERE-HE: "+chatModelList.get(0).getUserName());
-                                ChatMessageListAdapter adapter = new ChatMessageListAdapter(MessageActivity.this, R.layout.adapter_view_layout1, chatModelList);
+                                ChatMessageListAdapter adapter = new ChatMessageListAdapter(ConversationMessageActivity.this, R.layout.adapter_view_layout1, chatModelList);
                                 mListView.setAdapter(adapter);
                             }
 
@@ -133,7 +134,7 @@ public class MessageActivity extends AppCompatActivity {
                                 }
                                 System.out.println("HERE-HE...IN 2");
                                 System.out.println("HERE-HE: "+chatModelList.get(0).getUserName());
-                                ChatMessageListAdapter adapter = new ChatMessageListAdapter(MessageActivity.this, R.layout.adapter_view_layout1, chatModelList);
+                                ChatMessageListAdapter adapter = new ChatMessageListAdapter(ConversationMessageActivity.this, R.layout.adapter_view_layout1, chatModelList);
                                 mListView.setAdapter(adapter);
                             }
 
@@ -197,14 +198,10 @@ public class MessageActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("lastActivity").setValue(date.getTime());
         FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("receiverUID").setValue(receiverUID);
         FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("receiverName").setValue(receiverName);
-        FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("myUID").setValue(myUID);
-        FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("myUserName").setValue(myUserName);
-
         FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("lastActivity").setValue(date.getTime());
         FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("receiverUID").setValue(myUID);
         FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("receiverName").setValue(myUserName);
-        FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("myUID").setValue(receiverUID);
-        FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("myUserName").setValue(receiverName);
+
 
         EditText editText = findViewById(R.id.editText);
 
