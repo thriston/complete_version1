@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bookster">
 
+    <supports-screens
+        android:xlargeScreens="true"
+        android:largeScreens="true"
+        android:smallScreens="true"
+        android:normalScreens="true"
+        />
+
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application

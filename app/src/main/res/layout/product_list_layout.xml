@@ -29,13 +29,21 @@
         android:layout_marginBottom="10dp"
         android:clickable="true"
         android:elevation="0dp"
+        android:src="@drawable/plus_12"
 
 
         android:tint="@color/colorPrimary"
+
+
         app:backgroundTint="@color/fui_bgGoogle"
+
         app:fabSize="normal"
-        app:maxImageSize="@android:dimen/app_icon_size"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:maxImageSize="30dp" />
+        <!--app:srcCompat="@android:drawable/ic_input_add"-->
+
+
+
+
 
 
 </RelativeLayout>
