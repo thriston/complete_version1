@@ -5,6 +5,8 @@ public class Category {
     private String description;
     private  String numAds;
     private String imgURL;
+    //blah'
+    private static int ti;
     private static int numCategory;
 
     public Category(String name, String description, String numAds, String imgURL) {
