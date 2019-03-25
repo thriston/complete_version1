@@ -44,6 +44,7 @@ public class ProductListActivity extends AppCompatActivity {
         productList = new ArrayList<>();
         mListView = findViewById(R.id.product_list_view);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Products");
+        mDatabase.keepSynced(true);
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -68,6 +69,7 @@ public class ProductListActivity extends AppCompatActivity {
 
         DatabaseReference db;
         db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        db.keepSynced(true);
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

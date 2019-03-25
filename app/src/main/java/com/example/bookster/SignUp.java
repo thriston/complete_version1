@@ -40,6 +40,7 @@ public class SignUp extends AppCompatActivity{
         passwordInput=findViewById(R.id.passwordEditText);
         retypePassword=findViewById(R.id.retypePasswordEditText);
         mDatabase = FirebaseDatabase.getInstance().getReference("users");
+        mDatabase.keepSynced(true);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

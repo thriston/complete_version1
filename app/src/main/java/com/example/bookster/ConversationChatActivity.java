@@ -39,7 +39,7 @@ public class ConversationChatActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.WHITE);
 
         DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(myUID);
-
+        myDatabase.keepSynced(true);
         myDatabase.child("Conversations").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

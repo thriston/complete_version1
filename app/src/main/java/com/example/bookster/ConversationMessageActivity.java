@@ -49,6 +49,7 @@ public class ConversationMessageActivity extends AppCompatActivity {
         myUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         myDatabase = FirebaseDatabase.getInstance().getReference().child("Chats");
+        myDatabase.keepSynced(true);
 
 
         //FirebaseDatabase.getInstance().getReference().child()
@@ -165,6 +166,7 @@ public class ConversationMessageActivity extends AppCompatActivity {
 
 
         DatabaseReference myDatabase1 = FirebaseDatabase.getInstance().getReference().child("users");
+        myDatabase1.keepSynced(true);
         myDatabase1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -215,5 +217,6 @@ public class ConversationMessageActivity extends AppCompatActivity {
         myDatabase.child(key).push().setValue(chatMessage);
         editText.setText("");
     }
+
 
 }

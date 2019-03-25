@@ -9,24 +9,24 @@
         layout="@layout/toolbar"/>
 
 
-    <TextView
-        android:layout_below="@id/toolbar"
-        android:id="@+id/addProductTV"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:textAllCaps="true"
-        android:textColor="@android:color/black"
-        android:text="Add a Product"
-        android:layout_centerHorizontal="true"/>
+    <!--<TextView-->
+        <!--android:layout_below="@id/toolbar"-->
+        <!--android:id="@+id/addProductTV"-->
+        <!--android:textSize="20sp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:textAllCaps="true"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--android:text="Add a Product"-->
+        <!--android:layout_centerHorizontal="true"/>-->
 
 
     <EditText
         android:id="@+id/productName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/addProductTV"
+        android:layout_below="@+id/toolbar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:ems="10"
@@ -45,7 +45,9 @@
         android:ems="10"
         android:layout_centerHorizontal="true"
         android:inputType="text|textMultiLine"
-        android:hint="Description" />
+        android:hint="Description"
+        android:textAlignment="textStart"
+        />
 
 
     <EditText
@@ -81,9 +83,9 @@
         android:layout_marginRight="50dp"
         android:layout_marginBottom="20dp"
         android:clickable="true"
-        app:backgroundTint="@color/fui_bgGoogle"
-        app:maxImageSize="40dp"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:backgroundTint="@color/fui_transparent"
+        app:maxImageSize="55dp"
+        android:src="@drawable/cancel" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabAdd"
@@ -94,10 +96,10 @@
         android:layout_marginLeft="50dp"
         android:layout_marginBottom="20dp"
         android:clickable="true"
-        app:backgroundTint="@color/fui_bgGoogle"
+        app:backgroundTint="#ffffff"
         app:fabSize="normal"
-        app:maxImageSize="50dp"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:maxImageSize="40dp"
+        android:src="@drawable/accept2" />
 
 
 

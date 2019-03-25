@@ -32,6 +32,7 @@ public class Profile extends AppCompatActivity {
         contactView=findViewById(R.id.contactField);
         mDatabase = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(user.getUid());
+        mDatabase.keepSynced(true);
 
         ValueEventListener userListener = new ValueEventListener() {
             @Override
