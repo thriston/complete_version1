@@ -68,15 +68,35 @@ public class AddProductActivity extends AppCompatActivity {
                         productID,
                         productName.getText().toString(),
                         price.getText().toString(),
+                        quantity.getText().toString(),
                         description.getText().toString(),
                         category,
                         myUserProfile);
 
+                //Send information to User's Profile
+                DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users")
+                        .child(product.getSeller().myUID).child("Products").child(productID);
+                db.child("id").setValue(productID);
+                db.child("name").setValue(productName.getText().toString());
+                db.child("details").setValue(description.getText().toString());
+                db.child("price").setValue(price.getText().toString());
+                db.child("category").setValue(category);
+
+
                 myDatabase.child(productID).setValue(product);
 
-                Toast.makeText(getApplicationContext(),"Product Added online", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
+                finish();
 
 
+            }
+        });
+
+
+        fabCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

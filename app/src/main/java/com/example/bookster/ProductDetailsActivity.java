@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,14 +25,42 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     ProductPictureSlider adapter;
+    private  int REQUEST_CODE =1;
     User myUserProfile;
     String myUserName;
+    private FirebaseUser user;
 
     android.support.v7.widget.Toolbar toolbar;
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK )
+        {
+            DatabaseReference db;
+            db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            db.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    myUserName =  dataSnapshot.child("fullname").getValue().toString();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_page);
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
 
         Intent intent = getIntent();
@@ -63,19 +93,26 @@ public class ProductDetailsActivity extends AppCompatActivity {
         User userProfile = product.getSeller();
         //System.out.println("SELLER INFO DETAILS: "+product.getDetails());
 
-        DatabaseReference db;
-        db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        db.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                myUserName =  dataSnapshot.child("fullname").getValue().toString();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+        //If User is logged in, get username
+        if(user != null)
+        {
+            DatabaseReference db;
+            db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            db.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    myUserName =  dataSnapshot.child("fullname").getValue().toString();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
 
 
 
@@ -104,12 +141,22 @@ public class ProductDetailsActivity extends AppCompatActivity {
         messageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myintent = new Intent(ProductDetailsActivity.this, MessageActivity.class);
-                myintent.putExtra("productObj", product);
-                myintent.putExtra("myUserName", myUserName);
-                myintent.putExtra("myUserProfile",product.getSeller());
-                //System.out.println("CATEGORY: "+categoryList.get(position).getName());
-                startActivityForResult(myintent, 0);
+                user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user != null)
+                {
+                    Intent myintent = new Intent(ProductDetailsActivity.this, MessageActivity.class);
+                    myintent.putExtra("productObj", product);
+                    myintent.putExtra("myUserName", myUserName);
+                    myintent.putExtra("myUserProfile",product.getSeller());
+                    //System.out.println("CATEGORY: "+categoryList.get(position).getName());
+                    startActivityForResult(myintent, 0);
+                }
+                else
+                {
+                    Intent myintent = new Intent(ProductDetailsActivity.this, Login.class);
+                    startActivityForResult(myintent, REQUEST_CODE);
+                }
+
             }
         });
 

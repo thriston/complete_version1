@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,11 +26,39 @@ public class ProductListActivity extends AppCompatActivity {
     private String category;
     private User myUserProfile;
     private ArrayList<Product> productList;
+    private FirebaseUser user;
     private ListView mListView;
     private DatabaseReference mDatabase;
+    private int REQUEST_CODE = 1;
     private FirebaseAuth mAuth;
     Toolbar toolbar;
     FloatingActionButton fab;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK )
+        {
+//            Intent refresh = new Intent(this, ProductListActivity.class);
+//            startActivity(refresh);
+//            this.finish();
+            DatabaseReference db;
+            db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            db.keepSynced(true);
+            db.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    myUserProfile = dataSnapshot.getValue(User.class);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,20 +99,26 @@ public class ProductListActivity extends AppCompatActivity {
         });
 
 
-        DatabaseReference db;
-        db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        db.keepSynced(true);
-        db.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                myUserProfile = dataSnapshot.getValue(User.class);
-            }
+        //If user is logged in, copy User information to variable
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null)
+        {
+            DatabaseReference db;
+            db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            db.keepSynced(true);
+            db.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    myUserProfile = dataSnapshot.getValue(User.class);
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
+
 
 
 
@@ -99,13 +134,25 @@ public class ProductListActivity extends AppCompatActivity {
             }
         });
 
+
+        //to Add product
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myintent = new Intent(ProductListActivity.this, AddProductActivity.class);
-                myintent.putExtra("category",category);
-                myintent.putExtra("myUserProfile",myUserProfile);
-                startActivity(myintent);
+                user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user != null)
+                {
+                    Intent myintent = new Intent(ProductListActivity.this, AddProductActivity.class);
+                    myintent.putExtra("category",category);
+                    myintent.putExtra("myUserProfile",myUserProfile);
+                    startActivityForResult(myintent, 0);
+                }
+                else
+                {
+                    Intent myintent = new Intent(ProductListActivity.this, Login.class);
+                    startActivityForResult(myintent, REQUEST_CODE);
+                }
+
             }
         });
 

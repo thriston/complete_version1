@@ -21,6 +21,7 @@
         android:name=".Bookster"
         android:theme="@style/AppTheme">
         <activity android:name=".ConversationMessageActivity"></activity>
+        <activity android:name=".MyProductListActivity"></activity>
         <activity android:name=".AddProductActivity"></activity>
         <activity android:name=".Profile"></activity>
         <activity android:name=".Login" />

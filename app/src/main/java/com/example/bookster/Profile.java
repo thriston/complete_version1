@@ -68,6 +68,12 @@ public class Profile extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void my_products(View view)
+    {
+        Intent i= new Intent(getApplicationContext(),MyProductListActivity.class);
+        startActivity(i);
+    }
+
 
 
 }
