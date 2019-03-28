@@ -3,6 +3,7 @@ package com.example.bookster;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -16,45 +17,95 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     Button button;
     Toolbar toolbar;
+    private ArrayList<Category> categoryList = new ArrayList<>();
+    private ListView mListView;
+    private CategoryListAdapter adapter;
     User myUserProfile;
     String receiverName;
+    private DatabaseReference myDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FirebaseUser auth;
+        mListView  = (ListView) findViewById(R.id.listView);
 
 
-        ListView mListView = (ListView) findViewById(R.id.listView);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle("Bookster");
         setSupportActionBar(toolbar);
         fadeIn(toolbar);
 
-        //Create Category objects
-        Category school = new Category("School", "Books, Calculators, map","15 ads", "drawable://" + R.drawable.book);
-        Category electronics = new Category("Electronics", "phones, laptops, watches, etc.", "7 ads", "drawable://" + R.drawable.electronics);
-        Category clothing = new Category("Clothing", "Shoes, Jeans, Dresses, etc.", "32 ads", "drawable://" + R.drawable.clothing);
-        Category gaming = new Category("Gaming","Consoles, Games, Controllers, etc.", "3 ads", "drawable://" + R.drawable.gaming);
-        Category food = new Category("Food", "KFC, Subway, Marios, Pita Pit, Rituals", "10 ads", "drawable://" + R.drawable.food);
 
-        //Add the categories objects to an ArrayList
-        final ArrayList<Category> categoryList = new ArrayList<>();
-        categoryList.add(school);
-//        categoryList.add(electronics);
-//        categoryList.add(clothing);
-//        categoryList.add(gaming);
-//        categoryList.add(food);
 
-        CategoryListAdapter adapter = new CategoryListAdapter(this, R.layout.adapter_view_layout, categoryList);
-        mListView.setAdapter(adapter);
+        DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("Category");
+        myDatabase.keepSynced(true);
+        myDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                categoryList.clear();
+                for(DataSnapshot ds: dataSnapshot.getChildren())
+                {
+
+
+                    //System.out.println("CAT HERE: "+ds.child("").getValue());
+                    String description, name, imageUrl;
+                    String nItems;
+                    description =(String) ds.child("Description").getValue();
+                    name =(String) ds.child("Name").getValue();
+                    imageUrl = (String) ds.child("imageUrl").getValue();
+                    nItems =(String) ds.child("nItems").getValue();
+
+                    Category category = new Category(name, description, ""+nItems, "drawable://" + R.drawable.book);
+                    categoryList.add(category);
+
+                }
+                adapter = new CategoryListAdapter(MainActivity.this, R.layout.adapter_view_layout, categoryList);
+                mListView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
+//        //Create Category objects
+//        Category school = new Category("School", "Books, Calculators, map","15 ads", "drawable://" + R.drawable.book);
+//        Category electronics = new Category("Electronics", "phones, laptops, watches, etc.", "7 ads", "drawable://" + R.drawable.electronics);
+//        Category clothing = new Category("Clothing", "Shoes, Jeans, Dresses, etc.", "32 ads", "drawable://" + R.drawable.clothing);
+//        Category gaming = new Category("Gaming","Consoles, Games, Controllers, etc.", "3 ads", "drawable://" + R.drawable.gaming);
+//        Category food = new Category("Food", "KFC, Subway, Marios, Pita Pit, Rituals", "10 ads", "drawable://" + R.drawable.food);
+//
+//        //Add the categories objects to an ArrayList
+//        final ArrayList<Category> categoryList = new ArrayList<>();
+//        categoryList.add(school);
+////        categoryList.add(electronics);
+////        categoryList.add(clothing);
+////        categoryList.add(gaming);
+////        categoryList.add(food);
+//
+//        CategoryListAdapter adapter = new CategoryListAdapter(this, R.layout.adapter_view_layout, categoryList);
+//        mListView.setAdapter(adapter);
 
 
 //        DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("users");

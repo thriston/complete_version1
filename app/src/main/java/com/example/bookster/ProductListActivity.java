@@ -52,8 +52,11 @@ public class ProductListActivity extends AppCompatActivity {
                 productList.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren())
                 {
-                    Product product = ds.getValue(Product.class);
-                    productList.add(product);
+                    if(ds.child("category").getValue().equals(category))
+                    {
+                        Product product = ds.getValue(Product.class);
+                        productList.add(product);
+                    }
                 }
 
                 ProductListAdapter adapter = new ProductListAdapter(ProductListActivity.this, R.layout.product_list_item_layout, productList);
