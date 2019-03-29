@@ -10,7 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,11 +28,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private  int REQUEST_CODE =1;
     User myUserProfile;
     String myUserName;
+    private Product product;
     private FirebaseUser user;
 
     android.support.v7.widget.Toolbar toolbar;
 
-
+    //Get current user username
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -64,8 +65,18 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        final Product product = (Product) intent.getSerializableExtra("productObj");
+        product = (Product) intent.getSerializableExtra("productObj");
+
+        //if viewer is not the owner, add to number of views
+        if(user.getUid() != product.getSeller().getMyUID())
+        {
+            product.addView();
+            updateViews();
+        }
+
+
         myUserProfile = (User) intent.getSerializableExtra("myUserProfile");
+
         //System.out.println("PRODUCT NAME: "+narnia.getName());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
@@ -125,7 +136,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
         //For Call Button
-        Button btn = (Button) findViewById(R.id.callbtn);
+        ImageButton btn = (ImageButton) findViewById(R.id.callbtn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,7 +148,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
-        Button messageBtn = findViewById(R.id.msgbtn);
+        ImageButton messageBtn = findViewById(R.id.msgbtn);
         messageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,6 +171,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void updateViews()
+    {
+        DatabaseReference db1,db2;
+        db1 = FirebaseDatabase.getInstance().getReference().child("Products").child(product.getID()).child("views");
+        db1.setValue(product.getViews());
+        db2 = FirebaseDatabase.getInstance().getReference().child("users").child(product.getSeller().myUID).child("Products").child(product.getID()).child("views");
+        db2.setValue(product.getViews());
     }
 
 

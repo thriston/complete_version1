@@ -26,8 +26,8 @@ public class MyProductListAdapter extends ArrayAdapter<Product> {
         String name = getItem(position).getName();
         String details = getItem(position).getDetails();
         //String price = getItem(position).getPrice();
-        String views = getItem(position).getViews();
-        String bids = getItem(position).getBids();
+        int views = getItem(position).getViews();
+        int bids = getItem(position).getBids();
         String quantity = getItem(position).getQuantity();
 
 

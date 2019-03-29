@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class AddProductActivity extends AppCompatActivity {
     String category;
@@ -28,6 +30,7 @@ public class AddProductActivity extends AppCompatActivity {
     String productID;
     DatabaseReference myDatabase;
     Toolbar toolbar;
+    private StorageReference myStorage;
 
 
     @Override
@@ -54,6 +57,7 @@ public class AddProductActivity extends AppCompatActivity {
         quantity = findViewById(R.id.quantity);
         allowCalls = findViewById(R.id.allowCallsSwitch);
         myDatabase = FirebaseDatabase.getInstance().getReference().child("Products");
+        myStorage = FirebaseStorage.getInstance().getReference();
 
 
 

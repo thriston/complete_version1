@@ -8,8 +8,8 @@ public class Product implements Serializable {
     private String name;
     private String price;
     private String category;
-    private String views;
-    private String bids;
+    private int views;
+    private int bids;
     private String details;
     private String quantity;
     private User seller;
@@ -22,6 +22,8 @@ public class Product implements Serializable {
         this.category = category;
         this.details = details;
         this.seller = seller;
+        this.bids = 0;
+        this.views = 0;
     }
 
     public Product()
@@ -86,19 +88,29 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
-    public String getViews() {
+    public int getViews() {
         return views;
     }
 
-    public void setViews(String views) {
+    public void setViews(int views) {
         this.views = views;
     }
 
-    public String getBids() {
+    public int getBids() {
         return bids;
     }
 
-    public void setBids(String bids) {
+    public void setBids(int bids) {
         this.bids = bids;
+    }
+
+    public void addView()
+    {
+        this.views = this.views + 1;
+    }
+
+    public void addBid()
+    {
+        this.bids = this.bids + 1;
     }
 }
