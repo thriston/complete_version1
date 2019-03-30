@@ -29,6 +29,7 @@ public class MyProductListAdapter extends ArrayAdapter<Product> {
         int views = getItem(position).getViews();
         int bids = getItem(position).getBids();
         String quantity = getItem(position).getQuantity();
+        //ArrayList<String> images = getItem(position).getImages();
 
 
         LayoutInflater inflater = LayoutInflater.from(mContext);

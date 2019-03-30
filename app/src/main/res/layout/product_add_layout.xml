@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".MainActivity"   >
 
 
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
         <include
@@ -29,14 +31,28 @@
         <!--android:layout_centerHorizontal="true"/>-->
 
 
+        <TextView
+            android:id="@+id/uploadDetailsTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product Details"
+            android:layout_below="@+id/toolbar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:textColor="@color/design_default_color_primary_dark"
+            />
+
+
         <EditText
             android:id="@+id/productName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/toolbar"
+            android:layout_below="@+id/uploadDetailsTV"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:ems="10"
+
             android:hint="Product Name"
             android:inputType="text" />
 
@@ -80,32 +96,7 @@
             android:inputType="number"
             android:hint="Quantity" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="50dp"
-            android:layout_marginBottom="10dp"
-            android:clickable="true"
-            app:backgroundTint="@color/fui_transparent"
-            app:maxImageSize="55dp"
-            android:src="@drawable/cancel" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="50dp"
-            android:layout_marginBottom="20dp"
-            android:clickable="true"
-            app:backgroundTint="#ffffff"
-            app:fabSize="normal"
-            app:maxImageSize="40dp"
-            android:src="@drawable/accept2" />
 
 
 
@@ -123,11 +114,118 @@
             android:text="Allow calls  " />
 
 
+        <TextView
+            android:id="@+id/uploadImagesTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Product Images"
+            android:layout_below="@+id/allowCallsSwitch"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:textSize="15sp"
+            android:textColor="@color/design_default_color_primary_dark"
+            />
 
-    <!--</RelativeLayout>-->
+        <Button
+            android:id="@+id/mainImageUpload"
+            android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/uploadImagesTV"
+            android:text="Select Main Image"
+            android:background="@color/design_default_color_primary_dark"
+            android:textColor="#ffffff"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"/>
+
+
+        <Button
+            android:id="@+id/secondaryImagesBtn"
+            android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mainImageUpload"
+            android:text="Enable Secondary Images"
+            android:background="@color/design_default_color_primary_dark"
+            android:textColor="#ffffff"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            
+            />
 
 
 
 
 
-</RelativeLayout>
+
+
+
+        <FrameLayout
+            android:id="@+id/progress_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/secondaryImagesBtn"
+            android:layout_alignParentBottom="false"
+            android:layout_marginBottom="20dp"
+           >
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_gravity="center"
+                style="@android:style/Widget.Holo.ProgressBar.Large"
+                android:visibility="invisible"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </FrameLayout>
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabCancel"
+            android:layout_below="@+id/secondaryImagesBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="false"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="10dp"
+            android:clickable="true"
+            android:layout_marginTop="30dp"
+            app:backgroundTint="@color/fui_transparent"
+            app:maxImageSize="55dp"
+            android:src="@drawable/cancel" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/secondaryImagesBtn"
+            android:layout_alignParentBottom="false"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            app:backgroundTint="#ffffff"
+            app:fabSize="normal"
+            app:maxImageSize="40dp"
+            android:src="@drawable/accept2" />
+
+
+    </RelativeLayout>
+
+
+
+
+
+</ScrollView>
