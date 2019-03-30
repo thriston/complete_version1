@@ -320,7 +320,7 @@
             android:layout_marginBottom="10dp"
             android:backgroundTint="@color/fui_transparent"
             android:layout_below="@+id/sellerEmailTextView"
-            android:src="@drawable/call_button" />
+            android:src="@drawable/call_btn" />
 
 
         <ImageButton
