@@ -68,11 +68,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
         product = (Product) intent.getSerializableExtra("productObj");
 
         //if viewer is not the owner, add to number of views
-        if(user.getUid() != product.getSeller().getMyUID())
+        if(user!=null)
         {
-            product.addView();
-            updateViews();
+            if(user.getUid() != product.getSeller().getMyUID())
+            {
+                product.addView();
+                updateViews();
+            }
         }
+
 
 
         myUserProfile = (User) intent.getSerializableExtra("myUserProfile");
