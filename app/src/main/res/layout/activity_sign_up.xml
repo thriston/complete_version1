@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".SignUp">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
 
     <TextView
         android:id="@+id/signUpText"
@@ -14,6 +17,7 @@
         android:text="SignUp"
         android:layout_centerHorizontal="true"
         android:textSize="10pt"
+        android:layout_below="@id/toolbar"
         android:fontFamily="times new roman"
         android:textStyle="bold"
         android:layout_marginTop="10dp"/>

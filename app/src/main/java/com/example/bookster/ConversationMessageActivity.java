@@ -1,11 +1,13 @@
 package com.example.bookster;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -30,6 +32,7 @@ public class ConversationMessageActivity extends AppCompatActivity {
     //private User myUserProfile;
     private String receiverName;
     private Conversation receiverConvo;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,6 +50,22 @@ public class ConversationMessageActivity extends AppCompatActivity {
         receiverUID = receiverConvo.getReceiverUID();
         //receiverUID = product.getSeller().getUID();
         myUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle(receiverConvo.getReceiverFullName() +  "'s Chat");
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ConversationChatActivity.class));
+            }
+        });
+
 
         myDatabase = FirebaseDatabase.getInstance().getReference().child("Chats");
         myDatabase.keepSynced(true);

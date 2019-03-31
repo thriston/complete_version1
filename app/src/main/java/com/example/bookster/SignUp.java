@@ -1,9 +1,11 @@
 package com.example.bookster;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +27,7 @@ public class SignUp extends AppCompatActivity{
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     TextView textView;
+    Toolbar toolbar;
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
 
@@ -41,6 +44,23 @@ public class SignUp extends AppCompatActivity{
         retypePassword=findViewById(R.id.retypePasswordEditText);
         mDatabase = FirebaseDatabase.getInstance().getReference("users");
         mDatabase.keepSynced(true);
+
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle("Bookster - SignUp");
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),Login.class));
+            }
+        });
+
+
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

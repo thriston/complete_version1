@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -61,6 +62,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_page);
+        ImageButton button = (ImageButton) findViewById(R.id.viewinfo);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
 
@@ -85,8 +87,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle("Bookster - "+product.getName());
+        setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),ProductListActivity.class));
+            }
+        });
 
         viewPager = findViewById(R.id.product_img_slider);
         adapter = new ProductPictureSlider(this);
@@ -127,7 +138,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 }
             });
         }
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myintent = new Intent(v.getContext(), Seller_info.class);
+                myintent.putExtra("productObj", product);
+                startActivityForResult(myintent, 0);
 
+            }
+        });
 
 
 
