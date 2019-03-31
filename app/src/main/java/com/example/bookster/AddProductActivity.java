@@ -8,12 +8,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -214,7 +217,21 @@ public class AddProductActivity extends AppCompatActivity {
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK)
         {
             //productImages.add(data.getData());
+            Button mainImageBtn = findViewById(R.id.mainImageUpload);
+            mainImageBtn.setVisibility(View.GONE);
+
             productImage = data.getData();
+            ImageView mainImage = findViewById(R.id.mainImage);
+            mainImage.setImageURI(productImage);
+
+            CardView cardView = findViewById(R.id.cardView);
+            cardView.setVisibility(View.VISIBLE);
+
+
+            TextView tv = findViewById(R.id.mainImageTV);
+            tv.setVisibility(View.VISIBLE);
+
+            //mainImage.setLa
             Toast.makeText(getApplicationContext(), "Image Selected", Toast.LENGTH_SHORT).show();
         }
     }

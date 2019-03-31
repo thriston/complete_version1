@@ -39,7 +39,7 @@
             android:layout_below="@+id/toolbar"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:textSize="15sp"
+            android:textSize="20sp"
             android:textColor="@color/design_default_color_primary_dark"
             />
 
@@ -122,7 +122,7 @@
             android:layout_below="@+id/allowCallsSwitch"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            android:textSize="15sp"
+            android:textSize="20sp"
             android:textColor="@color/design_default_color_primary_dark"
             />
 
@@ -133,6 +133,7 @@
             android:layout_marginEnd="20dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/uploadImagesTV"
+            android:visibility="visible"
             android:text="Select Main Image"
             android:background="@color/design_default_color_primary_dark"
             android:textColor="#ffffff"
@@ -140,30 +141,46 @@
             android:layout_marginTop="20dp"/>
 
 
-        <Button
-            android:id="@+id/secondaryImagesBtn"
-            android:layout_width="match_parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/mainImageUpload"
-            android:text="Enable Secondary Images"
-            android:background="@color/design_default_color_primary_dark"
-            android:textColor="#ffffff"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"/>
-
-
-        <ImageView
+        <TextView
+            android:id="@+id/mainImageTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            
+            android:layout_centerHorizontal="true"
+            android:text="Main Image:"
+            android:visibility="gone"
+            android:layout_below="@+id/uploadImagesTV"
+            android:layout_marginTop="10dp"
+            android:textSize="15dp"
+            android:textColor="#000000"
             />
 
 
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_below="@+id/mainImageTV"
+            android:visibility="invisible"
+            android:layout_marginBottom="0dp"
+            android:paddingBottom="0dp"
+            app:cardBackgroundColor="@color/fui_transparent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/mainImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:visibility="visible"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:layout_below="@+id/mainImageUpload"
+                />
 
 
-
+        </android.support.v7.widget.CardView>
 
 
 
@@ -172,10 +189,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:layout_below="@+id/secondaryImagesBtn"
-            android:layout_alignParentBottom="false"
+            android:layout_below="@id/cardView"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
+
+
            >
 
             <ProgressBar
@@ -192,30 +210,38 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabCancel"
-            android:layout_below="@+id/secondaryImagesBtn"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="false"
-            android:layout_marginRight="50dp"
-            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/cardView"
+
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="20dp"
+
             android:clickable="true"
-            android:layout_marginTop="30dp"
+            android:focusable="true"
             app:backgroundTint="@color/fui_transparent"
             app:maxImageSize="55dp"
             android:src="@drawable/cancel" />
+
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_alignParentStart="true"
-            android:layout_below="@id/secondaryImagesBtn"
-            android:layout_alignParentBottom="false"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="50dp"
+            android:layout_below="@+id/cardView"
+
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
             android:layout_marginBottom="20dp"
+
             android:clickable="true"
+            android:focusable="true"
             app:backgroundTint="#ffffff"
             app:fabSize="normal"
             app:maxImageSize="40dp"
