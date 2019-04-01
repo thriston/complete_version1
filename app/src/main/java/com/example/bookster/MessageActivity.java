@@ -51,7 +51,8 @@ public class MessageActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle("A chat");
+        toolbar.setTitle(product.getSeller().getFullname() + "'s Chat" +
+                "");
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -60,7 +61,7 @@ public class MessageActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),ProductDetailsActivity.class));
+                finish();
             }
         });
 
@@ -208,6 +209,8 @@ public class MessageActivity extends AppCompatActivity {
 
 
     }
+
+
 
     public void sendMessage()
     {

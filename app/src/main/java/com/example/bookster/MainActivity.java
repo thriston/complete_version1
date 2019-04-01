@@ -197,10 +197,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(id == R.id.miProfile)
         {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
             if (user != null) {
                 //Uri photoUrl = user.getPhotoUrl();
 
@@ -222,12 +222,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if(id == R.id.chat)
+        if(user != null && id == R.id.chat)
         {
             //Toast.makeText(MainActivity.this, "Chat clicked", Toast.LENGTH_LONG).show();
             Intent i = new Intent(getApplicationContext(), ConversationChatActivity.class);
             startActivity(i);
             return true;
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getApplicationContext(), Login.class);
+            startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -79,6 +80,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         }
 
+        if(user!=null){
+            if(user.getUid().equals(product.getSeller().getMyUID())) {
+            hideButton();
+            }
+        }
 
 
         myUserProfile = (User) intent.getSerializableExtra("myUserProfile");
@@ -95,7 +101,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),ProductListActivity.class));
+                finish();
             }
         });
 
@@ -141,9 +147,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myintent = new Intent(v.getContext(), Seller_info.class);
-                myintent.putExtra("productObj", product);
-                startActivityForResult(myintent, 0);
+                if (user != null){
+                    Intent myintent = new Intent(ProductDetailsActivity.this, Seller_info.class);
+                    myintent.putExtra("productObj", product);
+                    startActivityForResult(myintent, 0);
+
+                }
+                else{
+                    Intent myintent = new Intent(ProductDetailsActivity.this, Login.class);
+                    Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
+                    startActivityForResult(myintent, REQUEST_CODE);
+                }
 
             }
         });
@@ -188,6 +202,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 else
                 {
                     Intent myintent = new Intent(ProductDetailsActivity.this, Login.class);
+                    Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
                     startActivityForResult(myintent, REQUEST_CODE);
                 }
 
@@ -203,6 +218,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         db1.setValue(product.getViews());
         db2 = FirebaseDatabase.getInstance().getReference().child("users").child(product.getSeller().myUID).child("Products").child(product.getID()).child("views");
         db2.setValue(product.getViews());
+    }
+
+    public void hideButton(){
+        final ImageButton messageBtn = findViewById(R.id.msgbtn);
+        messageBtn.setVisibility(View.INVISIBLE);
     }
 
 
