@@ -1,10 +1,12 @@
 package com.example.bookster;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,7 +31,7 @@ public class MessageActivity extends AppCompatActivity {
     private String myUserName;
     private User myUserProfile;
     private String receiverName;
-
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -46,6 +48,22 @@ public class MessageActivity extends AppCompatActivity {
         receiverUID = myUserProfile.getMyUID();
         //receiverUID = product.getSeller().getUID();
         myUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle(product.getSeller().getFullname() + "'s Chat" +
+                "");
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         myDatabase = FirebaseDatabase.getInstance().getReference().child("Chats");
         myDatabase.keepSynced(true);
@@ -191,6 +209,8 @@ public class MessageActivity extends AppCompatActivity {
 
 
     }
+
+
 
     public void sendMessage()
     {

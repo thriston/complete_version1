@@ -6,11 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".Profile">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
     <TextView
         android:id="@+id/AccountInfoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Account Information"
+        android:layout_below="@id/toolbar"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:textSize="10pt"
@@ -34,9 +39,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/AccountInfoText"
-        android:layout_toEndOf="@id/fullNameBar"
+        android:layout_marginStart="11dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="23dp"
+        android:layout_toEndOf="@id/fullNameBar"
         android:fontFamily="times new roman"
         android:text="fn"
         android:textSize="6pt"
@@ -59,12 +65,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/fullNameField"
-        android:layout_toEndOf="@+id/emailBar"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="11dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="22dp"
+        android:layout_toEndOf="@+id/emailBar"
+        android:fontFamily="times new roman"
         android:text="email"
         android:textSize="6pt"
-        android:fontFamily="times new roman"
         android:textStyle="italic" />
 
 
@@ -81,19 +88,19 @@
         android:textStyle="bold"/>
 
 
-
     <TextView
         android:id="@+id/contactField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/emailField"
-        android:layout_toEndOf="@id/contactBar"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="6dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="24dp"
+        android:layout_toEndOf="@id/contactBar"
+        android:fontFamily="times new roman"
         android:text="cn"
         android:textSize="6pt"
-        android:fontFamily="times new roman"
-        android:textStyle="italic"/>
+        android:textStyle="italic" />
 
 
     <Button

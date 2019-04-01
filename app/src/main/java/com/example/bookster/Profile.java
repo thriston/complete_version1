@@ -1,11 +1,13 @@
 package com.example.bookster;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 public class Profile extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
+    Toolbar toolbar;
     private TextView fullNameView, emailView, contactView;
 
     @Override
@@ -30,6 +33,23 @@ public class Profile extends AppCompatActivity {
         fullNameView=findViewById(R.id.fullNameField);
         emailView=findViewById(R.id.emailField);
         contactView=findViewById(R.id.contactField);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Your Profile");
+        toolbar.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
         mDatabase = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(user.getUid());
         mDatabase.keepSynced(true);

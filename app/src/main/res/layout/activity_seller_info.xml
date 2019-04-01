@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Seller_info">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
+    <TextView
+        android:id="@+id/fullNameBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Full Name:"
+        android:layout_marginTop="280dp"
+        android:layout_marginLeft="35dp"
+        android:textSize="7pt"
+        android:fontFamily="times new roman"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/emailBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email Address:"
+        android:layout_marginTop="400dp"
+        android:layout_marginLeft="35dp"
+        android:textSize="7pt"
+        android:fontFamily="times new roman"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/contactBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact Number:"
+        android:layout_marginTop="520dp"
+        android:layout_marginLeft="35dp"
+        android:textSize="7pt"
+        android:fontFamily="times new roman"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/fullNameField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="220dp"
+        android:layout_marginTop="283dp"
+        android:fontFamily="times new roman"
+        android:textSize="6pt"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/emailField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="403dp"
+        android:layout_marginLeft="220dp"
+        android:textSize="6pt"
+        android:fontFamily="times new roman"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/contactField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="523dp"
+        android:layout_marginLeft="220dp"
+        android:textSize="6pt"
+        android:fontFamily="times new roman"
+        android:textStyle="italic"/>
+
+    <TextView
+        android:id="@+id/AccountInfoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seller Information"
+        android:layout_marginTop="95dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="10pt"
+        android:fontFamily="times new roman"
+        android:textStyle="bold"/>
+</RelativeLayout>

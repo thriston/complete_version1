@@ -3,32 +3,31 @@
     package="com.example.bookster">
 
     <supports-screens
-        android:xlargeScreens="true"
         android:largeScreens="true"
-        android:smallScreens="true"
         android:normalScreens="true"
-        />
-
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".Bookster"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".Bookster"
         android:theme="@style/AppTheme">
-        <activity android:name=".ConversationMessageActivity"></activity>
-        <activity android:name=".MyProductListActivity"></activity>
-        <activity android:name=".AddProductActivity"></activity>
-        <activity android:name=".Profile"></activity>
+        <activity android:name=".Seller_info"></activity>
+        <activity android:name=".ConversationMessageActivity" />
+        <activity android:name=".MyProductListActivity" />
+        <activity android:name=".AddProductActivity" />
+        <activity android:name=".Profile" />
         <activity android:name=".Login" />
         <activity android:name=".SignUp" />
-        <activity android:name=".ProductListActivity"/>
-        <activity android:name=".MessageActivity"></activity>
-        <activity android:name=".ConversationChatActivity"></activity>
+        <activity android:name=".ProductListActivity" />
+        <activity android:name=".MessageActivity" />
+        <activity android:name=".ConversationChatActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProductDetailsActivity"></activity>
+        <activity android:name=".ProductDetailsActivity" />
     </application>
 
 </manifest>
