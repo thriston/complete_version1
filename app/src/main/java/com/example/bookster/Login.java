@@ -2,6 +2,7 @@ package com.example.bookster;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -22,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity {
     EditText emailInput,passwordInput;
-    TextView textView;
+    TextView textView, textView2;
     ViewPager viewPager;
     ProductPictureSlider adapter;
     Toolbar toolbar;
@@ -32,10 +33,14 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         textView=findViewById(R.id.signUpLinkTextView);
+        textView2=findViewById(R.id.resetPassword);
         mAuth = FirebaseAuth.getInstance();
         emailInput=findViewById(R.id.emailAddressEditText2);
         passwordInput=findViewById(R.id.passwordEditText2);
-
+        textView2.setTextColor(Color.parseColor("#411FC7"));
+        textView2.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        textView.setTextColor(Color.parseColor("#411FC7"));
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle("Bookster - Login");
@@ -56,6 +61,7 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i= new Intent(getApplicationContext(),SignUp.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -105,7 +111,7 @@ public class Login extends AppCompatActivity {
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(getApplicationContext(), "Sign in Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Sign in Failed - Username or Password Incorrect", Toast.LENGTH_SHORT).show();
 
                         }
 

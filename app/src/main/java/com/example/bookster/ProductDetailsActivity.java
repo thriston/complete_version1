@@ -222,7 +222,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     public void hideButton(){
         final ImageButton messageBtn = findViewById(R.id.msgbtn);
+        final ImageButton callBtn = findViewById(R.id.callbtn);
+        final ImageButton viewBtn = findViewById(R.id.viewinfo);
         messageBtn.setVisibility(View.INVISIBLE);
+        callBtn.setVisibility(View.INVISIBLE);
+        viewBtn.setVisibility(View.INVISIBLE);
     }
 
 
