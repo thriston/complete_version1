@@ -136,4 +136,6 @@ public class Product implements Serializable {
     public void setSecondaryImages(ArrayList<String> secondaryImages) {
         this.secondaryImages = secondaryImages;
     }
+
+
 }

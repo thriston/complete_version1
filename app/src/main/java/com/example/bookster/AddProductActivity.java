@@ -199,6 +199,20 @@ public class AddProductActivity extends AppCompatActivity {
                                     myUserProfile);
                                 myDatabase.child(productID).setValue(product);
                                 mainUploaded = true;
+
+                                DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users")
+                                        .child(product.getSeller().myUID).child("Products").child(productID);
+                                db.child("id").setValue(productID);
+                                db.child("name").setValue(productName.getText().toString());
+                                db.child("details").setValue(description.getText().toString());
+                                db.child("price").setValue(price.getText().toString());
+                                db.child("quantity").setValue(quantity.getText().toString());
+                                db.child("category").setValue(category);
+                                db.child("mainImage").setValue(uri.toString());
+                                db.child("secondaryImages").setValue(secondaryImages);
+                                db.child("bids").setValue(0);
+                                db.child("views").setValue(0);
+
                                 Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
                                 finish();
                             }

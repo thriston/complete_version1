@@ -61,8 +61,8 @@ public class MyProductListActivity extends AppCompatActivity {
                     productList.add(product);
                 }
 
-                MyProductListAdapter adapter = new MyProductListAdapter(MyProductListActivity.this, R.layout.my_product_list_item_layout, productList);
-                mListView.setAdapter(adapter);
+//                MyProductListAdapter adapter = new MyProductListAdapter(MyProductListActivity.this, R.layout.my_product_list_item_layout, productList);
+//                mListView.setAdapter(adapter);
             }
 
             @Override

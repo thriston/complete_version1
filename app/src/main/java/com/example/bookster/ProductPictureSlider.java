@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -51,13 +52,9 @@ public class ProductPictureSlider extends PagerAdapter {
 
         ImageView imageView = item_view.findViewById(R.id.slider_image);
 
-        //imageView.setImageResource(image_resources[position]);
-        System.out.println("IMAGE: "+images.get(position));
-        Glide.with(ctx).load(images.get(position)).into(imageView);
 
-        //imageView.setIm
-        //System.out.println("Main Image Here: "+images.get(position));
-
+        //Glide.with(ctx).load(images.get(position)).into(imageView);
+        Glide.with(ctx).load(images.get(position)).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(imageView);
 
         container.addView(item_view);
 
