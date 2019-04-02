@@ -10,11 +10,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +22,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
@@ -31,7 +35,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
     User myUserProfile;
     String myUserName;
     private Product product;
+    private int count;
     private FirebaseUser user;
+    private ArrayList<String> secondaryImages;
 
     android.support.v7.widget.Toolbar toolbar;
 
@@ -63,12 +69,60 @@ public class ProductDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_page);
+        secondaryImages = new ArrayList<>();
         ImageButton button = (ImageButton) findViewById(R.id.viewinfo);
         user = FirebaseAuth.getInstance().getCurrentUser();
+        StorageReference mStorage = FirebaseStorage.getInstance().getReference();
+        StorageReference pathRef;
+
+
 
 
         Intent intent = getIntent();
         product = (Product) intent.getSerializableExtra("productObj");
+
+        count = 0;
+        secondaryImages.add(product.getMainImage());
+        if(product.getSecondaryImages() != null)
+        {
+            for(String path: product.getSecondaryImages())
+            {
+                //System.out.println("URL: "+mStorage.toString()+path);
+                pathRef = mStorage.child(path);
+                pathRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri)
+                    {
+                        count++;
+                        System.out.println("URL: "+uri.toString());
+                        secondaryImages.add(uri.toString());
+
+                        if(count == product.getSecondaryImages().size())
+                        {
+                            viewPager = findViewById(R.id.product_img_slider);
+                            adapter = new ProductPictureSlider(getApplication(), secondaryImages);
+                            viewPager.setAdapter(adapter);
+                        }
+
+
+                    }
+                });
+            }
+        }
+        else
+        {
+            viewPager = findViewById(R.id.product_img_slider);
+            adapter = new ProductPictureSlider(getApplication(), secondaryImages);
+            viewPager.setAdapter(adapter);
+        }
+
+        //System.out.println("MAIN URL: "+product.getMainImage());
+
+
+
+
+
+
 
         //if viewer is not the owner, add to number of views
         if(user!=null)
@@ -104,10 +158,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        viewPager = findViewById(R.id.product_img_slider);
-        adapter = new ProductPictureSlider(this);
-        viewPager.setAdapter(adapter);
 
         //set Texts
         TextView productName = findViewById(R.id.productNameTextView);

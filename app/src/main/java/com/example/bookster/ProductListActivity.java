@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -28,8 +30,15 @@ public class ProductListActivity extends AppCompatActivity {
     private ArrayList<Product> productList;
     private FirebaseUser user;
     private ListView mListView;
+    private Product product;
+    private Intent myintent;
     private DatabaseReference mDatabase;
+    private StorageReference mStorage;
+    private StorageReference pathRef;
+    private StorageReference ref;
+    private ArrayList<String> productImages;
     private int REQUEST_CODE = 1;
+    private int count;
     private FirebaseAuth mAuth;
     Toolbar toolbar;
     FloatingActionButton fab;
@@ -63,6 +72,9 @@ public class ProductListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_list_layout);
+        productImages = new ArrayList<>();
+        mStorage = FirebaseStorage.getInstance().getReference();
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Products");
         toolbar.setTitleTextColor(Color.WHITE);
@@ -132,16 +144,14 @@ public class ProductListActivity extends AppCompatActivity {
 
 
 
-
+        //Click on product list item
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //if(position==0){
-                Intent myintent = new Intent(view.getContext(), ProductDetailsActivity.class);
-                myintent.putExtra("productObj", productList.get(position));
-                //System.out.println("CATEGORY: "+categoryList.get(position).getName());
+                product = productList.get(position);
+                myintent = new Intent(view.getContext(), ProductDetailsActivity.class);
+                myintent.putExtra("productObj", product);
                 startActivityForResult(myintent, 0);
-                //}
             }
         });
 
