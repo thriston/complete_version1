@@ -1,8 +1,6 @@
 package com.example.bookster;
 
 
-import android.net.Uri;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -17,8 +15,9 @@ public class Product implements Serializable {
     private String quantity;
     private User seller;
     private String mainImage;
+    private ArrayList<String> secondaryImages;
 
-    public Product(String ID, String name, String price, String quantity, String details, String category, String mainImage, User seller) {
+    public Product(String ID, String name, String price, String quantity, String details, String category, String mainImage, ArrayList<String> secondaryImages, User seller) {
         this.ID = ID;
         this.name = name;
         this.price = price;
@@ -29,6 +28,7 @@ public class Product implements Serializable {
         this.bids = 0;
         this.views = 0;
         this.mainImage = mainImage;
+        this.secondaryImages = secondaryImages;
     }
 
 
@@ -127,5 +127,13 @@ public class Product implements Serializable {
 
     public void setMainImage(String mainImage) {
         this.mainImage = mainImage;
+    }
+
+    public ArrayList<String> getSecondaryImages() {
+        return secondaryImages;
+    }
+
+    public void setSecondaryImages(ArrayList<String> secondaryImages) {
+        this.secondaryImages = secondaryImages;
     }
 }
