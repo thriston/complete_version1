@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,9 +62,10 @@ public class MyProductListActivity extends AppCompatActivity {
                     Product product = ds.getValue(Product.class);
                     productList.add(product);
                 }
+                //System.out.println("PRODUCTS: "+productList.get(0).getViews());
 
-//                MyProductListAdapter adapter = new MyProductListAdapter(MyProductListActivity.this, R.layout.my_product_list_item_layout, productList);
-//                mListView.setAdapter(adapter);
+                MyProductListAdapter adapter = new MyProductListAdapter(MyProductListActivity.this, R.layout.my_product_list_item_layout, productList);
+                mListView.setAdapter(adapter);
             }
 
             @Override
@@ -76,17 +79,17 @@ public class MyProductListActivity extends AppCompatActivity {
 
 
 
-//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                //if(position==0){
-//                Intent myintent = new Intent(view.getContext(), ProductDetailsActivity.class);
-//                myintent.putExtra("productObj", productList.get(position));
-//                //System.out.println("CATEGORY: "+categoryList.get(position).getName());
-//                startActivityForResult(myintent, 0);
-//                //}
-//            }
-//        });
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //if(position==0){
+                Intent myintent = new Intent(view.getContext(), MyProductDetailsActivity.class);
+                myintent.putExtra("productObj", productList.get(position));
+                //System.out.println("CATEGORY: "+categoryList.get(position).getName());
+                startActivityForResult(myintent, 0);
+                //}
+            }
+        });
 
 
         //to Add product

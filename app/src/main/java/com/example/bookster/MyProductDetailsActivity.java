@@ -9,10 +9,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +27,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-public class ProductDetailsActivity extends AppCompatActivity {
+public class MyProductDetailsActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     ProductPictureSlider adapter;
@@ -39,7 +39,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private FirebaseUser user;
     private ArrayList<String> secondaryImages;
 
-    android.support.v7.widget.Toolbar toolbar;
+    Toolbar toolbar;
 
     //Get current user username
     @Override
@@ -68,7 +68,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.product_page);
+        setContentView(R.layout.my_product_page);
         secondaryImages = new ArrayList<>();
         ImageButton button = (ImageButton) findViewById(R.id.viewinfo);
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -122,25 +122,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
 
-
-
-        //if viewer is not the owner, add to number of views
-        if(user!=null)
-        {
-            if(!user.getUid().equals(product.getSeller().getMyUID()))
-            {
-                product.addView();
-                updateViews();
-            }
-        }
-
-        if(user!=null){
-            if(user.getUid().equals(product.getSeller().getMyUID())) {
-            hideButton();
-            }
-        }
-
-
         myUserProfile = (User) intent.getSerializableExtra("myUserProfile");
 
         //System.out.println("PRODUCT NAME: "+narnia.getName());
@@ -164,122 +145,38 @@ public class ProductDetailsActivity extends AppCompatActivity {
         TextView price = findViewById(R.id.productPricetextView);
         TextView category = findViewById(R.id.productCatagoryTextView);
         TextView details = findViewById(R.id.productDetailstextView);
-        TextView sellerName = findViewById(R.id.sellerNameTextView);
         TextView stockQty = findViewById(R.id.stockQuantity);
-        TextView sellerContact = findViewById(R.id.sellerContactNumTextView);
-        TextView sellerEmail = findViewById(R.id.sellerEmailTextView);
+        TextView views = findViewById(R.id.nViews);
+        TextView nTransactions = findViewById(R.id.nTransactions);
+        TextView dateCreated = findViewById(R.id.dateCreated);
 
         productName.setText(product.getName());
         price.setText("$"+product.getPrice());
         category.setText("Category: "+product.getCategory());
         details.setText(product.getDetails());
-        stockQty.setText(product.getQuantity()+" left");
-        User userProfile = product.getSeller();
-        //System.out.println("SELLER INFO DETAILS: "+product.getDetails());
+        stockQty.setText(product.getQuantity());
+        views.setText(product.getViews()+"");
+        nTransactions.setText(product.getNTransactions()+"");
+        dateCreated.setText(DateFormat.format("d-M-yyyy", product.getDateCreated())+" (d-m-y)");
+
+        ImageButton editProductBtn = findViewById(R.id.editProductInfo);
+        ImageButton deleteProductBtn = findViewById(R.id.deleteProduct);
 
 
-
-        //If User is logged in, get username
-        if(user != null)
-        {
-            DatabaseReference db;
-            db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            db.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    myUserName =  dataSnapshot.child("fullname").getValue().toString();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
-        button.setOnClickListener(new View.OnClickListener() {
+        editProductBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (user != null){
-                    Intent myintent = new Intent(ProductDetailsActivity.this, Seller_info.class);
-                    myintent.putExtra("productObj", product);
-                    startActivityForResult(myintent, 0);
-
-                }
-                else{
-                    Intent myintent = new Intent(ProductDetailsActivity.this, Login.class);
-                    Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
-                    startActivityForResult(myintent, REQUEST_CODE);
-                }
-
+                Intent myintent = new Intent(getApplication(), EditProductActivity.class);
+                myintent.putExtra("productObj",product);
+                startActivityForResult(myintent, 0);
             }
         });
 
 
 
 
-
-
-        sellerName.setText(product.getSeller().getFullname());
-        sellerContact.setText(product.getSeller().getContact());
-        sellerEmail.setText(product.getSeller().getEmail());
-
-
-        //For Call Button
-        ImageButton btn = (ImageButton) findViewById(R.id.callbtn);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-
-                TextView num = findViewById(R.id.sellerContactNumTextView);
-                intent.setData(Uri.parse("tel:" + num.getText() ));
-                startActivity(intent);
-            }
-        });
-
-        ImageButton messageBtn = findViewById(R.id.msgbtn);
-        messageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                user = FirebaseAuth.getInstance().getCurrentUser();
-                if(user != null)
-                {
-                    Intent myintent = new Intent(ProductDetailsActivity.this, MessageActivity.class);
-                    myintent.putExtra("productObj", product);
-                    myintent.putExtra("myUserName", myUserName);
-                    myintent.putExtra("myUserProfile",product.getSeller());
-                    //System.out.println("CATEGORY: "+categoryList.get(position).getName());
-                    startActivityForResult(myintent, 0);
-                }
-                else
-                {
-                    Intent myintent = new Intent(ProductDetailsActivity.this, Login.class);
-                    Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
-                    startActivityForResult(myintent, REQUEST_CODE);
-                }
-
-            }
-        });
-
     }
 
-    public void updateViews()
-    {
-        DatabaseReference db1,db2;
-        db1 = FirebaseDatabase.getInstance().getReference().child("Products").child(product.getID()).child("views");
-        db1.setValue(product.getViews());
-        db2 = FirebaseDatabase.getInstance().getReference().child("users").child(product.getSeller().myUID).child("Products").child(product.getID()).child("views");
-        db2.setValue(product.getViews());
-    }
-
-    public void hideButton(){
-        final ImageButton messageBtn = findViewById(R.id.msgbtn);
-        final ImageButton callBtn = findViewById(R.id.callbtn);
-        final ImageButton viewBtn = findViewById(R.id.viewinfo);
-        messageBtn.setVisibility(View.INVISIBLE);
-        callBtn.setVisibility(View.INVISIBLE);
-        viewBtn.setVisibility(View.INVISIBLE);
-    }
 
 
 

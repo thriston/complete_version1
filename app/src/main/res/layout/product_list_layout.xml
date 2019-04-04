@@ -29,13 +29,9 @@
         android:layout_marginBottom="10dp"
         android:clickable="true"
         android:elevation="0dp"
-        android:src="@drawable/plus_12"
+        android:src="@drawable/plus_new"
+        android:backgroundTint="#ffffff"
 
-
-        android:tint="@color/colorPrimary"
-
-
-        app:backgroundTint="@color/fui_bgGoogle"
 
         app:fabSize="normal"
         app:maxImageSize="30dp" />

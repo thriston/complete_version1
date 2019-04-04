@@ -28,7 +28,7 @@ public class MyProductListAdapter extends ArrayAdapter<Product> {
     private static class ViewHolder {
         TextView name;
         TextView details;
-        TextView my_views;
+        TextView views;
         TextView bids;
         TextView quantity;
         ImageView image;
@@ -48,9 +48,18 @@ public class MyProductListAdapter extends ArrayAdapter<Product> {
         String name = getItem(position).getName();
         String details = getItem(position).getDetails();
         int views = getItem(position).getViews();
-        int bids = getItem(position).getBids();
+        int transactions = getItem(position).getNTransactions();
         String quantity = getItem(position).getQuantity();
         String mainImage = getItem(position).getMainImage();
+
+//        System.out.println("NAME: "+name);
+//        System.out.println("Details: "+details);
+//        System.out.println("Views: "+views);
+//        System.out.println("Bids: "+transactions);
+//        System.out.println("Quantity: "+quantity);
+//        System.out.println("MainImage: "+mainImage);
+
+
         //ArrayList<String> images = getItem(position).getImages();
 
         final View result;
@@ -67,9 +76,9 @@ public class MyProductListAdapter extends ArrayAdapter<Product> {
             holder= new MyProductListAdapter.ViewHolder();
             holder.name = (TextView) convertView.findViewById(R.id.my_product_name);
             holder.details = (TextView) convertView.findViewById(R.id.my_product_description);
-            holder.my_views = (TextView) convertView.findViewById(R.id.my_views1);
+            holder.views = (TextView) convertView.findViewById(R.id.my_product_views);
             holder.bids = (TextView) convertView.findViewById(R.id.nSold);
-            holder.quantity = (TextView) convertView.findViewById(R.id.my_quantity);
+            holder.quantity = (TextView) convertView.findViewById(R.id.my_product_quantity);
             holder.image = (ImageView) convertView.findViewById(R.id.my_product_image);
 
             result = convertView;
@@ -89,9 +98,9 @@ public class MyProductListAdapter extends ArrayAdapter<Product> {
 
         holder.name.setText(name);
         holder.details.setText(details);
-        holder.my_views.setText(views);
-        holder.bids.setText(bids);
-        holder.quantity.setText(quantity);
+        holder.views.setText(views+" Views");
+        holder.bids.setText(transactions+" Transactions");
+        holder.quantity.setText(quantity+" in stock");
 
 
         ImageLoader imageLoader = ImageLoader.getInstance();

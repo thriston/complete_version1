@@ -9,10 +9,12 @@ public class Product implements Serializable {
     private String name;
     private String price;
     private String category;
+    private boolean isActive;  //if product is inactive (boolean == false) don't display the product
     private int views;
-    private int bids;
+    private int nTransactions;
     private String details;
     private String quantity;
+    private Long dateCreated;
     private User seller;
     private String mainImage;
     private ArrayList<String> secondaryImages;
@@ -25,10 +27,12 @@ public class Product implements Serializable {
         this.category = category;
         this.details = details;
         this.seller = seller;
-        this.bids = 0;
+        this.nTransactions = 0;
         this.views = 0;
         this.mainImage = mainImage;
         this.secondaryImages = secondaryImages;
+        this.dateCreated = System.currentTimeMillis();
+        this.isActive = true;
     }
 
 
@@ -103,12 +107,12 @@ public class Product implements Serializable {
         this.views = views;
     }
 
-    public int getBids() {
-        return bids;
+    public int getNTransactions() {
+        return nTransactions;
     }
 
-    public void setBids(int bids) {
-        this.bids = bids;
+    public void setNTransactions(int nTransactions) {
+        this.nTransactions = nTransactions;
     }
 
     public void addView()
@@ -116,9 +120,9 @@ public class Product implements Serializable {
         this.views = this.views + 1;
     }
 
-    public void addBid()
+    public void addTransaction()
     {
-        this.bids = this.bids + 1;
+        this.nTransactions = this.nTransactions + 1;
     }
 
     public String getMainImage() {
@@ -137,5 +141,19 @@ public class Product implements Serializable {
         this.secondaryImages = secondaryImages;
     }
 
+    public Long getDateCreated() {
+        return dateCreated;
+    }
 
+    public void setDateCreated(Long dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 }

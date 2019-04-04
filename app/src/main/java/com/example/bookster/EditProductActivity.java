@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class AddProductActivity extends AppCompatActivity {
+public class EditProductActivity extends AppCompatActivity {
     String category;
     FloatingActionButton fabAdd;
     FloatingActionButton fabCancel;
@@ -83,14 +83,12 @@ public class AddProductActivity extends AppCompatActivity {
         mainImageBtn = findViewById(R.id.mainImageUpload);
         imagesUrl = new ArrayList<>();
         toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle("Add Product");
-        category = getIntent().getStringExtra("category");
-        myUserProfile = (User) getIntent().getSerializableExtra("myUserProfile");
+        toolbar.setTitle("Edit Product");
+
+        product = (Product) getIntent().getSerializableExtra("productObj");
+        category = product.getCategory();
         myStorage = FirebaseStorage.getInstance().getReference();
 
-        System.out.println("USER: "+myUserProfile.getFullname());
-        System.out.println("USER: "+myUserProfile.getEmail());
-        System.out.println("USER: "+myUserProfile.getContact());
         //System.out.println("USER: "+myUserProfile.getUID());
 
         fabAdd = findViewById(R.id.fabAdd);
@@ -107,6 +105,17 @@ public class AddProductActivity extends AppCompatActivity {
         CardView cardView2 = findViewById(R.id.cardView2);
         CardView cardView3 = findViewById(R.id.cardView3);
         CardView cardView4 = findViewById(R.id.cardView4);
+
+
+        EditText productNameET = findViewById(R.id.productName);
+        EditText productDetailsET = findViewById(R.id.description);
+        EditText priceET = findViewById(R.id.price);
+        EditText quantityET = findViewById(R.id.quantity);
+
+        productNameET.setText(product.getName());
+        productDetailsET.setText(product.getDetails());
+        priceET.setText(product.getPrice());
+        quantityET.setText(product.getQuantity());
 
 
 
