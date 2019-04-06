@@ -60,7 +60,8 @@ public class MyProductListActivity extends AppCompatActivity {
                 for(DataSnapshot ds : dataSnapshot.getChildren())
                 {
                     Product product = ds.getValue(Product.class);
-                    productList.add(product);
+                    if(product.isActive())
+                        productList.add(product);
                 }
                 //System.out.println("PRODUCTS: "+productList.get(0).getViews());
 
@@ -73,6 +74,8 @@ public class MyProductListActivity extends AppCompatActivity {
 
             }
         });
+
+
 
 
 
@@ -115,6 +118,9 @@ public class MyProductListActivity extends AppCompatActivity {
 
 
     }
+
+
+
 
 
 }

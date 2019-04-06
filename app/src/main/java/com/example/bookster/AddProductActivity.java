@@ -212,6 +212,7 @@ public class AddProductActivity extends AppCompatActivity {
                                 db.child("secondaryImages").setValue(secondaryImages);
                                 db.child("nTransactions").setValue(0);
                                 db.child("views").setValue(0);
+                                db.child("active").setValue(true);
                                 db.child("dateCreated").setValue(System.currentTimeMillis());
 
                                 Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();

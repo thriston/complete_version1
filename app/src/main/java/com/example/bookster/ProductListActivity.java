@@ -104,7 +104,7 @@ public class ProductListActivity extends AppCompatActivity {
                 productList.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren())
                 {
-                    if(ds.child("category").getValue().equals(category))
+                    if(ds.child("category").getValue().equals(category)  && ds.child("active").getValue().toString().equals("true"))
                     {
                         Product product = ds.getValue(Product.class);
                         productList.add(product);
@@ -149,9 +149,19 @@ public class ProductListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 product = productList.get(position);
-                myintent = new Intent(view.getContext(), ProductDetailsActivity.class);
-                myintent.putExtra("productObj", product);
-                startActivityForResult(myintent, 0);
+                if(product.getSeller().getMyUID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+                {
+                    myintent = new Intent(view.getContext(), MyProductDetailsActivity.class);
+                    myintent.putExtra("productObj", product);
+                    startActivityForResult(myintent, 0);
+                }
+                else
+                {
+                    myintent = new Intent(view.getContext(), ProductDetailsActivity.class);
+                    myintent.putExtra("productObj", product);
+                    startActivityForResult(myintent, 0);
+                }
+
             }
         });
 

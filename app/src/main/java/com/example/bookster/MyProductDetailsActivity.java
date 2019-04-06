@@ -1,5 +1,7 @@
 package com.example.bookster;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -34,6 +36,7 @@ public class MyProductDetailsActivity extends AppCompatActivity {
     private  int REQUEST_CODE =1;
     User myUserProfile;
     String myUserName;
+    private DatabaseReference mDatabase;
     private Product product;
     private int count;
     private FirebaseUser user;
@@ -161,6 +164,7 @@ public class MyProductDetailsActivity extends AppCompatActivity {
 
         ImageButton editProductBtn = findViewById(R.id.editProductInfo);
         ImageButton deleteProductBtn = findViewById(R.id.deleteProduct);
+        ImageButton viewProfileBtn = findViewById(R.id.my_view_info);
 
 
         editProductBtn.setOnClickListener(new View.OnClickListener() {
@@ -172,6 +176,59 @@ public class MyProductDetailsActivity extends AppCompatActivity {
             }
         });
 
+        viewProfileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), Profile.class);
+                //i.putExtra("receiverUID", receiverUID);
+                startActivity(i);
+                //finish();
+            }
+        });
+
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Products").child(product.getID());
+        //mDatabase.keepSynced(true);
+
+        deleteProductBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogevent();
+            }
+        });
+
+
+
+
+
+
+    }
+
+
+    public void dialogevent(){
+
+        AlertDialog.Builder altdial = new AlertDialog.Builder(MyProductDetailsActivity.this);
+        altdial.setMessage("Are you sure you want to delete this product?").setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mDatabase.child("active").setValue(false);
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .child("Products").child(product.getID());
+                        mDatabase.child("active").setValue(false);
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = altdial.create();
+        alert.setTitle("Dialog Header");
+        alert.show();
 
 
 

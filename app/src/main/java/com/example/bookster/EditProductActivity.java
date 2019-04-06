@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +21,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -70,6 +77,9 @@ public class EditProductActivity extends AppCompatActivity {
     private String mainImageUrl;
     private boolean mainUploaded = false;
     private TextView cardTV;
+    private boolean changesMadeMain = false;
+    private boolean changesMadeSec = false;
+    private FirebaseUser user;
     //private ArrayList<Uri> productImages;
     //private ArrayList<Uri> productImages = new ArrayList<Uri>();
 
@@ -78,7 +88,7 @@ public class EditProductActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.product_add_layout);
+        setContentView(R.layout.my_product_add_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mainImageBtn = findViewById(R.id.mainImageUpload);
         imagesUrl = new ArrayList<>();
@@ -111,11 +121,45 @@ public class EditProductActivity extends AppCompatActivity {
         EditText productDetailsET = findViewById(R.id.description);
         EditText priceET = findViewById(R.id.price);
         EditText quantityET = findViewById(R.id.quantity);
+        ImageView mainImage = findViewById(R.id.mainImage);
 
         productNameET.setText(product.getName());
         productDetailsET.setText(product.getDetails());
         priceET.setText(product.getPrice());
         quantityET.setText(product.getQuantity());
+        Glide.with(this).load(product.getMainImage()).into(mainImage);
+
+
+
+        final ArrayList<Integer> resources = new ArrayList<>();
+        resources.add(R.id.secImage1);
+        resources.add(R.id.secImage2);
+        resources.add(R.id.secImage3);
+        resources.add(R.id.secImage4);
+
+        count = 0;
+        //secondaryImages.add(product.getMainImage());
+        if(product.getSecondaryImages() != null)
+        {
+            for(String path: product.getSecondaryImages())
+            {
+                //System.out.println("URL: "+mStorage.toString()+path);
+                pathRef = FirebaseStorage.getInstance().getReference().child(path);
+                pathRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri)
+                    {
+                        ImageView secondaryImage = findViewById(resources.get(count));
+                        count++;
+                        Glide.with(getApplicationContext()).load(uri.toString()).into(secondaryImage);
+
+
+                    }
+                });
+            }
+        }
+
+
 
 
 
@@ -124,7 +168,7 @@ public class EditProductActivity extends AppCompatActivity {
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                changesMadeMain = true;
                 chooseImage(PICK_MAIN_IMAGE_REQUEST);
 
             }
@@ -133,7 +177,7 @@ public class EditProductActivity extends AppCompatActivity {
         cardView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                changesMadeSec = true;
                 chooseImage(PICK_SEC1_IMAGE_REQUEST);
 
             }
@@ -142,7 +186,7 @@ public class EditProductActivity extends AppCompatActivity {
         cardView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                changesMadeSec = true;
                 chooseImage(PICK_SEC2_IMAGE_REQUEST);
 
             }
@@ -151,7 +195,7 @@ public class EditProductActivity extends AppCompatActivity {
         cardView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                changesMadeSec = true;
                 chooseImage(PICK_SEC3_IMAGE_REQUEST);
 
             }
@@ -160,11 +204,38 @@ public class EditProductActivity extends AppCompatActivity {
         cardView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                changesMadeSec = true;
                 chooseImage(PICK_SEC4_IMAGE_REQUEST);
 
             }
         });
+
+
+        //
+        System.out.println("Main Image: "+product.getMainImage()); //url
+        System.out.println("Secondry Images: "+product.getSecondaryImages()); //firebase location - ProductImages/ac7d3bca-5e6a-4871-a97f-576861e10539
+
+
+        //productImage = Uri.parse(product.getMainImage());
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null)
+        {
+            DatabaseReference db;
+            db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            db.keepSynced(true);
+            db.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    myUserProfile = dataSnapshot.getValue(User.class);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
 
 
 
@@ -176,7 +247,7 @@ public class EditProductActivity extends AppCompatActivity {
 
                 ProgressBar progressBar = findViewById(R.id.progress_bar);
                 progressBar.setVisibility(View.VISIBLE);
-                productID = FirebaseDatabase.getInstance().getReference().child("Products").push().getKey();
+                productID = product.getID();
 
 
 
@@ -187,133 +258,230 @@ public class EditProductActivity extends AppCompatActivity {
 //
 //                    System.out.println("IMAGE: "+productImages.get(""+i));
 //                }
+                final String mainImg = product.getMainImage();
+                final ArrayList<String> secImg = product.getSecondaryImages();
 
-                productImage = productImages.get("0");
-                final String mainImagePath = "ProductImages/"+ UUID.randomUUID();
-                myStorage.child(mainImagePath).putFile(productImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        myStorage.child(mainImagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Product product = new Product(
-                                    productID,
-                                    productName.getText().toString(),
-                                    price.getText().toString(),
-                                    quantity.getText().toString(),
-                                    description.getText().toString(),
-                                    category,
-                                    uri.toString(),
-                                    secondaryImages,
-                                    myUserProfile);
-                                myDatabase.child(productID).setValue(product);
-                                mainUploaded = true;
+                if(changesMadeMain && changesMadeSec)
+                {
+                    productImage = productImages.get("0");
+                    final String mainImagePath = "ProductImages/"+ UUID.randomUUID();
+                    myStorage.child(mainImagePath).putFile(productImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            myStorage.child(mainImagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Product product = new Product(
+                                            productID,
+                                            productName.getText().toString(),
+                                            price.getText().toString(),
+                                            quantity.getText().toString(),
+                                            description.getText().toString(),
+                                            category,
+                                            uri.toString(),
+                                            secondaryImages,
+                                            myUserProfile);
+                                    myDatabase.child(productID).setValue(product);
+                                    mainUploaded = true;
 
-                                DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users")
-                                        .child(product.getSeller().myUID).child("Products").child(productID);
-                                db.child("id").setValue(productID);
-                                db.child("name").setValue(productName.getText().toString());
-                                db.child("details").setValue(description.getText().toString());
-                                db.child("price").setValue(price.getText().toString());
-                                db.child("quantity").setValue(quantity.getText().toString());
-                                db.child("category").setValue(category);
-                                db.child("mainImage").setValue(uri.toString());
-                                db.child("secondaryImages").setValue(secondaryImages);
-                                db.child("nTransactions").setValue(0);
-                                db.child("views").setValue(0);
-                                db.child("dateCreated").setValue(System.currentTimeMillis());
+                                    DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users")
+                                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Products").child(productID);
+                                    db.child("id").setValue(productID);
+                                    db.child("name").setValue(productName.getText().toString());
+                                    db.child("details").setValue(description.getText().toString());
+                                    db.child("price").setValue(price.getText().toString());
+                                    db.child("quantity").setValue(quantity.getText().toString());
+                                    db.child("category").setValue(category);
+                                    db.child("mainImage").setValue(uri.toString());
+                                    db.child("secondaryImages").setValue(secondaryImages);
+                                    db.child("nTransactions").setValue(0);
+                                    db.child("views").setValue(0);
+                                    db.child("dateCreated").setValue(System.currentTimeMillis());
 
-                                Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                        });
-                    }
-                });
-
-
-
-                for(Map.Entry<String, Uri> entry : productImages.entrySet()) {
-                    String path = "ProductImages/"+ UUID.randomUUID();
-                    key = entry.getKey();
-                    Uri url = entry.getValue();
-                    if(key != "0")
-                    {
-                        secondaryImages.add(path);
-                        myStorage.child(path).putFile(url).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                count++;
-                                if(count == productImages.size()-1)
-                                {
-                                    secondaryImagesUploaded = true;
-                                    if(mainUploaded && secondaryImagesUploaded)
-                                        finish();
+                                    Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
+                                    finish();
                                 }
-                            }
-                        });
+                            });
+                        }
+                    });
+
+
+
+                    for(Map.Entry<String, Uri> entry : productImages.entrySet()) {
+                        String path = "ProductImages/"+ UUID.randomUUID();
+                        key = entry.getKey();
+                        Uri url = entry.getValue();
+                        if(key != "0")
+                        {
+                            secondaryImages.add(path);
+                            myStorage.child(path).putFile(url).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    count++;
+                                    if(count == productImages.size()-1)
+                                    {
+                                        secondaryImagesUploaded = true;
+                                        if(mainUploaded && secondaryImagesUploaded)
+                                            finish();
+                                    }
+                                }
+                            });
+                        }
                     }
+
                 }
 
 
 
 
+                //Main Image and Secondary image is unchanged
+                else if(!changesMadeMain && !changesMadeSec)
+                {
+                    Product product = new Product(
+                            productID,
+                            productName.getText().toString(),
+                            price.getText().toString(),
+                            quantity.getText().toString(),
+                            description.getText().toString(),
+                            category,
+                            mainImg,
+                            secImg,
+                            myUserProfile);
+                    myDatabase.child(productID).setValue(product);
+                    mainUploaded = true;
+
+                    DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Products").child(productID);
+                    db.child("id").setValue(productID);
+                    db.child("name").setValue(productName.getText().toString());
+                    db.child("details").setValue(description.getText().toString());
+                    db.child("price").setValue(price.getText().toString());
+                    db.child("quantity").setValue(quantity.getText().toString());
+                    db.child("category").setValue(category);
+                    db.child("mainImage").setValue(mainImg);
+                    db.child("secondaryImages").setValue(secImg);
+                    db.child("nTransactions").setValue(0);
+                    db.child("views").setValue(0);
+                    db.child("dateCreated").setValue(System.currentTimeMillis());
+
+                    Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
+                    finish();
+
+                }
+
+
+                //If MainImage Changed Alone
+                else if(changesMadeMain && !changesMadeSec)
+                {
+                    productImage = productImages.get("0");
+                    final String mainImagePath = "ProductImages/"+ UUID.randomUUID();
+                    myStorage.child(mainImagePath).putFile(productImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            myStorage.child(mainImagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Product product = new Product(
+                                            productID,
+                                            productName.getText().toString(),
+                                            price.getText().toString(),
+                                            quantity.getText().toString(),
+                                            description.getText().toString(),
+                                            category,
+                                            uri.toString(),
+                                            secImg,
+                                            myUserProfile);
+                                    myDatabase.child(productID).setValue(product);
+                                    mainUploaded = true;
+
+                                    DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users")
+                                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Products").child(productID);
+                                    db.child("id").setValue(productID);
+                                    db.child("name").setValue(productName.getText().toString());
+                                    db.child("details").setValue(description.getText().toString());
+                                    db.child("price").setValue(price.getText().toString());
+                                    db.child("quantity").setValue(quantity.getText().toString());
+                                    db.child("category").setValue(category);
+                                    db.child("mainImage").setValue(uri.toString());
+                                    db.child("secondaryImages").setValue(secImg);
+                                    db.child("nTransactions").setValue(0);
+                                    db.child("views").setValue(0);
+                                    db.child("dateCreated").setValue(System.currentTimeMillis());
+
+                                    Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            });
+                        }
+                    });
+
+                    //end if
+                }
 
 
 
-//                if(productImages.size() >= 1)
-//                {
-////                    for(Uri secondaryImageUrl: productImages)
-////                    {
-////                        myStorage.putFile(secondaryImageUrl);
-//
-//                    myStorage.putFile(productImages.get(0));
-//                    myStorage.putFile(productImages.get(1));
-//                    myStorage.putFile(productImages.get(2));
-//                    myStorage.putFile(productImages.get(3));
-//                }
+                //If Secondary Images Changed ALone
+                else if(changesMadeSec && !changesMadeMain)
+                {
+
+                    count = 0;
+                    for(Map.Entry<String, Uri> entry : productImages.entrySet()) {
+                        String path = "ProductImages/"+ UUID.randomUUID();
+                        key = entry.getKey();
+                        Uri url = entry.getValue();
+                        if(key != "0")
+                        {
+                            secondaryImages.add(path);
+                            myStorage.child(path).putFile(url).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    count++;
+                                    System.out.println("Count: "+count+"    Size: "+productImages.size());
+                                    if(count == productImages.size())
+                                    {
+                                        Product product = new Product(
+                                                productID,
+                                                productName.getText().toString(),
+                                                price.getText().toString(),
+                                                quantity.getText().toString(),
+                                                description.getText().toString(),
+                                                category,
+                                                mainImg,
+                                                secondaryImages,
+                                                myUserProfile);
+                                        myDatabase.child(productID).setValue(product);
+                                        mainUploaded = true;
+
+                                        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users")
+                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Products").child(productID);
+                                        db.child("id").setValue(productID);
+                                        db.child("name").setValue(productName.getText().toString());
+                                        db.child("details").setValue(description.getText().toString());
+                                        db.child("price").setValue(price.getText().toString());
+                                        db.child("quantity").setValue(quantity.getText().toString());
+                                        db.child("category").setValue(category);
+                                        db.child("mainImage").setValue(mainImg);
+                                        db.child("secondaryImages").setValue(secondaryImages);
+                                        db.child("nTransactions").setValue(0);
+                                        db.child("views").setValue(0);
+                                        db.child("dateCreated").setValue(System.currentTimeMillis());
+
+                                        Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                }
+                            });
+                        }
+                    }
 
 
 
 
 
-//                for(Uri uri: productImages)
-//                {
-//
-//                }
 
 
-
-//                //productID = FirebaseDatabase.getInstance().getReference().child("Products").push().getKey();
-//
-//                Product product = new Product(
-//                        productID,
-//                        productName.getText().toString(),
-//                        price.getText().toString(),
-//                        quantity.getText().toString(),
-//                        description.getText().toString(),
-//                        category,
-//                        mainImageUrl,
-//                        imagesUrl,
-//                        myUserProfile);
-//
-//                myDatabase.child(productID).setValue(product);
-//                //Send information to User's Profile
-//                DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users")
-//                        .child(product.getSeller().myUID).child("Products").child(productID);
-//                db.child("id").setValue(productID);
-//                db.child("name").setValue(productName.getText().toString());
-//                db.child("details").setValue(description.getText().toString());
-//                db.child("price").setValue(price.getText().toString());
-//                db.child("category").setValue(category);
-                //db.child("images").setValue(images);
-
-
-                //myDatabase.child(productID).setValue(product);
-//
-//
-//                Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
-//                finish();
-
+                    //end if
+                }
 
             }
         });
