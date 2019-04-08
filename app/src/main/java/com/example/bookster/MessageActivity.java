@@ -130,6 +130,7 @@ public class MessageActivity extends AppCompatActivity {
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+
                             }
                         });
 
@@ -153,6 +154,7 @@ public class MessageActivity extends AppCompatActivity {
                                 System.out.println("HERE-HE...IN 2");
                                 System.out.println("HERE-HE: "+chatModelList.get(0).getUserName());
                                 ChatMessageListAdapter adapter = new ChatMessageListAdapter(MessageActivity.this, R.layout.adapter_view_layout1, chatModelList);
+
                                 mListView.setAdapter(adapter);
                             }
 

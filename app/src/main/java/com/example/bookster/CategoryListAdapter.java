@@ -100,7 +100,7 @@ public class CategoryListAdapter extends ArrayAdapter<Category> {
 
         holder.name.setText(name);
         holder.description.setText(description);
-        holder.numAds.setText(numAds);
+        holder.numAds.setText(numAds+" items");
 
         //create the imageloader object
         ImageLoader imageLoader = ImageLoader.getInstance();

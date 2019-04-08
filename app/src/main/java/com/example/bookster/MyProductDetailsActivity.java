@@ -36,6 +36,7 @@ public class MyProductDetailsActivity extends AppCompatActivity {
     private  int REQUEST_CODE =1;
     User myUserProfile;
     String myUserName;
+    DatabaseReference catRef;
     private DatabaseReference mDatabase;
     private Product product;
     private int count;
@@ -194,6 +195,31 @@ public class MyProductDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialogevent();
+                catRef = FirebaseDatabase.getInstance().getReference();
+                catRef = catRef.child("Category");
+                catRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(DataSnapshot ds: dataSnapshot.getChildren())
+                        {
+                            if(ds.getKey().equals(product.getCategory()))
+                            {
+                                String val = ds.child("nItems").getValue().toString();
+                                int valInt = Integer.parseInt(val);
+                                FirebaseDatabase.getInstance().getReference().child("Category").child(product.getCategory()).child("nItems").setValue((valInt-1)+"");
+
+                            }
+                        }
+
+//                                        System.out.println("NUMBER ITEMS: "+dataSnapshot.child("Description").getValue());
+//
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 

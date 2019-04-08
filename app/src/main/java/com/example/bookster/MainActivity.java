@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     imageUrl = (String) ds.child("imageUrl").getValue();
                     nItems =(String) ds.child("nItems").getValue();
 
-                    Category category = new Category(name, description, ""+nItems, "drawable://" + R.drawable.book);
+                    Category category = new Category(name, description, ""+nItems, imageUrl);//"drawable://" + R.drawable.book
                     categoryList.add(category);
 
                 }

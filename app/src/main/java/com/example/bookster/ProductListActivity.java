@@ -149,7 +149,7 @@ public class ProductListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 product = productList.get(position);
-                if(product.getSeller().getMyUID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+                if(FirebaseAuth.getInstance().getCurrentUser()!= null && product.getSeller().getMyUID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) )
                 {
                     myintent = new Intent(view.getContext(), MyProductDetailsActivity.class);
                     myintent.putExtra("productObj", product);

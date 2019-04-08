@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -21,8 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -55,6 +59,7 @@ public class AddProductActivity extends AppCompatActivity {
     private StorageReference myStorage;
     private StorageReference pathRef;
     private Button mainImageBtn;
+    DatabaseReference catRef;
 
     private int PICK_MAIN_IMAGE_REQUEST = 10;
     private int PICK_SEC1_IMAGE_REQUEST = 11;
@@ -199,6 +204,35 @@ public class AddProductActivity extends AppCompatActivity {
                                     myUserProfile);
                                 myDatabase.child(productID).setValue(product);
                                 mainUploaded = true;
+                                catRef = FirebaseDatabase.getInstance().getReference();
+                                catRef = catRef.child("Category");
+                                System.out.println("THE CATEGORY: "+category);
+                                catRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot ds: dataSnapshot.getChildren())
+                                        {
+                                            if(ds.getKey().equals(category))
+                                            {
+                                                String val = ds.child("nItems").getValue().toString();
+                                                int valInt = Integer.parseInt(val);
+                                                System.out.println("NUMBER ITEMS: "+valInt);
+                                                FirebaseDatabase.getInstance().getReference().child("Category").child(category).child("nItems").setValue((valInt+1)+"");
+
+                                            }
+                                        }
+
+//                                        System.out.println("NUMBER ITEMS: "+dataSnapshot.child("Description").getValue());
+//
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
 
                                 DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users")
                                         .child(product.getSeller().myUID).child("Products").child(productID);
@@ -221,6 +255,8 @@ public class AddProductActivity extends AppCompatActivity {
                         });
                     }
                 });
+
+
 
 
 

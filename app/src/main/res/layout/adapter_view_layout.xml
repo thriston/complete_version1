@@ -12,18 +12,21 @@
         android:weightSum="100">
 
         <ImageView
-            android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_width="60dp"
             android:layout_weight="50"
-            android:id="@+id/image"/>
+            android:id="@+id/image"
+            android:src="@drawable/img_placeholder"
+            />
 
         <TextView
             android:textStyle="bold"
             android:gravity="center"
             android:textAlignment="center"
             android:text="TextView1"
-            android:layout_width="match_parent"
+
             android:layout_height="60dp"
+            android:layout_width="60dp"
             android:id="@+id/textView1"
             android:layout_weight="50"/>
 
