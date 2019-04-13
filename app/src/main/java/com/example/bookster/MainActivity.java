@@ -1,145 +1,86 @@
 package com.example.bookster;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity {
-    Button button;
-    Toolbar toolbar;
-    private ArrayList<Category> categoryList = new ArrayList<>();
-    private ListView mListView;
-    private CategoryListAdapter adapter;
-    User myUserProfile;
-    String receiverName;
-    private DatabaseReference myDatabase;
+public class MainActivity extends AppCompatActivity  {
+//    Button button;
+    android.support.v7.widget.Toolbar toolbar;
+//    private ArrayList<Category> categoryList = new ArrayList<>();
+//    private ListView mListView;
+//    private CategoryListAdapter adapter;
+    private DrawerLayout drawer;
+//    User myUserProfile;
+//    String receiverName;
+//    private DatabaseReference myDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FirebaseUser auth;
-        mListView  = (ListView) findViewById(R.id.listView);
-
-
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle("Bookster");
-        setSupportActionBar(toolbar);
-        fadeIn(toolbar);
-
-
-
-        DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("Category");
-        myDatabase.keepSynced(true);
-        myDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                categoryList.clear();
-                for(DataSnapshot ds: dataSnapshot.getChildren())
-                {
-
-
-                    //System.out.println("CAT HERE: "+ds.child("").getValue());
-                    String description, name, imageUrl;
-                    String nItems;
-                    description =(String) ds.child("Description").getValue();
-                    name =(String) ds.child("Name").getValue();
-                    imageUrl = (String) ds.child("imageUrl").getValue();
-                    nItems =(String) ds.child("nItems").getValue();
-
-                    Category category = new Category(name, description, ""+nItems, imageUrl);//"drawable://" + R.drawable.book
-                    categoryList.add(category);
-
-                }
-                adapter = new CategoryListAdapter(MainActivity.this, R.layout.adapter_view_layout, categoryList);
-                mListView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-
-
-
-
-
-//        //Create Category objects
-//        Category school = new Category("School", "Books, Calculators, map","15 ads", "drawable://" + R.drawable.book);
-//        Category electronics = new Category("Electronics", "phones, laptops, watches, etc.", "7 ads", "drawable://" + R.drawable.electronics);
-//        Category clothing = new Category("Clothing", "Shoes, Jeans, Dresses, etc.", "32 ads", "drawable://" + R.drawable.clothing);
-//        Category gaming = new Category("Gaming","Consoles, Games, Controllers, etc.", "3 ads", "drawable://" + R.drawable.gaming);
-//        Category food = new Category("Food", "KFC, Subway, Marios, Pita Pit, Rituals", "10 ads", "drawable://" + R.drawable.food);
+//        FirebaseUser auth;
+//        mListView  = (ListView) findViewById(R.id.listView);
+//        drawer= findViewById(R.id.drawer_layout);
+////
+//        NavigationView navigationView = findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
+////
+////
+//        toolbar =  findViewById(R.id.toolbar);
+////        toolbar.setTitleTextColor(Color.WHITE);
+////
+////        toolbar.setTitle("Bookster");
+//        setSupportActionBar(toolbar);
+//        fadeIn(toolbar);
+//        setSupportActionBar(toolbar);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
 //
-//        //Add the categories objects to an ArrayList
-//        final ArrayList<Category> categoryList = new ArrayList<>();
-//        categoryList.add(school);
-////        categoryList.add(electronics);
-////        categoryList.add(clothing);
-////        categoryList.add(gaming);
-////        categoryList.add(food);
 //
-//        CategoryListAdapter adapter = new CategoryListAdapter(this, R.layout.adapter_view_layout, categoryList);
-//        mListView.setAdapter(adapter);
+//
+//        if (savedInstanceState == null)
+//        {
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                    new HomeFragment()).commit();
+//            navigationView.setCheckedItem(R.id.home);
+//        }
 
-
-//        DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("users");
-//        myDatabase.child("Conversations").addValueEventListener(new ValueEventListener() {
+//
+//
+//
+//
+//
+//
+//        DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("Category");
+//        myDatabase.keepSynced(true);
+//        myDatabase.addValueEventListener(new ValueEventListener() {
 //            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                ListView mListView = findViewById(R.id.chatListView);
-//                final ArrayList<Conversation> conversationsModel= new ArrayList<>();
-//                for(DataSnapshot ds : dataSnapshot.getChildren())
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                categoryList.clear();
+//                for(DataSnapshot ds: dataSnapshot.getChildren())
 //                {
 //
 //
+//                    //System.out.println("CAT HERE: "+ds.child("").getValue());
+//                    String description, name, imageUrl;
+//                    String nItems;
+//                    description =(String) ds.child("Description").getValue();
+//                    name =(String) ds.child("Name").getValue();
+//                    imageUrl = (String) ds.child("imageUrl").getValue();
+//                    nItems =(String) ds.child("nItems").getValue();
+//
+//                    Category category = new Category(name, description, ""+nItems, imageUrl);//"drawable://" + R.drawable.book
+//                    categoryList.add(category);
+//
 //                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError)
-//            {
-//            }
-//
-//
-//        });
-
-//        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("fullName");
-//
-//        db.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                receiverName = (String) dataSnapshot.getValue();
-//
-//                //firebaseCallback.onCallBack(receiverName);
-////                Conversation conversation = new Conversation(key,time, receiverName);
-////                conversationsModel.add(conversation);
+//                adapter = new CategoryListAdapter(MainActivity.this, R.layout.adapter_view_layout, categoryList);
+//                mListView.setAdapter(adapter);
 //            }
 //
 //            @Override
@@ -147,36 +88,102 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
-
-
-
-
-
-
-
-        //LIST ONCLICK LISTENER
-
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //if(position==0){
-                    Intent myintent = new Intent(view.getContext(), ProductListActivity.class);
-                    myintent.putExtra("category", categoryList.get(position).getName() );
-                    //System.out.println("CATEGORY: "+categoryList.get(position).getName());
-                    startActivityForResult(myintent, 0);
-                //}
-            }
-        });
+//
+//
+//
+//
+//
+//
+//
+////        //Create Category objects
+////        Category school = new Category("School", "Books, Calculators, map","15 ads", "drawable://" + R.drawable.book);
+////        Category electronics = new Category("Electronics", "phones, laptops, watches, etc.", "7 ads", "drawable://" + R.drawable.electronics);
+////        Category clothing = new Category("Clothing", "Shoes, Jeans, Dresses, etc.", "32 ads", "drawable://" + R.drawable.clothing);
+////        Category gaming = new Category("Gaming","Consoles, Games, Controllers, etc.", "3 ads", "drawable://" + R.drawable.gaming);
+////        Category food = new Category("Food", "KFC, Subway, Marios, Pita Pit, Rituals", "10 ads", "drawable://" + R.drawable.food);
+////
+////        //Add the categories objects to an ArrayList
+////        final ArrayList<Category> categoryList = new ArrayList<>();
+////        categoryList.add(school);
+//////        categoryList.add(electronics);
+//////        categoryList.add(clothing);
+//////        categoryList.add(gaming);
+//////        categoryList.add(food);
+////
+////        CategoryListAdapter adapter = new CategoryListAdapter(this, R.layout.adapter_view_layout, categoryList);
+////        mListView.setAdapter(adapter);
+//
+//
+////        DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+////        myDatabase.child("Conversations").addValueEventListener(new ValueEventListener() {
+////            @Override
+////            public void onDataChange(DataSnapshot dataSnapshot) {
+////                ListView mListView = findViewById(R.id.chatListView);
+////                final ArrayList<Conversation> conversationsModel= new ArrayList<>();
+////                for(DataSnapshot ds : dataSnapshot.getChildren())
+////                {
+////
+////
+////                }
+////
+////            }
+////
+////            @Override
+////            public void onCancelled(DatabaseError databaseError)
+////            {
+////            }
+////
+////
+////        });
+//
+////        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("fullName");
+////
+////        db.addValueEventListener(new ValueEventListener() {
+////            @Override
+////            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+////                receiverName = (String) dataSnapshot.getValue();
+////
+////                //firebaseCallback.onCallBack(receiverName);
+//////                Conversation conversation = new Conversation(key,time, receiverName);
+//////                conversationsModel.add(conversation);
+////            }
+////
+////            @Override
+////            public void onCancelled(@NonNull DatabaseError databaseError) {
+////
+////            }
+////        });
+//
+//
+//
+//
+//
+//
+//
+//        //LIST ONCLICK LISTENER
+//
+//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                //if(position==0){
+//                    Intent myintent = new Intent(view.getContext(), ProductListActivity.class);
+//                    myintent.putExtra("category", categoryList.get(position).getName() );
+//                    //System.out.println("CATEGORY: "+categoryList.get(position).getName());
+//                    startActivityForResult(myintent, 0);
+//                //}
+//            }
+//        });
 
     }
 
-    // Menu icons are inflated just as they were with actionbar
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+//    // Menu icons are inflated just as they were with actionbar
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        menu.clear();
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
 
 
     public void checkCurrentUser() {
@@ -194,63 +201,76 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Respond to menu item clicks
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        if(id == R.id.miProfile)
+//        {
+//
+//            if (user != null) {
+//                //Uri photoUrl = user.getPhotoUrl();
+//
+//                // Check if user's email is verified
+//                boolean emailVerified = user.isEmailVerified();
+//                System.out.println("USER: " + user.getEmail());
+//                String uid = user.getUid();
+//                //Toast.makeText(getApplicationContext(),email+" Signed in",Toast.LENGTH_SHORT).show();
+//                Intent i = new Intent(getApplicationContext(), Profile.class);
+//                //i.putExtra("receiverUID", receiverUID);
+//                startActivity(i);
+//
+//            }
+//            else {
+//                Intent i = new Intent(getApplicationContext(), Login.class);
+//                startActivity(i);
+//            }
+//            return true;
+//        }
+//
+//
+//        if(user != null && id == R.id.chat)
+//        {
+//            //Toast.makeText(MainActivity.this, "Chat clicked", Toast.LENGTH_LONG).show();
+//            Intent i = new Intent(getApplicationContext(), ConversationChatActivity.class);
+//            startActivity(i);
+//            return true;
+//        }
+//        else{
+//            Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
+//            Intent i = new Intent(getApplicationContext(), Login.class);
+//            startActivity(i);
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
+
+
+
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//        switch (menuItem.getItemId())
+//        {
+//            case R.id.home:
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+//                break;
+//
+//        }
+//
+//        drawer.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
+//
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(id == R.id.miProfile)
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START))
         {
-
-            if (user != null) {
-                //Uri photoUrl = user.getPhotoUrl();
-
-                // Check if user's email is verified
-                boolean emailVerified = user.isEmailVerified();
-                System.out.println("USER: " + user.getEmail());
-                String uid = user.getUid();
-                //Toast.makeText(getApplicationContext(),email+" Signed in",Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(getApplicationContext(), Profile.class);
-                //i.putExtra("receiverUID", receiverUID);
-                startActivity(i);
-
-            }
-            else {
-                Intent i = new Intent(getApplicationContext(), Login.class);
-                startActivity(i);
-            }
-            return true;
-        }
-
-
-        if(user != null && id == R.id.chat)
-        {
-            //Toast.makeText(MainActivity.this, "Chat clicked", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(getApplicationContext(), ConversationChatActivity.class);
-            startActivity(i);
-            return true;
+            drawer.closeDrawer(GravityCompat.START);
         }
         else{
-            Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(getApplicationContext(), Login.class);
-            startActivity(i);
+            super.onBackPressed();
         }
-        return super.onOptionsItemSelected(item);
-    }
 
 
-    private void fadeIn(View view) {
-        // Create an AlphaAnimation variable
-        // 0.0f makes the view invisible
-        // 1.0f makes the view fully visible
-        AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
-        // Set out long you want the animation to be. * Measured in milliseconds *
-        // 1000 milliseconds = 1 second
-        anim.setDuration(1500);
-        // Start the animation on our passed in view
-        view.startAnimation(anim);
-        /*  After the animation is complete we want to make sure we set the visibility of the view
-            to VISIBLE. Otherwise it will go back to being INVISIBLE due to our previous lines
-            that set the view to INVISIBLE */
-        view.setVisibility(View.VISIBLE);
     }
 }

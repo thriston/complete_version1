@@ -1,25 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view"
+    >
     <!--<item-->
         <!--android:id="@+id/miCompose"-->
         <!--android:icon="@drawable/ic_compose"-->
         <!--app:showAsAction="ifRoom"-->
         <!--android:title="@string/compose">-->
     <!--</item>-->
-    <item
-        android:id="@+id/miProfile"
-        android:icon="@drawable/ic_profile"
-        app:showAsAction="ifRoom"
-        android:title="@string/profile">
+
+    <group android:checkableBehavior="single">
+
+
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/ic_home"
+            app:showAsAction="ifRoom"
+            android:title="@string/home">
+        </item>
+
+
+        <item
+            android:id="@+id/miProfile"
+            android:icon="@drawable/ic_profile"
+            app:showAsAction="ifRoom"
+            android:title="@string/profile">
+        </item>
+
+        <item
+            android:id="@+id/chat"
+            android:icon="@drawable/chat_icon"
+            app:showAsAction="ifRoom"
+            android:title="Chat">
+        </item>
+
+        <item
+            android:id="@+id/myProducts"
+            android:icon="@drawable/ic_product"
+            app:showAsAction="ifRoom"
+            android:title="My Products">
+        </item>
+
+
+        <item
+            android:id="@+id/notifications"
+            android:icon="@drawable/ic_notifications"
+            app:showAsAction="ifRoom"
+            android:title="Notifications">
+        </item>
+
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            app:showAsAction="ifRoom"
+            android:title="Log out">
+        </item>
+
+
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item android:id="@+id/nav_share"
+                android:icon="@drawable/ic_share"
+                android:title="Share"/>
+        </menu>
+
     </item>
 
-    <item
-        android:id="@+id/chat"
-        android:icon="@drawable/chat_icon"
-        app:showAsAction="ifRoom"
-        android:title="">
-    </item>
 
 
 
