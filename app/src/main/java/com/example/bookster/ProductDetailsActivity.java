@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
-    AlertDialog safeZoneDisclaimer;
+    AlertDialog safeZoneDisclaimer, purchaseRequestDialog;
     ViewPager viewPager;
     ProductPictureSlider adapter;
     private  int REQUEST_CODE =1;
@@ -66,7 +66,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
             });
         }
     }
-
 
 
     @Override
@@ -121,9 +120,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
         }
 
         //System.out.println("MAIN URL: "+product.getMainImage());
-
-
-
 
 
 
@@ -220,9 +216,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
 
-
-
-
         sellerName.setText(product.getSeller().getFullname());
         sellerContact.setText(product.getSeller().getContact());
         sellerEmail.setText(product.getSeller().getEmail());
@@ -266,8 +259,36 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         //For SafeZone Disclaimer Alert
+        purchaseRequestDialog = new AlertDialog.Builder(ProductDetailsActivity.this).create();
+        purchaseRequestDialog.setTitle("Purchase Request");
+        purchaseRequestDialog.setMessage("Do you want to buy this product?");
+        purchaseRequestDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Send Purchase Request", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(ProductDetailsActivity.this, "Purchase Request Sent...", Toast.LENGTH_LONG).show();
+                // TO PURCHASE REQUESTS
+                safeZoneDisclaimer.show();
+                //
+                dialog.dismiss();;
+            }
+        });
+        purchaseRequestDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(ProductDetailsActivity.this, "Canceled...", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+        Button purchaseBtn = findViewById(R.id.purchaseRequestBtn);
+        purchaseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                purchaseRequestDialog.show();
+            }
+        });
+
         safeZoneDisclaimer = new AlertDialog.Builder(ProductDetailsActivity.this).create();
-        safeZoneDisclaimer.setTitle("Safe Zones");
+        safeZoneDisclaimer.setTitle("Safe /''Zones");
         safeZoneDisclaimer.setMessage("Your personal safety is important to us at Bookster and as such we have identified places in and around the St Augustine UWI campus which are well known, public and suitable for conducting trade. These areas are called Safe Zones and are there to help you conduct your trades in a safe environment.\n" +
                 "\nDisclaimer\n" +
                 "While we are careful in identifying Safe Zones, they are merely suggestions, therefore you must always take care to ensure personal safety. Bookster accepts no liability in any event whether or not conducting trades in or out of Safe Zones.\n");
@@ -276,6 +297,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(ProductDetailsActivity.this, "Accepted...", Toast.LENGTH_LONG).show();
                 // TO PURCHASE REQUESTS
+                purchaseRequestDialog.show();
                 Intent i = new Intent(ProductDetailsActivity.this, MainActivity.class);
                 dialog.dismiss();
                 startActivity(i);
@@ -288,15 +310,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        Button purchaseBtn = findViewById(R.id.purchaseRequestBtn);
-        purchaseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                safeZoneDisclaimer.show();
-//                Intent i = new Intent(ProductDetailsActivity.this, .class);
-//                startActivity(i);
-            }
-        });
+//        Button purchaseBtn = findViewById(R.id.purchaseRequestBtn);
+//        purchaseBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                safeZoneDisclaimer.show();
+////                Intent i = new Intent(ProductDetailsActivity.this, .class);
+////                startActivity(i);
+//            }
+//        });
     }
 
     public void updateViews()
