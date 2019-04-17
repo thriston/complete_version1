@@ -1,5 +1,7 @@
 package com.example.bookster;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 public class SignUp extends AppCompatActivity{
+    AlertDialog termsAndConditions;
     EditText fullNameInput,emailInput,passwordInput, retypePassword, contactInput;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -90,6 +94,7 @@ public class SignUp extends AppCompatActivity{
         final String contact =contactInput.getText().toString();
         final String password=passwordInput.getText().toString();
 
+
         if(email.isEmpty()){
             Toast.makeText(getApplicationContext(),"Email Address is required",Toast.LENGTH_SHORT).show();
             return;
@@ -120,55 +125,92 @@ public class SignUp extends AppCompatActivity{
             return;
         }
 
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
+        //For Terms And Conditions
+        termsAndConditions = new AlertDialog.Builder(SignUp.this).create();
+        termsAndConditions.setTitle("TERMS AND CONDITIONS");
+        termsAndConditions.setMessage("Welcome to Bookster\n\n" +
+                "These terms and conditions outline the rules and regulations for the use of Bookster.\n\n\n" +
+                "Product/Item Postings\n\n" +
+                "Drugs/illegal substances including any and all related paraphernalia are not allowed.\n\n" +
+                "Sexual/inappropriate items and images are not allowed.\n\n" +
+                "Product pictures must be accurate and be of the same or an identical product.\n\n" +
+                "The creation of multiple postings for the same item is not allowed.\n\n" +
+                "Spamming of any kind is not allowed.\n\n" +
+                "The use of abusive/hateful/inappropriate language in the chat is not allowed.\n\n\n" +
+                "Reservation of Rights\n\n" +
+                "We reserve the right at any time and in our sole discretion to remove or to request that you remove all item/product postings or any particular posting on our application. You agree to immediately remove all item/product postings upon such request. We also reserve the right to amend these terms and conditions and its item posting policy at any time. By continuing to post items, you agree to be bound to and abide by these posting terms and conditions.\n" +
+                "\n\nDisclaimer\n\n" +
+                "Bookster provides a service to be used as is, without guarantee, as such to the maximum extent permitted by applicable law, we exclude all liabilities, representations, warranties and conditions relating to our application and the use of this application (including, without limitation, any warranties implied by law in respect of satisfactory quality). \n" +
+                "\n\n" +
+                "Safe Zones Disclaimer\n" +
+                "\nBookster accepts no liability in any event whether conducting trades in or out of Safe Zones.\n\n" +
+                "In order to create an account and fully use Bookster you must agree to the preceding terms and conditions.\n");
 
-                            //Store Additionl data in firebase database
-                                User user = new User(
-                                    fullname,
-                                    email,
-                                    contact,
-                                    FirebaseAuth.getInstance().getCurrentUser().getUid()
+        termsAndConditions.setButton(DialogInterface.BUTTON_POSITIVE, "I Accept", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(SignUp.this, "Accepted...", Toast.LENGTH_SHORT).show();
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(SignUp.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
 
-                            );
-//                            UserProfile user = new UserProfile(
-//                                    fullname,
-//                                    email,
-//                                    contact,
-//                                    FirebaseAuth.getInstance().getCurrentUser().getUid()
-//                            );
+                                    //Store Additionl data in firebase database
+                                    User user = new User(
+                                            fullname,
+                                            email,
+                                            contact,
+                                            FirebaseAuth.getInstance().getCurrentUser().getUid()
 
-                            mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(getApplicationContext(),"User Created",Toast.LENGTH_SHORT).show();
-                                        mAuth.signInWithEmailAndPassword(email, password);
-                                        Toast.makeText(getApplicationContext(),"Logged In",Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    }
-                                    else{
-                                        Log.d("Testing Daatabase Stuff", task.toString());
-                                        Toast.makeText(getApplicationContext(),"Error!!!... Cannot Create User Account" ,Toast.LENGTH_SHORT).show();
-                                    }
+                                    );
+                                    //                            UserProfile user = new UserProfile(
+                                    //                                    fullname,
+                                    //                                    email,
+                                    //                                    contact,
+                                    //                                    FirebaseAuth.getInstance().getCurrentUser().getUid()
+                                    //                            );
+
+                                    mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful()){
+                                                        Toast.makeText(getApplicationContext(),"User Created",Toast.LENGTH_SHORT).show();
+                                                        mAuth.signInWithEmailAndPassword(email, password);
+                                                        Toast.makeText(getApplicationContext(),"Logged In",Toast.LENGTH_SHORT).show();
+                                                        finish();
+                                                    }
+                                                    else{
+                                                        Log.d("Testing Daatabase Stuff", task.toString());
+                                                        Toast.makeText(getApplicationContext(),"Error!!!... Cannot Create User Account" ,Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                }
+                                            });
+
+                                    //FirebaseUser user = mAuth.getCurrentUser();
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Toast.makeText(getApplicationContext(),"An account already exists with that email",Toast.LENGTH_SHORT).show();
 
                                 }
-                            });
 
-                            //FirebaseUser user = mAuth.getCurrentUser();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(getApplicationContext(),"An account already exists with that email",Toast.LENGTH_SHORT).show();
+                                // ...
+                            }
+                        });
+                dialog.dismiss();
+            }
+        });
+        termsAndConditions.setButton(DialogInterface.BUTTON_NEGATIVE, "Reject", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(SignUp.this, "You must accept to continue.", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+        termsAndConditions.show();
 
-                        }
-
-                        // ...
-                    }
-                });
     }
 
     private static boolean isValidEmail(String email) {
