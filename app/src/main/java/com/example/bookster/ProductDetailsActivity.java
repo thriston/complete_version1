@@ -265,7 +265,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         purchaseRequestDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Send Purchase Request", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(ProductDetailsActivity.this, "Purchase Request Sent...", Toast.LENGTH_LONG).show();
+                Toast.makeText(ProductDetailsActivity.this, "Sending Purchase Request...", Toast.LENGTH_LONG).show();
                 // TO PURCHASE REQUESTS
                 safeZoneDisclaimer.show();
                 //
@@ -295,7 +295,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         safeZoneDisclaimer.setButton(DialogInterface.BUTTON_POSITIVE, "I Accept", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(ProductDetailsActivity.this, "Accepted...", Toast.LENGTH_LONG).show();
+                Toast.makeText(ProductDetailsActivity.this, "Accepted...Purchase Request Sent.", Toast.LENGTH_LONG).show();
                 // TO PURCHASE REQUESTS
                 purchaseRequestDialog.show();
                 Intent i = new Intent(ProductDetailsActivity.this, MainActivity.class);
