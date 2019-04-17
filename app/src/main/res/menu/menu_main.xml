@@ -11,65 +11,72 @@
         <!--android:title="@string/compose">-->
     <!--</item>-->
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single" android:id="@+id/group0">
 
 
         <item
-            android:id="@+id/home"
+            android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
             app:showAsAction="ifRoom"
             android:title="@string/home">
         </item>
 
 
-        <item
-            android:id="@+id/miProfile"
-            android:icon="@drawable/ic_profile"
-            app:showAsAction="ifRoom"
-            android:title="@string/profile">
-        </item>
+        <!--<item-->
+            <!--android:id="@+id/miProfile"-->
+            <!--android:icon="@drawable/ic_profile"-->
+            <!--app:showAsAction="ifRoom"-->
+            <!--android:title="@string/profile">-->
+        <!--</item>-->
 
-        <item
-            android:id="@+id/chat"
-            android:icon="@drawable/chat_icon"
-            app:showAsAction="ifRoom"
-            android:title="Chat">
-        </item>
+        <!--<item-->
+            <!--android:id="@+id/chat"-->
+            <!--android:icon="@drawable/chat_icon"-->
+            <!--app:showAsAction="ifRoom"-->
+            <!--android:title="Chat">-->
+        <!--</item>-->
 
-        <item
-            android:id="@+id/myProducts"
-            android:icon="@drawable/ic_product"
-            app:showAsAction="ifRoom"
-            android:title="My Products">
-        </item>
-
-
-        <item
-            android:id="@+id/notifications"
-            android:icon="@drawable/ic_notifications"
-            app:showAsAction="ifRoom"
-            android:title="Notifications">
-        </item>
+        <!--<item-->
+            <!--android:id="@+id/myProducts"-->
+            <!--android:icon="@drawable/ic_product"-->
+            <!--app:showAsAction="ifRoom"-->
+            <!--android:title="My Products">-->
+        <!--</item>-->
 
 
-        <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_logout"
-            app:showAsAction="ifRoom"
-            android:title="Log out">
-        </item>
+        <!--<item-->
+            <!--android:id="@+id/notifications"-->
+            <!--android:icon="@drawable/ic_notifications"-->
+            <!--app:showAsAction="ifRoom"-->
+            <!--android:title="Notifications">-->
+        <!--</item>-->
+
+
+        <!--<item-->
+            <!--android:id="@+id/nav_logout"-->
+            <!--android:icon="@drawable/ic_logout"-->
+            <!--app:showAsAction="ifRoom"-->
+            <!--android:title="Log out">-->
+        <!--</item>-->
+
+        <!--<item-->
+            <!--android:id="@+id/nav_login"-->
+            <!--android:icon="@drawable/ic_login"-->
+            <!--app:showAsAction="ifRoom"-->
+            <!--android:title="Log In">-->
+        <!--</item>-->
 
 
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item android:id="@+id/nav_share"
-                android:icon="@drawable/ic_share"
-                android:title="Share"/>
-        </menu>
+    <!--<item android:title="Communicate">-->
+        <!--<menu>-->
+            <!--<item android:id="@+id/nav_share"-->
+                <!--android:icon="@drawable/ic_share"-->
+                <!--android:title="Share"/>-->
+        <!--</menu>-->
 
-    </item>
+    <!--</item>-->
 
 
 

@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,6 +43,7 @@ public class ProductListActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     Toolbar toolbar;
     FloatingActionButton fab;
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
@@ -75,10 +77,19 @@ public class ProductListActivity extends AppCompatActivity {
         productImages = new ArrayList<>();
         mStorage = FirebaseStorage.getInstance().getReference();
 
+
+
+
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Products");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
+
+
+
+
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -180,8 +191,14 @@ public class ProductListActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Intent myintent = new Intent(ProductListActivity.this, Login.class);
-                    startActivityForResult(myintent, REQUEST_CODE);
+//                    Intent myintent = new Intent(getApplicationContext(), MainActivity.class);
+//
+//                    //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LoginFragment()).commit();
+//                    startActivity(myintent);
+                    Toast.makeText(ProductListActivity.this, "Please login to add product", Toast.LENGTH_SHORT).show();
+                //                    startActivityForResult(myintent, REQUEST_CODE);
+
+                    //navigationView.setCheckedItem(nav_login);
                 }
 
             }
@@ -189,6 +206,11 @@ public class ProductListActivity extends AppCompatActivity {
 
 
     }
+
+
+
+
+
 
 
 }

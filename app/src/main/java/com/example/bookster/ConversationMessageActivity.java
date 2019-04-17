@@ -123,8 +123,6 @@ public class ConversationMessageActivity extends AppCompatActivity {
                                     ChatMessage chatMessage = ds.getValue(ChatMessage.class);
                                     chatModelList.add(chatMessage);
                                 }
-                                System.out.println("HERE-HE...IN 1");
-                                System.out.println("HERE-HE: "+chatModelList.get(0).getUserName());
                                 ChatMessageListAdapter adapter = new ChatMessageListAdapter(ConversationMessageActivity.this, R.layout.adapter_view_layout1, chatModelList);
                                 mListView.setAdapter(adapter);
                             }

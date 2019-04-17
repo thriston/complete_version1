@@ -27,7 +27,12 @@
         <activity android:name=".Profile" />
         <activity android:name=".Login" />
         <activity android:name=".SignUp" />
-        <activity android:name=".ProductListActivity" />
+        <activity android:name=".ProductListActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity android:name=".MessageActivity" />
         <activity android:name=".ConversationChatActivity" />
         <activity android:name=".MainActivity">

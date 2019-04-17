@@ -6,14 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".Login">
 
-    <!--<fragment-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:name="com.example.bookster.LoginFragment"-->
-        <!--/>-->
-
     <include
         android:id="@+id/toolbar"
+        android:visibility="invisible"
         layout="@layout/toolbar"/>
 
     <TextView
@@ -56,13 +51,14 @@
         style="@android:style/Widget.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="370dp"
         android:layout_marginEnd="8dp"
+        android:text="Login"
+        android:onClick="signIn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="370dp"
         android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:text="Login" />
+        android:paddingRight="40dp"/>
 
     <TextView
         android:id="@+id/resetPassword"

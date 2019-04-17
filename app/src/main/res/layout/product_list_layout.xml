@@ -25,9 +25,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:clickable="true"
+        android:focusable="true"
         android:elevation="0dp"
         android:src="@drawable/plus_new"
         android:backgroundTint="#ffffff"
@@ -35,7 +36,79 @@
 
         app:fabSize="normal"
         app:maxImageSize="30dp" />
+
+
+
         <!--app:srcCompat="@android:drawable/ic_input_add"-->
+
+
+    <!--<android.support.v4.widget.DrawerLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/drawer_layout"-->
+        <!--android:elevation="4dp"-->
+        <!--&gt;-->
+
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical"-->
+            <!--&gt;-->
+            <!--<include-->
+                <!--android:id="@+id/toolbar"-->
+                <!--layout="@layout/toolbar"-->
+
+                <!--/>-->
+
+            <!--<ListView-->
+                <!--android:id="@+id/product_list_view"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_below="@+id/toolbar"-->
+                <!--android:layout_alignParentStart="true" />-->
+
+            <!--&lt;!&ndash;<android.support.design.widget.FloatingActionButton&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/fab"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_alignParentEnd="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_alignParentBottom="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginEnd="10dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginBottom="10dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:clickable="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:focusable="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:elevation="0dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:src="@drawable/plus_new"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:backgroundTint="#ffffff"&ndash;&gt;-->
+
+
+                <!--&lt;!&ndash;app:fabSize="normal"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:maxImageSize="30dp" />&ndash;&gt;-->
+
+
+
+        <!--</RelativeLayout>-->
+
+        <!--<FrameLayout-->
+            <!--android:id="@+id/fragment_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
+
+        <!--<android.support.design.widget.NavigationView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_gravity="start"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:visibility="visible"-->
+            <!--android:id="@+id/nav_view"-->
+
+            <!--app:headerLayout="@layout/nav_header"-->
+            <!--app:menu="@menu/menu_main"-->
+            <!--/>-->
+
+
+
+    <!--</android.support.v4.widget.DrawerLayout>-->
 
 
 

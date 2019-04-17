@@ -1,18 +1,13 @@
 package com.example.bookster;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -30,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class HomeFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener{
+public class HomeFragment extends Fragment  {
 
     Button button;
     Toolbar toolbar;
@@ -40,6 +35,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
     private DrawerLayout drawer;
     User myUserProfile;
     String receiverName;
+    NavigationView navigationView;
     private DatabaseReference myDatabase;
 
     public HomeFragment() {
@@ -61,28 +57,29 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
 
         FirebaseUser auth;
         mListView  = (ListView) v.findViewById(R.id.listView);
-        drawer= v.findViewById(R.id.drawer_layout);
-
-        NavigationView navigationView = v.findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+//        drawer= v.findViewById(R.id.drawer_layout);
+//
+//        navigationView = v.findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
+//        navigationView.setCheckedItem(R.id.home);
         //navigationView.setNavigationItemSelectedListener(this);
 
 
-        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(Color.WHITE);
-
-        toolbar.setTitle("Bookster");
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-
-
+//        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+//        toolbar.setTitleTextColor(Color.WHITE);
+//
+//        toolbar.setTitle("Bookster");
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
 
-        fadeIn(toolbar);
+
+
+//        fadeIn(toolbar);
 
         //Options Bar
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
 
 
 
@@ -108,8 +105,13 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
                     categoryList.add(category);
 
                 }
-                adapter = new CategoryListAdapter(getActivity(), R.layout.adapter_view_layout, categoryList);
-                mListView.setAdapter(adapter);
+                if (getActivity()!=null){
+                    adapter = new CategoryListAdapter(getActivity(), R.layout.adapter_view_layout, categoryList);
+                    mListView.setAdapter(adapter);
+                }
+
+
+
             }
 
             @Override
@@ -141,22 +143,27 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
     }
 
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId())
-        {
-            case R.id.home:
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-                NavigationView navigationView = getView().findViewById(R.id.nav_view);
-                navigationView.setNavigationItemSelectedListener(this);
-                break;
-
-
-        }
-
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//        switch (menuItem.getItemId())
+//        {
+//            case R.id.home:
+//                getActivity().getFragmentManager().popBackStack();
+//                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+//                navigationView.setCheckedItem(R.id.home);
+//                break;
+//            case R.id.nav_login:
+//                getActivity().getFragmentManager().popBackStack();
+//                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new LoginFragment()).commit();
+//                navigationView.setCheckedItem(R.id.nav_login);
+//                break;
+//
+//
+//        }
+//
+//        drawer.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
 
 //    @Override
 //    public void onBackPressed() {

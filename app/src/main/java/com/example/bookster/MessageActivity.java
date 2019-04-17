@@ -87,7 +87,7 @@ public class MessageActivity extends AppCompatActivity {
 
 
 
-
+        //Checks for a conversation and returns messages
         myDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -106,7 +106,6 @@ public class MessageActivity extends AppCompatActivity {
                 v2 = myUID+"_"+receiverUID;
 
 
-
                 if(chatIDs.contains(v1) || chatIDs.contains(v2))
                 {
                     if(chatIDs.contains(v1))
@@ -123,6 +122,11 @@ public class MessageActivity extends AppCompatActivity {
                                 }
                                 System.out.println("HERE-HE...IN 1");
                                 System.out.println("HERE-HE: "+chatModelList.get(0).getUserName());
+
+                                //Adds items (chat messages) to the listView
+
+                                //if()
+
                                 ChatMessageListAdapter adapter = new ChatMessageListAdapter(MessageActivity.this, R.layout.adapter_view_layout1, chatModelList);
                                 mListView.setAdapter(adapter);
                             }

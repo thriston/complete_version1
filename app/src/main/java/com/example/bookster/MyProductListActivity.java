@@ -40,8 +40,19 @@ public class MyProductListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_product_list_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("My Products");
+        toolbar.setTitle("My items");
         toolbar.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         String myUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //fab = findViewById(R.id.fab);
         Intent intent = getIntent();

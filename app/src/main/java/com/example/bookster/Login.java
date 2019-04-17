@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,6 +31,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         textView=findViewById(R.id.signUpLinkTextView);
         textView2=findViewById(R.id.resetPassword);
         mAuth = FirebaseAuth.getInstance();
@@ -65,8 +65,8 @@ public class Login extends AppCompatActivity {
             }
         });
 
-//        setContentView(R.layout.product_page);
-//
+       // setContentView(R.layout.product_page);
+
 //        viewPager = findViewById(R.id.product_img_slider);
 //        adapter = new ProductPictureSlider(this);
 //        viewPager.setAdapter(adapter);
@@ -106,7 +106,7 @@ public class Login extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             //Intent i= new Intent(getApplicationContext(),MainActivity.class);
                             //startActivity(i);
-                            setResult(RESULT_OK, null);
+                            setResult(  RESULT_OK, null);
                             finish();
 
                         } else {

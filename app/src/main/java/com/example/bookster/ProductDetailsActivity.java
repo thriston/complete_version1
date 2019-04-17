@@ -206,9 +206,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                 }
                 else{
-                    Intent myintent = new Intent(ProductDetailsActivity.this, Login.class);
+//                    Intent myintent = new Intent(ProductDetailsActivity.this, Login.class);
                     Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
-                    startActivityForResult(myintent, REQUEST_CODE);
+//                    startActivityForResult(myintent, REQUEST_CODE);
                 }
 
             }
@@ -229,11 +229,20 @@ public class ProductDetailsActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
+                user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user!=null)
+                {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
 
-                TextView num = findViewById(R.id.sellerContactNumTextView);
-                intent.setData(Uri.parse("tel:" + num.getText() ));
-                startActivity(intent);
+                    TextView num = findViewById(R.id.sellerContactNumTextView);
+                    intent.setData(Uri.parse("tel:" + num.getText() ));
+                    startActivity(intent);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -253,9 +262,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Intent myintent = new Intent(ProductDetailsActivity.this, Login.class);
+//                    Intent myintent = new Intent(ProductDetailsActivity.this, Login.class);
                     Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
-                    startActivityForResult(myintent, REQUEST_CODE);
+//                    startActivityForResult(myintent, REQUEST_CODE);
                 }
 
             }
