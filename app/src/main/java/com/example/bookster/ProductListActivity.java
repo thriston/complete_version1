@@ -8,8 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,6 +35,10 @@ public class ProductListActivity extends AppCompatActivity {
     private ArrayList<Product> productList;
     private FirebaseUser user;
     private ListView mListView;
+    private ProductListAdapter adapter;
+    private EditText searchEdit;
+
+
     private Product product;
     private Intent myintent;
     private DatabaseReference mDatabase;
@@ -74,8 +82,10 @@ public class ProductListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_list_layout);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         productImages = new ArrayList<>();
         mStorage = FirebaseStorage.getInstance().getReference();
+        searchEdit = findViewById(R.id.search_edit);
 
 
 
@@ -122,8 +132,26 @@ public class ProductListActivity extends AppCompatActivity {
                     }
                 }
 
-                ProductListAdapter adapter = new ProductListAdapter(ProductListActivity.this, R.layout.product_list_item_layout, productList);
+                adapter = new ProductListAdapter(ProductListActivity.this, R.layout.product_list_item_layout, productList);
                 mListView.setAdapter(adapter);
+                mListView.setTextFilterEnabled(true);
+
+                searchEdit.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        adapter.getFilter().filter(s.toString());
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
             }
 
             @Override

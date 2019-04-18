@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +25,9 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
     private Context mContext;
     int mResource;
     private int lastPosition = -1;
+    private ArrayList<Product> originalList;
+    private ArrayList<Product> productList;
+    private ProductFilter filter;
 
 
     private static class ViewHolder {
@@ -38,7 +42,20 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         super(context, resource, objects);
         this.mContext = context;
         this.mResource = resource;
+        this.productList = new ArrayList<Product>();
+        this.productList.addAll(objects);
+        this.originalList = new ArrayList<Product>();
+        this.originalList.addAll(objects);
     }
+
+    @Override
+    public Filter getFilter() {
+        if (filter == null){
+            filter  = new ProductFilter();
+        }
+        return filter;
+    }
+
 
     @NonNull
     @Override
@@ -108,35 +125,55 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         return convertView;
 
 
-
-
-
-
-
-//
-//        LayoutInflater inflater = LayoutInflater.from(mContext);
-//        convertView = inflater.inflate(mResource, parent,false);
-//
-//        TextView product_name = (TextView) convertView.findViewById(R.id.product_name);
-//        TextView product_details = (TextView) convertView.findViewById(R.id.product_description);
-//        TextView product_price = (TextView) convertView.findViewById(R.id.product_price);
-//        ImageView product_image = (ImageView) convertView.findViewById(R.id.product_image);
-//
-//        product_name.setText(name);
-//        product_details.setText(details);
-//        product_price.setText("$"+price);
-//
-//        //Works
-//        Picasso.with(mContext).load(mainImage).into(product_image);
-//
-//
-//
-//
-//
-//
-//
-//        return convertView;
     }
+
+    private class ProductFilter extends Filter
+    {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            constraint = constraint.toString().toLowerCase();
+            FilterResults result = new FilterResults();
+            if(constraint != null && constraint.toString().length() > 0)
+            {
+                ArrayList<Product> filteredItems = new ArrayList<Product>();
+
+                for(int i = 0, l = originalList.size(); i < l; i++)
+                {
+                    Product product = originalList.get(i);
+                    if(product.getName().toLowerCase().contains(constraint))
+                        filteredItems.add(product);
+                }
+                result.count = filteredItems.size();
+                result.values = filteredItems;
+            }
+            else
+            {
+                synchronized(this)
+                {
+                    result.values = originalList;
+                    result.count = originalList.size();
+                }
+            }
+            return result;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint,
+                                      FilterResults results) {
+
+            productList = (ArrayList<Product>)results.values;
+            notifyDataSetChanged();
+            clear();
+            for(int i = 0, l = productList.size(); i < l; i++)
+                add(productList.get(i));
+            notifyDataSetInvalidated();
+        }
+    }
+
+
 
     private void setupImageLoader(){
         // UNIVERSAL IMAGE LOADER SETUP
