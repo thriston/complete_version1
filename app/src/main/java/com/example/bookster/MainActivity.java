@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 ////
         toolbar =  findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
-
+        toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle("Bookster");
         setSupportActionBar(toolbar);
         fadeIn(toolbar);
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     });
 
             AlertDialog alert = altdial.create();
-            alert.setTitle("Dialog Header");
+            alert.setTitle("Log Out");
             alert.show();
 
 
@@ -273,6 +273,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(itemID == nav_my_products)
         {
             Intent i= new Intent(getApplicationContext(),MyProductListActivity.class);
+            startActivity(i);
+        }
+        else
+        if(itemID == nav_notifications)
+        {
+            Intent i= new Intent(getApplicationContext(),RequestActivity.class);
             startActivity(i);
         }
 

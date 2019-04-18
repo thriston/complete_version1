@@ -33,8 +33,9 @@ public class ProductListActivity extends AppCompatActivity {
     private String category;
     private User myUserProfile;
     private ArrayList<Product> productList;
-    private FirebaseUser user;
+
     private ListView mListView;
+    private FirebaseUser user;
     private ProductListAdapter adapter;
     private EditText searchEdit;
 

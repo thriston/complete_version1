@@ -18,15 +18,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditProductActivity"></activity>
-        <activity android:name=".MyProductDetailsActivity"></activity>
-        <activity android:name=".Seller_info"></activity>
+        <activity android:name=".EditProductActivity" />
+        <activity android:name=".MyProductDetailsActivity" />
+        <activity android:name=".Seller_info" />
         <activity android:name=".ConversationMessageActivity" />
         <activity android:name=".MyProductListActivity" />
         <activity android:name=".AddProductActivity" />
         <activity android:name=".Profile" />
         <activity android:name=".Login" />
         <activity android:name=".SignUp" />
+
+        <activity android:name=".RequestActivity"/>
         <activity android:name=".ProductListActivity"
             android:parentActivityName=".MainActivity">
             <meta-data

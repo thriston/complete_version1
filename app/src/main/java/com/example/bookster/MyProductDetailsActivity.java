@@ -253,7 +253,7 @@ public class MyProductDetailsActivity extends AppCompatActivity {
                 });
 
         AlertDialog alert = altdial.create();
-        alert.setTitle("Dialog Header");
+        alert.setTitle("Delete");
         alert.show();
 
 
