@@ -16,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Request: "
-
             android:textColor="#000099"
             />
 
@@ -24,10 +23,9 @@
             android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Barter Request"
             android:textStyle="bold"
             android:textColor="#000000"
-            android:text="A Purchase Request"
-
             />
 
 
@@ -68,12 +66,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Product: "
+            android:text="My product: "
             android:textColor="#000099"
 
             />
         <TextView
-            android:id="@+id/product"
+            android:id="@+id/my_product"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Samsung Fold"
@@ -92,7 +90,81 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Selling price: "
+            android:text="Barter product: "
+            android:textColor="#000099"
+
+            />
+        <TextView
+            android:id="@+id/barterProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Huawei P30 Pro"
+            android:textStyle="italic"
+            />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• Description: "
+            android:textColor="#000099"
+
+            />
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description of product"
+
+            />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• Rating: "
+            android:textColor="#000099"
+
+            />
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="6.5/10"
+
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• Selling price: "
             android:textColor="#000099"
 
             />
@@ -100,8 +172,8 @@
             android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="$1234"
-            android:textStyle="italic"
+            android:text="$1862"
+
             />
 
 
@@ -183,6 +255,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="pending"
+            android:textColor="#CCCC00"
             />
 
 
@@ -206,6 +279,7 @@
             android:textColor="#ffffff"
             />
 
+
         <!--<Button-->
             <!--android:id="@+id/call"-->
             <!--android:layout_width="wrap_content"-->
@@ -223,6 +297,11 @@
             android:backgroundTint="#000099"
             android:textColor="#ffffff"
             />
+
+
+
+
+
 
         <Button
             android:id="@+id/reject"

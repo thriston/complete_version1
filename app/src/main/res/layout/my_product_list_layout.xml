@@ -19,27 +19,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginTop="1dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:clickable="true"
-        android:elevation="0dp"
-        android:src="@drawable/plus_12"
-
-
-        android:tint="@color/colorPrimary"
-
-
-        app:backgroundTint="@color/fui_bgGoogle"
-
-        app:fabSize="normal"
-        app:maxImageSize="30dp" />
-        <!--app:srcCompat="@android:drawable/ic_input_add"-->
+    <!--app:srcCompat="@android:drawable/ic_input_add"-->
 
 
 

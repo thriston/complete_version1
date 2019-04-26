@@ -19,11 +19,16 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -38,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String receiverName;
     NavigationView navigationView;
     private DatabaseReference myDatabase;
+    private TextView tvName, tvEmail;
 
     //If logged in
     //private static final int nav_chat = 941;
@@ -64,6 +70,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        View headerLayout = navigationView.getHeaderView(0);
+        tvName = headerLayout.findViewById(R.id.name);
+        tvEmail = headerLayout.findViewById(R.id.email);
+        //tvEmail.setText("EMAIL@GMAIL.COM");
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null)
+        {
+            DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+            db.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //System.out.println("INFORMATION: "+dataSnapshot.child("fullname").getValue().toString());
+                    tvName.setText(dataSnapshot.child("fullname").getValue().toString());
+                    tvEmail.setText(dataSnapshot.child("email").getValue().toString());
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+        else
+        {
+            tvName.setText("Login to access full functionality");
+            tvEmail.setVisibility(View.GONE);
+
+        }
+
+
+
         //navigationView.setCheckedItem(R.id.nav_home);
         addMenuItems();
 
@@ -278,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else
         if(itemID == nav_notifications)
         {
-            Intent i= new Intent(getApplicationContext(),RequestActivity.class);
+            Intent i= new Intent(getApplicationContext(), RequestActivity.class);
             startActivity(i);
         }
 
@@ -332,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             menu.add(R.id.group0, nav_chat, 2 , "Chat").setIcon(R.drawable.chat_icon);
             menu.add(R.id.group0, nav_profile, 3 , "Profile").setIcon(R.drawable.ic_profile);
             menu.add(R.id.group0, nav_my_products, 4 , "My products").setIcon(R.drawable.ic_product);
-            menu.add(R.id.group0, nav_notifications, 5 , "Notifications").setIcon(R.drawable.ic_notifications);
+            menu.add(R.id.group0, nav_notifications, 5 , "Requests").setIcon(R.drawable.ic_notifications);
             menu.add(R.id.group0, nav_logout, 6 , "Logout").setIcon(R.drawable.ic_logout);
         }
         else

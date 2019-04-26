@@ -1,5 +1,6 @@
 package com.example.bookster;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class MyProductListActivity extends AppCompatActivity {
+public class MyBarterProductListActivity extends AppCompatActivity {
     private String category;
     private User myUserProfile;
     private ArrayList<Product> productList;
@@ -40,7 +41,7 @@ public class MyProductListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_product_list_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("My items");
+        toolbar.setTitle("Select product to Barter");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -74,7 +75,7 @@ public class MyProductListActivity extends AppCompatActivity {
                 }
 
 
-                MyProductListAdapter adapter = new MyProductListAdapter(MyProductListActivity.this, R.layout.my_product_list_item_layout, productList);
+                MyProductListAdapter adapter = new MyProductListAdapter(MyBarterProductListActivity.this, R.layout.my_product_list_item_layout, productList);
                 mListView.setAdapter(adapter);
             }
 
@@ -90,10 +91,12 @@ public class MyProductListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //if(position==0){
-                Intent myintent = new Intent(view.getContext(), MyProductDetailsActivity.class);
+                Intent myintent = new Intent();
                 myintent.putExtra("productObj", productList.get(position));
                 //System.out.println("CATEGORY: "+categoryList.get(position).getName());
-                startActivityForResult(myintent, 0);
+                setResult(Activity.RESULT_OK, myintent);
+                finish();
+                //startActivityForResult(myintent, 0);
                 //}
             }
         });

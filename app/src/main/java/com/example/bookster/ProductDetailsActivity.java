@@ -32,41 +32,23 @@ import java.util.ArrayList;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
-    AlertDialog safeZoneDisclaimer, purchaseRequestDialog;
+    AlertDialog safeZoneDisclaimer, safeZoneDisclaimerBarter, purchaseRequestDialog, barterRequestDialog ;
     ViewPager viewPager;
     ProductPictureSlider adapter;
     private  int REQUEST_CODE =1;
     User myUserProfile;
     String myUserName;
     private DatabaseReference mDatabase;
-    private Product product;
+    private Product product, requestProduct;
     private int count;
     private FirebaseUser user;
     private ArrayList<String> secondaryImages;
+    private int REQUEST_NAME = 150;
+    private int REQUEST_PRODUCT = 160;
+
 
     android.support.v7.widget.Toolbar toolbar;
 
-    //Get current user username
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK )
-        {
-            DatabaseReference db;
-            db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            db.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    myUserName =  dataSnapshot.child("fullname").getValue().toString();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
 
 
     @Override
@@ -74,7 +56,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_page);
         secondaryImages = new ArrayList<>();
-        ImageButton button = (ImageButton) findViewById(R.id.viewinfo);
+        ImageButton infoButton = (ImageButton) findViewById(R.id.viewinfo);
         user = FirebaseAuth.getInstance().getCurrentUser();
         StorageReference mStorage = FirebaseStorage.getInstance().getReference();
         StorageReference pathRef;
@@ -197,7 +179,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 }
             });
         }
-        button.setOnClickListener(new View.OnClickListener() {
+        infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (user != null){
@@ -244,6 +226,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
+        //Gets Current User's name if logged in that will be used to sent to other activity
         ImageButton messageBtn = findViewById(R.id.msgbtn);
         messageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -256,7 +239,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     myintent.putExtra("myUserName", myUserName);
                     myintent.putExtra("myUserProfile",product.getSeller());
                     //System.out.println("CATEGORY: "+categoryList.get(position).getName());
-                    startActivityForResult(myintent, 0);
+                    startActivityForResult(myintent, REQUEST_NAME);
                 }
                 else
                 {
@@ -268,14 +251,26 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
-        //For SafeZone Disclaimer Alert
+
+
+
+        //Purchase Button Clicked
+
+        Button purchaseBtn = findViewById(R.id.purchaseRequestBtn);
+        purchaseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                purchaseRequestDialog.show();
+            }
+        });
+
         purchaseRequestDialog = new AlertDialog.Builder(ProductDetailsActivity.this).create();
         purchaseRequestDialog.setTitle("Purchase Request");
         purchaseRequestDialog.setMessage("Do you want to buy this product?");
         purchaseRequestDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Send Purchase Request", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(ProductDetailsActivity.this, "Sending Purchase Request...", Toast.LENGTH_LONG).show();
+                //Toast.makeText(ProductDetailsActivity.this, "Sending Purchase Request...", Toast.LENGTH_LONG).show();
                 // TO PURCHASE REQUESTS
                 safeZoneDisclaimer.show();
                 //
@@ -285,20 +280,61 @@ public class ProductDetailsActivity extends AppCompatActivity {
         purchaseRequestDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(ProductDetailsActivity.this, "Canceled...", Toast.LENGTH_LONG).show();
+                Toast.makeText(ProductDetailsActivity.this, "Canceled", Toast.LENGTH_LONG).show();
                 dialog.dismiss();
             }
         });
-        Button purchaseBtn = findViewById(R.id.purchaseRequestBtn);
-        purchaseBtn.setOnClickListener(new View.OnClickListener() {
+
+
+
+
+
+        //Barter Button CLicked
+
+        Button barterBtn = findViewById(R.id.barterRequestBtn);
+        barterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                purchaseRequestDialog.show();
+
+                safeZoneDisclaimerBarter.show();
             }
         });
 
+        barterRequestDialog = new AlertDialog.Builder(ProductDetailsActivity.this).create();
+        barterRequestDialog .setTitle("Barter Request");
+        barterRequestDialog .setMessage("Do you want to barter this product?");
+        barterRequestDialog .setButton(DialogInterface.BUTTON_POSITIVE, "Select Product to Barter", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Toast.makeText(ProductDetailsActivity.this, "Sending Purchase Request...", Toast.LENGTH_LONG).show();
+                // TO PURCHASE REQUESTS
+                //safeZoneDisclaimer.show();
+                //
+
+                Intent myintent = new Intent(getApplicationContext(), MyBarterProductListActivity.class);
+                startActivityForResult(myintent, REQUEST_PRODUCT);
+
+
+                dialog.dismiss();;
+            }
+        });
+        barterRequestDialog .setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(ProductDetailsActivity.this, "Canceled", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+
+
+
+
+
+
+
+
         safeZoneDisclaimer = new AlertDialog.Builder(ProductDetailsActivity.this).create();
-        safeZoneDisclaimer.setTitle("Safe /''Zones");
+        safeZoneDisclaimer.setTitle("Safe Zones");
         safeZoneDisclaimer.setMessage("Your personal safety is important to us at Bookster and as such we have identified places in and around the St Augustine UWI campus which are well known, public and suitable for conducting trade. These areas are called Safe Zones and are there to help you conduct your trades in a safe environment.\n" +
                 "\nDisclaimer\n" +
                 "While we are careful in identifying Safe Zones, they are merely suggestions, therefore you must always take care to ensure personal safety. Bookster accepts no liability in any event whether or not conducting trades in or out of Safe Zones.\n");
@@ -314,10 +350,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                 PurchaseRequest purchaseRequest = new PurchaseRequest(
                         requestID,
-                        "Purchase request for item: "+product.getName(),
+                        "Purchase Request",
                         "Campus Security",
                         "pending",
-                        FirebaseAuth.getInstance().getUid(),
+                        FirebaseAuth.getInstance().getCurrentUser().getUid(),
                         myUserName,
                         product,
                         System.currentTimeMillis()
@@ -346,15 +382,33 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-//        Button purchaseBtn = findViewById(R.id.purchaseRequestBtn);
-//        purchaseBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                safeZoneDisclaimer.show();
-////                Intent i = new Intent(ProductDetailsActivity.this, .class);
-////                startActivity(i);
-//            }
-//        });
+
+
+
+
+        safeZoneDisclaimerBarter = new AlertDialog.Builder(ProductDetailsActivity.this).create();
+        safeZoneDisclaimerBarter.setTitle("Safe Zones");
+        safeZoneDisclaimerBarter.setMessage("Your personal safety is important to us at Bookster and as such we have identified places in and around the St Augustine UWI campus which are well known, public and suitable for conducting trade. These areas are called Safe Zones and are there to help you conduct your trades in a safe environment.\n" +
+                "\nDisclaimer\n" +
+                "While we are careful in identifying Safe Zones, they are merely suggestions, therefore you must always take care to ensure personal safety. Bookster accepts no liability in any event whether or not conducting trades in or out of Safe Zones.\n");
+        safeZoneDisclaimerBarter.setButton(DialogInterface.BUTTON_POSITIVE, "I Accept", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                barterRequestDialog.show();
+
+                dialog.dismiss();
+            }
+        });
+        safeZoneDisclaimerBarter.setButton(DialogInterface.BUTTON_NEGATIVE, "Reject", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(ProductDetailsActivity.this, "You must accept to continue.", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+
     }
 
     public void updateViews()
@@ -374,6 +428,71 @@ public class ProductDetailsActivity extends AppCompatActivity {
         callBtn.setVisibility(View.INVISIBLE);
         viewBtn.setVisibility(View.INVISIBLE);
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == REQUEST_NAME)
+        {
+            DatabaseReference db;
+            db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            db.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    myUserName =  dataSnapshot.child("fullname").getValue().toString();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+        else if(resultCode == RESULT_OK && requestCode == REQUEST_PRODUCT)
+        {
+            requestProduct = (Product) data.getSerializableExtra("productObj");
+
+
+            String requestID = FirebaseDatabase.getInstance().getReference().child("Requests").child("Barter").push().getKey();
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("Requests").child("Barter").child(requestID);
+
+            BarterRequest barterRequest = new BarterRequest(
+                    requestID,
+                    "Purchase Request",
+                    "Campus Security",
+                    "pending",
+                    FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                    myUserName,
+                    requestProduct,
+                    product,
+                    System.currentTimeMillis()
+            );
+
+
+
+            mDatabase.setValue(barterRequest);
+
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child("Requests").child("Barter").child("sent").child(requestID);
+            mDatabase.setValue(barterRequest);
+
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(product.getSeller().myUID)
+                    .child("Requests").child("Barter").child("received").child(requestID);
+            mDatabase.setValue(barterRequest);
+
+            Toast.makeText(ProductDetailsActivity.this, "Barter Request Sent", Toast.LENGTH_LONG).show();
+
+
+
+
+        }
+        else
+        {
+            System.out.println("Activity Canceled");
+        }
+    }
+
 
 
 

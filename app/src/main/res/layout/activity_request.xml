@@ -1,20 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_request"
+
     >
 
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        />
-
-    <ListView
-        android:id="@+id/listView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:id="@+id/activity_request"
+        android:orientation="vertical"
+        >
 
-</LinearLayout>
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Purchase Requests"
+            android:gravity="center"
+            android:textColor="#000099"
+            android:background="#DCDCDC"
+            android:textSize="20sp"
+            />
+
+        <ListView
+             android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/design_default_color_primary_dark"
+            android:dividerHeight="1dip"
+            />
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Barter Requests"
+            android:gravity="center"
+            android:textColor="#000099"
+            android:background="#DCDCDC"
+            android:textSize="20sp"
+            />
+
+        <ListView
+
+            android:id="@+id/barterListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/design_default_color_primary_dark"
+            android:dividerHeight="1dip"
+            />
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+</ScrollView>
