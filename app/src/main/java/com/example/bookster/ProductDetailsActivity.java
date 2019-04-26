@@ -333,7 +333,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         .child("Requests").child("Purchase").child("received").child(requestID);
                 mDatabase.setValue(purchaseRequest);
 
-
                 purchaseRequestDialog.show();
                 Intent i = new Intent(ProductDetailsActivity.this, MainActivity.class);
                 dialog.dismiss();
