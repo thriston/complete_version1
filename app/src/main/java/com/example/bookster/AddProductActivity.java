@@ -175,15 +175,6 @@ public class AddProductActivity extends AppCompatActivity {
                 productID = FirebaseDatabase.getInstance().getReference().child("Products").push().getKey();
 
 
-
-
-                //System.out.println("MAP SIZE: "+productImages.size());
-//                for(int i=0; i < productImages.size(); i++)
-//                {
-//
-//                    System.out.println("IMAGE: "+productImages.get(""+i));
-//                }
-
                 productImage = productImages.get("0");
                 final String mainImagePath = "ProductImages/"+ UUID.randomUUID();
                 myStorage.child(mainImagePath).putFile(productImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -257,9 +248,6 @@ public class AddProductActivity extends AppCompatActivity {
                 });
 
 
-
-
-
                 for(Map.Entry<String, Uri> entry : productImages.entrySet()) {
                     String path = "ProductImages/"+ UUID.randomUUID();
                     key = entry.getKey();
@@ -281,66 +269,6 @@ public class AddProductActivity extends AppCompatActivity {
                         });
                     }
                 }
-
-
-
-
-
-
-
-//                if(productImages.size() >= 1)
-//                {
-////                    for(Uri secondaryImageUrl: productImages)
-////                    {
-////                        myStorage.putFile(secondaryImageUrl);
-//
-//                    myStorage.putFile(productImages.get(0));
-//                    myStorage.putFile(productImages.get(1));
-//                    myStorage.putFile(productImages.get(2));
-//                    myStorage.putFile(productImages.get(3));
-//                }
-
-
-
-
-
-//                for(Uri uri: productImages)
-//                {
-//
-//                }
-
-
-
-//                //productID = FirebaseDatabase.getInstance().getReference().child("Products").push().getKey();
-//
-//                Product product = new Product(
-//                        productID,
-//                        productName.getText().toString(),
-//                        price.getText().toString(),
-//                        quantity.getText().toString(),
-//                        description.getText().toString(),
-//                        category,
-//                        mainImageUrl,
-//                        imagesUrl,
-//                        myUserProfile);
-//
-//                myDatabase.child(productID).setValue(product);
-//                //Send information to User's Profile
-//                DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users")
-//                        .child(product.getSeller().myUID).child("Products").child(productID);
-//                db.child("id").setValue(productID);
-//                db.child("name").setValue(productName.getText().toString());
-//                db.child("details").setValue(description.getText().toString());
-//                db.child("price").setValue(price.getText().toString());
-//                db.child("category").setValue(category);
-                //db.child("images").setValue(images);
-
-
-                //myDatabase.child(productID).setValue(product);
-//
-//
-//                Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
-//                finish();
 
 
             }

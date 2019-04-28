@@ -1,5 +1,8 @@
 package com.example.bookster;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,9 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +36,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     Toolbar toolbar;
     private TextView fullNameView, emailView, contactView;
+    private ImageView profileImageV;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -43,11 +51,15 @@ public class ProfileFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
 
+
+
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String email = user.getEmail();
         fullNameView= v.findViewById(R.id.fullNameField);
         emailView= v.findViewById(R.id.emailField);
         contactView= v.findViewById(R.id.contactField);
+        profileImageV = v.findViewById(R.id.profilePicture);
 
         toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         toolbar.setTitle("Your Profile");
@@ -79,6 +91,8 @@ public class ProfileFragment extends Fragment {
                 fullNameView.setText(currUser.fullname);
                 emailView.setText(currUser.email);
                 contactView.setText(currUser.contact);
+                Glide.with(getContext()).load(currUser.profilePicURL).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(profileImageV);
+
 
                 // [END_EXCLUDE]
             }
@@ -94,6 +108,35 @@ public class ProfileFragment extends Fragment {
             }
         };
         mDatabase.addValueEventListener(userListener);
+
+        Button logOutBtn = v.findViewById(R.id.logOutBtn);
+        logOutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder altdial = new AlertDialog.Builder(getContext());
+                altdial.setMessage("Are you sure you want to log out?").setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                FirebaseAuth.getInstance().signOut();
+                                Intent intent= new Intent(getContext(), MainActivity.class);
+                                //getActivity().finish();
+                                startActivity(intent);
+                                Toast.makeText(getContext(), "Logged Out", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert = altdial.create();
+                alert.setTitle("Log Out");
+                alert.show();
+            }
+        });
 
 
         return v;

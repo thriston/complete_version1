@@ -109,7 +109,6 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
 
 
         ImageLoader imageLoader = ImageLoader.getInstance();
-        ;
         int defaultImage = mContext.getResources().getIdentifier("@drawable/image_failed",null,mContext.getPackageName());
 
         //create display options

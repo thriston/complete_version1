@@ -123,7 +123,9 @@ public class Product implements Serializable {
     public void addTransaction()
     {
         this.nTransactions = this.nTransactions + 1;
+        this.quantity = ""+(Integer.parseInt(quantity) - 1);
     }
+
 
     public String getMainImage() {
         return mainImage;

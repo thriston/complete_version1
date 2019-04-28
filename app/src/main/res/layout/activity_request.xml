@@ -34,6 +34,9 @@
             android:layout_height="match_parent"
             android:divider="@color/design_default_color_primary_dark"
             android:dividerHeight="1dip"
+            android:scrollbarSize="10dp"
+            android:scrollbarThumbVertical="@layout/custom_scroll_style"
+            android:fadeScrollbars="false"
             />
 
         <TextView
@@ -48,12 +51,14 @@
             />
 
         <ListView
-
+            android:fadeScrollbars="false"
             android:id="@+id/barterListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@color/design_default_color_primary_dark"
             android:dividerHeight="1dip"
+            android:scrollbarSize="10dp"
+            android:scrollbarThumbVertical="@layout/custom_scroll_style"
             />
 
 

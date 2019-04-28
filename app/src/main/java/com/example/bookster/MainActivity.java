@@ -18,10 +18,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     private DatabaseReference myDatabase;
     private TextView tvName, tvEmail;
+    private ImageView imageView;
 
     //If logged in
     //private static final int nav_chat = 941;
@@ -66,6 +70,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
        // FirebaseUser auth;
        // mListView  = (ListView) findViewById(R.id.listView);
+
+
+
+
+
         drawer= findViewById(R.id.drawer_layout);
 //
         navigationView = findViewById(R.id.nav_view);
@@ -75,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View headerLayout = navigationView.getHeaderView(0);
         tvName = headerLayout.findViewById(R.id.name);
         tvEmail = headerLayout.findViewById(R.id.email);
+        imageView = headerLayout.findViewById(R.id.profilePictureImage);
         //tvEmail.setText("EMAIL@GMAIL.COM");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -87,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     //System.out.println("INFORMATION: "+dataSnapshot.child("fullname").getValue().toString());
                     tvName.setText(dataSnapshot.child("fullname").getValue().toString());
                     tvEmail.setText(dataSnapshot.child("email").getValue().toString());
+                    Glide.with(getApplicationContext()).load(dataSnapshot.child("profilePicURL").getValue().toString()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(imageView);
+
                 }
 
                 @Override
@@ -100,6 +112,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         {
             tvName.setText("Login to access full functionality");
             tvEmail.setVisibility(View.GONE);
+
+            //Glide.with(ctx).load(images.get(position)).into(imageView);
+
 
         }
 

@@ -179,12 +179,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 }
             });
         }
+
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (user != null){
                     Intent myintent = new Intent(ProductDetailsActivity.this, Seller_info.class);
                     myintent.putExtra("productObj", product);
+                    myintent.putExtra("myUserName", myUserName);
                     startActivityForResult(myintent, 0);
 
                 }
@@ -214,8 +216,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 {
                     Intent intent = new Intent(Intent.ACTION_DIAL);
 
-                    TextView num = findViewById(R.id.sellerContactNumTextView);
-                    intent.setData(Uri.parse("tel:" + num.getText() ));
+
+                    intent.setData(Uri.parse("tel:" + product.getSeller().getContact() ));
                     startActivity(intent);
                 }
                 else

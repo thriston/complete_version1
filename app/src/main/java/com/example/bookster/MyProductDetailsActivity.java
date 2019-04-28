@@ -161,7 +161,7 @@ public class MyProductDetailsActivity extends AppCompatActivity {
         stockQty.setText(product.getQuantity());
         views.setText(product.getViews()+"");
         nTransactions.setText(product.getNTransactions()+"");
-        dateCreated.setText(DateFormat.format("d-M-yyyy", product.getDateCreated())+" (d-m-y)");
+        dateCreated.setText(DateFormat.format("d-M-yyyy", product.getDateCreated())+" (dd-mm-yyyyy)");
 
         ImageButton editProductBtn = findViewById(R.id.editProductInfo);
         ImageButton deleteProductBtn = findViewById(R.id.deleteProduct);
@@ -180,10 +180,12 @@ public class MyProductDetailsActivity extends AppCompatActivity {
         viewProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), Profile.class);
+                //Intent i = new Intent(getApplicationContext(), Profile.class);
                 //i.putExtra("receiverUID", receiverUID);
-                startActivity(i);
+                //startActivity(i);
                 //finish();
+                Intent i=new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(i);
             }
         });
 

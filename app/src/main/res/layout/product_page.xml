@@ -204,7 +204,7 @@
             android:layout_height="wrap_content"
             android:text="Barter"
             android:textColor="#ffffff"
-            android:backgroundTint="@color/design_default_color_primary_dark"
+            android:backgroundTint="#000099"
             android:layout_below="@id/stockStatus"
             />
 
@@ -216,7 +216,7 @@
             android:layout_height="wrap_content"
             android:text="Purchase"
             android:textColor="#ffffff"
-            android:backgroundTint="@color/design_default_color_primary_dark"
+            android:backgroundTint="#000099"
             android:layout_below="@id/barterRequestBtn"
             />
 

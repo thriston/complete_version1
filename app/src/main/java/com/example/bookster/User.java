@@ -3,17 +3,18 @@ package com.example.bookster;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    public String fullname, email, contact, myUID;
+    public String fullname, email, contact, myUID, profilePicURL;
 
     public User(){
 
     }
 
-    public User(String fullname, String email, String contact, String myUID) {
+    public User(String fullname, String email, String contact, String myUID, String profilePicURL) {
         this.fullname = fullname;
         this.email = email;
         this.contact = contact;
         this.myUID = myUID;
+        this.profilePicURL = profilePicURL;
     }
 
 
@@ -47,5 +48,13 @@ public class User implements Serializable {
 
     public void setMyUID(String myUID) {
         this.myUID = myUID;
+    }
+
+    public String getProfilePicURL() {
+        return profilePicURL;
+    }
+
+    public void setProfilePicURL(String profilePicURL) {
+        this.profilePicURL = profilePicURL;
     }
 }

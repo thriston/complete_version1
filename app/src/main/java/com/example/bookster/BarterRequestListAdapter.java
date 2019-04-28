@@ -37,8 +37,8 @@ public class BarterRequestListAdapter extends ArrayAdapter<BarterRequest> {
         String message = getItem(position).getMessage();
         String senderUserName = getItem(position).getSenderName();
         long time = getItem(position).getDate();
-        final Product myProduct= getItem(position).getMyProduct();
-        final Product barterProduct= getItem(position).getSellerProduct();
+        final Product barterProduct= getItem(position).getMyProduct();
+        final Product  myProduct= getItem(position).getSellerProduct();
         final String requestID = getItem(position).getID();
         String location = getItem(position).getLocation();
         String status = getItem(position).getStatus();
@@ -125,8 +125,15 @@ public class BarterRequestListAdapter extends ArrayAdapter<BarterRequest> {
                     DatabaseReference db1,db2;
                     db1 = FirebaseDatabase.getInstance().getReference().child("Products").child(myProduct.getID()).child("ntransactions");
                     db1.setValue(myProduct.getNTransactions());
+
+                    db1 = FirebaseDatabase.getInstance().getReference().child("Products").child(myProduct.getID()).child("quantity");
+                    db1.setValue(myProduct.getQuantity());
+
                     db2 = FirebaseDatabase.getInstance().getReference().child("users").child(myProduct.getSeller().myUID).child("Products").child(myProduct.getID()).child("nTransactions");
                     db2.setValue(myProduct.getNTransactions());
+
+                    db2 = FirebaseDatabase.getInstance().getReference().child("users").child(myProduct.getSeller().myUID).child("Products").child(myProduct.getID()).child("quantity");
+                    db2.setValue(myProduct.getQuantity());
 
                     mDatabase.keepSynced(true);
 
@@ -165,18 +172,6 @@ public class BarterRequestListAdapter extends ArrayAdapter<BarterRequest> {
                     getContext().startActivity(myintent);
                 }
             });
-
-//            barterViewHolder.call.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(Intent.ACTION_DIAL);
-//
-////                    TextView num = convertView.findViewById(R.id.sellerContactNumTextView);
-////                    intent.setData(Uri.parse("tel:" + num.getText() ));
-////                    startActivity(intent);
-//                }
-//            });
-
 
         }
 

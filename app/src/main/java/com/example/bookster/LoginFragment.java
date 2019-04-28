@@ -93,12 +93,13 @@ public class LoginFragment extends Fragment {
 //        toggle.syncState();
 
 
+        //Signup link on login page
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i= new Intent(getContext(),SignUp.class);
                 startActivity(i);
-                getActivity().finish();
+                //getActivity().finish();
             }
         });
 
