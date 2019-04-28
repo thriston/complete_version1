@@ -183,6 +183,15 @@ public class AddProductActivity extends AppCompatActivity {
                         myStorage.child(mainImagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
+                                // initiate a Switch
+                                Switch simpleSwitch = (Switch) findViewById(R.id.allowCallsSwitch);
+
+                                // check current state of a Switch (true or false).
+                                Boolean switchState = simpleSwitch.isChecked();
+                                if(!switchState)
+                                {
+                                    myUserProfile.setContact("Hidden");
+                                }
                                 Product product = new Product(
                                     productID,
                                     productName.getText().toString(),
@@ -207,7 +216,6 @@ public class AddProductActivity extends AppCompatActivity {
                                             {
                                                 String val = ds.child("nItems").getValue().toString();
                                                 int valInt = Integer.parseInt(val);
-                                                System.out.println("NUMBER ITEMS: "+valInt);
                                                 FirebaseDatabase.getInstance().getReference().child("Category").child(category).child("nItems").setValue((valInt+1)+"");
 
                                             }

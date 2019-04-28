@@ -214,11 +214,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 if(user!=null)
                 {
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-
-
-                    intent.setData(Uri.parse("tel:" + product.getSeller().getContact() ));
-                    startActivity(intent);
+                    if(product.getSeller().getContact().equals("Hidden"))
+                    {
+                        Toast.makeText(ProductDetailsActivity.this, "Seller's Contact Number is not Available", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.parse("tel:" + product.getSeller().getContact()));
+                        startActivity(intent);
+                    }
                 }
                 else
                 {

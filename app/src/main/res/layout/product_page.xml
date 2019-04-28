@@ -21,7 +21,7 @@
 
         <TextView
             android:id="@+id/productNameTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/toolbar"
             android:text="Product Name"
@@ -33,7 +33,7 @@
 
         <TextView
             android:id="@+id/sellerNameTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginStart="5dp"
@@ -146,7 +146,7 @@
             android:layout_below="@id/product_img_slider"
             android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
-            android:text="FOR SALE"
+            android:text="FOR SALE / BARTER"
             android:layout_marginEnd="24dp"
             android:textColor="@color/design_default_color_primary_dark"
             android:textSize="18sp"
@@ -235,7 +235,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="12dp"
             android:layout_below="@+id/purchaseRequestBtn"
-            android:text="Seller:"
+            android:text="Contact:"
             android:textColor="#4A4A4A"
             android:textSize="20sp"
             />
@@ -248,11 +248,25 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/purchaseRequestBtn"
             android:layout_toEndOf="@+id/sellerTV"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="26dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginStart="10dp"
             android:text="9876543210"
+            android:padding="0dp"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp"
+            />
+
+
+        <TextView
+            android:id="@+id/emailTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_below="@+id/sellerTV"
+            android:text="Email:"
+            android:textColor="#4A4A4A"
+            android:textSize="20sp"
             />
 
 
@@ -261,9 +275,10 @@
             android:id="@+id/sellerEmailTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="26dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
             android:layout_below="@id/sellerContactNumTextView"
-            android:layout_toEndOf="@+id/sellerTV"
+            android:layout_toEndOf="@+id/emailTV"
             android:text="thebuilder@bob.com"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp"
