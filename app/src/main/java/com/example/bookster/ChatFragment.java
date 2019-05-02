@@ -73,6 +73,8 @@ public class ChatFragment extends Fragment {
                 conversationsModel= new ArrayList<>();
                 for(final DataSnapshot ds : dataSnapshot.getChildren())
                 {
+                    if(getActivity() == null)
+                        return;
                     key = ds.getKey();
 
                     if (key.startsWith(myUID))

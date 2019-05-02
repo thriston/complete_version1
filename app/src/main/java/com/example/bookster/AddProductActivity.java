@@ -7,12 +7,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -41,10 +41,16 @@ public class AddProductActivity extends AppCompatActivity {
     FloatingActionButton fabAdd;
     FloatingActionButton fabCancel;
     User myUserProfile;
-    EditText productName;
-    EditText description;
-    EditText price;
-    EditText quantity;
+//    EditText productName;
+//    EditText description;
+//    EditText price;
+//    EditText quantity;
+
+    private TextInputLayout textInputProductName;
+    private TextInputLayout textInputDescription;
+    private TextInputLayout textInputPrice;
+    private TextInputLayout textInputQuantity;
+
     Switch allowCalls;
     String productID;
     DatabaseReference myDatabase;
@@ -70,7 +76,7 @@ public class AddProductActivity extends AppCompatActivity {
 
     private String key;
     private int PICK_MULTIPLE_IMAGE_REQUEST = 20;
-    private Uri productImage;
+    private Uri productImage = null;
     private ArrayList<String> imagesUrl; //the html image url
     private String mainImageUrl;
     private boolean mainUploaded = false;
@@ -101,10 +107,17 @@ public class AddProductActivity extends AppCompatActivity {
         fabAdd = findViewById(R.id.fabAdd);
         fabCancel = findViewById(R.id.fabCancel);
 
-        productName = findViewById(R.id.productName);
-        description = findViewById(R.id.description);
-        price = findViewById(R.id.price);
-        quantity = findViewById(R.id.quantity);
+//        productName = findViewById(R.id.productName);
+//        description = findViewById(R.id.description);
+//        price = findViewById(R.id.price);
+//        quantity = findViewById(R.id.quantity);
+
+        //From input form
+        textInputProductName = findViewById(R.id.text_input_product_name);
+        textInputDescription = findViewById(R.id.text_input_description);
+        textInputPrice = findViewById(R.id.text_input_price);
+        textInputQuantity = findViewById(R.id.text_input_quantity);
+
         allowCalls = findViewById(R.id.allowCallsSwitch);
         myDatabase = FirebaseDatabase.getInstance().getReference().child("Products");
         CardView cardView = findViewById(R.id.cardView);
@@ -168,116 +181,120 @@ public class AddProductActivity extends AppCompatActivity {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                ProgressBar progressBar = findViewById(R.id.progress_bar);
-                progressBar.setVisibility(View.VISIBLE);
-                productID = FirebaseDatabase.getInstance().getReference().child("Products").push().getKey();
-
-
                 productImage = productImages.get("0");
-                final String mainImagePath = "ProductImages/"+ UUID.randomUUID();
-                myStorage.child(mainImagePath).putFile(productImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        myStorage.child(mainImagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                // initiate a Switch
-                                Switch simpleSwitch = (Switch) findViewById(R.id.allowCallsSwitch);
+                if(productImage==null)
+                {
+                    Toast.makeText(AddProductActivity.this, "Please Select a main Image", Toast.LENGTH_SHORT).show();
+                }
+                if(confirmInput() & productImage!=null)
+                {
+                    ProgressBar progressBar = findViewById(R.id.progress_bar);
+                    progressBar.setVisibility(View.VISIBLE);
+                    productID = FirebaseDatabase.getInstance().getReference().child("Products").push().getKey();
 
-                                // check current state of a Switch (true or false).
-                                Boolean switchState = simpleSwitch.isChecked();
-                                if(!switchState)
-                                {
-                                    myUserProfile.setContact("Hidden");
-                                }
-                                Product product = new Product(
-                                    productID,
-                                    productName.getText().toString(),
-                                    price.getText().toString(),
-                                    quantity.getText().toString(),
-                                    description.getText().toString(),
-                                    category,
-                                    uri.toString(),
-                                    secondaryImages,
-                                    myUserProfile);
-                                myDatabase.child(productID).setValue(product);
-                                mainUploaded = true;
-                                catRef = FirebaseDatabase.getInstance().getReference();
-                                catRef = catRef.child("Category");
-                                System.out.println("THE CATEGORY: "+category);
-                                catRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for(DataSnapshot ds: dataSnapshot.getChildren())
-                                        {
-                                            if(ds.getKey().equals(category))
+
+                    final String mainImagePath = "ProductImages/"+ UUID.randomUUID();
+                    myStorage.child(mainImagePath).putFile(productImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            myStorage.child(mainImagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    // initiate a Switch
+                                    Switch simpleSwitch = (Switch) findViewById(R.id.allowCallsSwitch);
+
+                                    // check current state of a Switch (true or false).
+                                    Boolean switchState = simpleSwitch.isChecked();
+                                    if(!switchState)
+                                    {
+                                        myUserProfile.setContact("Hidden");
+                                    }
+                                    Product product = new Product(
+                                            productID,
+                                            textInputProductName.getEditText().getText().toString(),
+                                            textInputPrice.getEditText().getText().toString(),
+                                            textInputQuantity.getEditText().getText().toString(),
+                                            textInputDescription.getEditText().getText().toString(),
+                                            category,
+                                            uri.toString(),
+                                            secondaryImages,
+                                            myUserProfile);
+                                    myDatabase.child(productID).setValue(product);
+                                    mainUploaded = true;
+                                    catRef = FirebaseDatabase.getInstance().getReference();
+                                    catRef = catRef.child("Category");
+                                    System.out.println("THE CATEGORY: "+category);
+                                    catRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            for(DataSnapshot ds: dataSnapshot.getChildren())
                                             {
-                                                String val = ds.child("nItems").getValue().toString();
-                                                int valInt = Integer.parseInt(val);
-                                                FirebaseDatabase.getInstance().getReference().child("Category").child(category).child("nItems").setValue((valInt+1)+"");
+                                                if(ds.getKey().equals(category))
+                                                {
+                                                    String val = ds.child("nItems").getValue().toString();
+                                                    int valInt = Integer.parseInt(val);
+                                                    FirebaseDatabase.getInstance().getReference().child("Category").child(category).child("nItems").setValue((valInt+1)+"");
 
+                                                }
                                             }
-                                        }
 
 //                                        System.out.println("NUMBER ITEMS: "+dataSnapshot.child("Description").getValue());
 //
-                                    }
+                                        }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                    }
-                                });
-
-
-
-                                DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users")
-                                        .child(product.getSeller().myUID).child("Products").child(productID);
-                                db.child("id").setValue(productID);
-                                db.child("name").setValue(productName.getText().toString());
-                                db.child("details").setValue(description.getText().toString());
-                                db.child("price").setValue(price.getText().toString());
-                                db.child("quantity").setValue(quantity.getText().toString());
-                                db.child("category").setValue(category);
-                                db.child("mainImage").setValue(uri.toString());
-                                db.child("secondaryImages").setValue(secondaryImages);
-                                db.child("nTransactions").setValue(0);
-                                db.child("views").setValue(0);
-                                db.child("active").setValue(true);
-                                db.child("dateCreated").setValue(System.currentTimeMillis());
-
-                                Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                        });
-                    }
-                });
+                                        }
+                                    });
 
 
-                for(Map.Entry<String, Uri> entry : productImages.entrySet()) {
-                    String path = "ProductImages/"+ UUID.randomUUID();
-                    key = entry.getKey();
-                    Uri url = entry.getValue();
-                    if(key != "0")
-                    {
-                        secondaryImages.add(path);
-                        myStorage.child(path).putFile(url).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                count++;
-                                if(count == productImages.size()-1)
-                                {
-                                    secondaryImagesUploaded = true;
-                                    if(mainUploaded && secondaryImagesUploaded)
-                                        finish();
+
+                                    DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users")
+                                            .child(product.getSeller().myUID).child("Products").child(productID);
+                                    db.child("id").setValue(productID);
+                                    db.child("name").setValue(textInputProductName.getEditText().getText().toString());
+                                    db.child("details").setValue(textInputDescription.getEditText().getText().toString());
+                                    db.child("price").setValue(textInputPrice.getEditText().getText().toString());
+                                    db.child("quantity").setValue(textInputQuantity.getEditText().getText().toString());
+                                    db.child("category").setValue(category);
+                                    db.child("mainImage").setValue(uri.toString());
+                                    db.child("secondaryImages").setValue(secondaryImages);
+                                    db.child("nTransactions").setValue(0);
+                                    db.child("views").setValue(0);
+                                    db.child("active").setValue(true);
+                                    db.child("dateCreated").setValue(System.currentTimeMillis());
+
+                                    Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
+                                    finish();
                                 }
-                            }
-                        });
+                            });
+                        }
+                    });
+
+
+                    for(Map.Entry<String, Uri> entry : productImages.entrySet()) {
+                        String path = "ProductImages/"+ UUID.randomUUID();
+                        key = entry.getKey();
+                        Uri url = entry.getValue();
+                        if(key != "0")
+                        {
+                            secondaryImages.add(path);
+                            myStorage.child(path).putFile(url).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    count++;
+                                    if(count == productImages.size()-1)
+                                    {
+                                        secondaryImagesUploaded = true;
+                                        if(mainUploaded && secondaryImagesUploaded)
+                                            finish();
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
-
 
             }
         });
@@ -360,6 +377,100 @@ public class AddProductActivity extends AppCompatActivity {
 //        }
 
     }
+
+    private boolean validateProductName()
+    {
+        String productNameInput = textInputProductName.getEditText().getText().toString().trim();
+        if(productNameInput.isEmpty())
+        {
+            textInputProductName.setError("Name can't be empty");
+            return false;
+        }
+        else
+        if(productNameInput.length() > 40)
+        {
+            textInputProductName.setError("Name too large");
+            return false;
+        }
+        else
+        {
+            textInputProductName.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateDescription()
+    {
+        String descriptionInput = textInputDescription.getEditText().getText().toString().trim();
+        if(descriptionInput.isEmpty())
+        {
+            textInputDescription.setError("Description can't be empty");
+            return false;
+        }
+        else
+        if(descriptionInput.length() > 150)
+        {
+            textInputDescription.setError("Description too large");
+            return false;
+        }
+        else
+        {
+            textInputDescription.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validatePrice()
+    {
+        String priceInput = textInputPrice.getEditText().getText().toString().trim();
+        if(priceInput.isEmpty())
+        {
+            textInputPrice.setError("Price is empty");
+            return true;
+        }
+        else
+        if(priceInput.length() > 6)
+        {
+            textInputPrice.setError("Number too large");
+            return false;
+        }
+        else
+        {
+            textInputPrice.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateQuantity()
+    {
+        String quantityInput = textInputQuantity.getEditText().getText().toString().trim();
+        if(quantityInput.isEmpty())
+        {
+            textInputQuantity.setError("Quantity cant be empty");
+            return false;
+        }
+        else
+        if(quantityInput.length() > 4)
+        {
+            textInputQuantity.setError("Number too large");
+            return false;
+        }
+        else
+        {
+            textInputQuantity.setError(null);
+            return true;
+        }
+    }
+
+    public boolean confirmInput()
+    {
+        if(!validateProductName() | !validateDescription() | !validatePrice() | !validateQuantity())
+        {
+            return false;
+        }
+        return true;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

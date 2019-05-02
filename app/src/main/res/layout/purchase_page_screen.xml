@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Seller_info">
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
+
+        <TextView
+            android:id="@+id/requestTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000099"
+            android:text="Purchase Request"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:textSize="10pt"
+            android:fontFamily="times new roman"
+            android:textStyle="bold"/>
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardViewProduct"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:paddingBottom="0dp"
+            android:backgroundTint="@color/grey_font"
+            app:cardBackgroundColor="@color/fui_transparent"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            >
+
+
+
+            <ImageView
+                android:id="@+id/product_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:visibility="visible"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+
+                />
+
+
+        </android.support.v7.widget.CardView>
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            >
+
+            <TextView
+                android:id="@+id/my_productTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My product: "
+                android:layout_marginStart="35dp"
+                android:textColor="#000099"
+                android:textSize="7pt"
+                android:textStyle="bold"
+                />
+
+
+            <TextView
+                android:id="@+id/my_product"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:text="Samsung Fold"
+                android:fontFamily="times new roman"
+                android:textSize="6pt"
+                android:textStyle="italic" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            >
+
+            <TextView
+                android:id="@+id/barter_productTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Selling price: "
+                android:layout_marginStart="35dp"
+                android:textColor="#000099"
+                android:textSize="7pt"
+                android:textStyle="bold"
+                />
+
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:text="$1234"
+                android:fontFamily="times new roman"
+                android:textSize="6pt"
+                android:textStyle="italic" />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Status: "
+                android:layout_marginStart="35dp"
+                android:textColor="#000099"
+                android:textSize="7pt"
+                android:textStyle="bold"
+                />
+
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:text="pending"
+                android:fontFamily="times new roman"
+                android:textSize="6pt"
+                android:textStyle="italic" />
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date: "
+                android:layout_marginStart="35dp"
+                android:textColor="#000099"
+                android:textSize="7pt"
+                android:textStyle="bold"
+                />
+
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:text="23-2-12 10am"
+                android:fontFamily="times new roman"
+                android:textSize="6pt"
+                android:textStyle="italic" />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Safe Zone: "
+                android:layout_marginStart="35dp"
+                android:textColor="#000099"
+                android:textSize="7pt"
+                android:textStyle="bold"
+                />
+
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:text="Campus Security"
+                android:fontFamily="times new roman"
+                android:textSize="6pt"
+                android:textStyle="italic" />
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+
+
+
+            <TextView
+                android:id="@+id/fullNameBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="From:"
+                android:textColor="#000099"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="35dp"
+                android:textSize="7pt"
+                android:fontFamily="times new roman"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/fullNameField"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="John Doe"
+                android:layout_toEndOf="@+id/fullNameBar"
+                android:layout_marginTop="20dp"
+                android:fontFamily="times new roman"
+                android:textSize="6pt"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/emailBar"
+                android:layout_below="@+id/fullNameField"
+                android:textColor="#000099"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="times new roman"
+                android:text="Email Address:"
+                android:textSize="7pt"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/emailField"
+                android:layout_below="@+id/fullNameField"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/emailBar"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="20dp"
+                android:text="Johndoe@gmail.com"
+                android:textSize="6pt"
+                android:fontFamily="times new roman"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/contactBar"
+                android:layout_below="@+id/emailField"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact Number:"
+                android:textColor="#000099"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="35dp"
+                android:textSize="7pt"
+                android:fontFamily="times new roman"
+                android:textStyle="bold"/>
+
+
+
+            <TextView
+                android:id="@+id/contactField"
+                android:layout_toEndOf="@+id/contactBar"
+                android:layout_below="@+id/emailField"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="20dp"
+                android:text="Hidden"
+
+                android:textSize="6pt"
+                android:fontFamily="times new roman"
+                android:textStyle="italic|bold"/>
+
+
+            <TextView
+                android:id="@+id/profilePictureTV"
+                android:layout_below="@+id/contactField"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Requester's Picture"
+                android:layout_centerHorizontal="true"
+                android:textColor="#000099"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="35dp"
+                android:textSize="7pt"
+                android:fontFamily="times new roman"
+                android:textStyle="bold"/>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:layout_below="@+id/profilePictureTV"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="visible"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:paddingBottom="0dp"
+                android:backgroundTint="@color/grey_font"
+                app:cardBackgroundColor="@color/fui_transparent"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="5dp"
+                >
+
+
+
+                <ImageView
+                    android:id="@+id/profilePicture"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:visibility="visible"
+                    android:layout_centerHorizontal="true"
+                    android:adjustViewBounds="true"
+
+                    />
+
+
+            </android.support.v7.widget.CardView>
+
+
+
+        </RelativeLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            >
+
+            <ImageButton
+                android:id="@+id/acceptBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:backgroundTint="@color/fui_transparent"
+                android:src="@drawable/ic_accept" />
+
+
+
+
+            <ImageButton
+                android:id="@+id/callbtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="0dp"
+                android:layout_marginStart="40dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:backgroundTint="@color/fui_transparent"
+                android:src="@drawable/call_btn" />
+
+
+
+            <ImageButton
+                android:id="@+id/msgbtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="0dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginStart="40dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:backgroundTint="@color/fui_transparent"
+                android:src="@drawable/message_btn" />
+
+
+            <ImageButton
+                android:id="@+id/rejectBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:backgroundTint="@color/fui_transparent"
+                android:src="@drawable/ic_reject" />
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+</ScrollView>

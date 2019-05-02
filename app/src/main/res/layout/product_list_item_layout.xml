@@ -32,11 +32,27 @@
         android:text="1.5 meter cable, RGB lights, CD software."
         android:textSize="15sp" />
 
+    <TextView
+        android:id="@+id/seller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/product_description"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="0dp"
+        android:layout_toEndOf="@+id/product_image"
+        android:gravity="center_vertical"
+        android:paddingStart="10dp"
+        android:text="Thriston Sookram"
+        android:textStyle="italic"
+        android:textColor="#000099"
+        android:textSize="15sp" />
+
+
     <RatingBar
         android:id="@+id/rating"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:layout_marginLeft="10dp"
-        android:layout_below="@+id/product_description"
+        android:layout_below="@+id/seller"
         android:layout_toEndOf="@+id/product_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,7 +78,7 @@
     <TextView
         android:id="@+id/productStatus"
         android:layout_width="wrap_content"
-        android:layout_height="21dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/rating"
         android:layout_alignParentEnd="true"
         android:textAlignment="center"
@@ -70,13 +86,15 @@
         android:layout_marginEnd="0dp"
         android:layout_toEndOf="@+id/product_price"
         android:paddingLeft="10dp"
-        android:text="FOR SALE"
+        android:paddingTop="2dp"
+        android:textSize="12sp"
+        android:text="FOR SALE/BARTER"
         android:textColor="@color/colorPrimary" />
 
     <ImageView
         android:id="@+id/product_image"
-        android:layout_width="110dp"
-        android:layout_height="100dp"
+        android:layout_width="135dp"
+        android:layout_height="135dp"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         app:srcCompat="@drawable/img_placeholder"

@@ -86,6 +86,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
+                if (getActivity() == null) {
+                    return;
+                }
                 User currUser = dataSnapshot.getValue(User.class);
                 // [START_EXCLUDE]
                 fullNameView.setText(currUser.fullname);

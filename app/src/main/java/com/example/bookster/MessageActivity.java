@@ -9,8 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,6 +35,7 @@ public class MessageActivity extends AppCompatActivity {
     private String myUserName;
     private User myUserProfile;
     private String receiverName;
+    private String profilePicURL;
     Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,7 +48,7 @@ public class MessageActivity extends AppCompatActivity {
         final Product product = (Product) intent.getSerializableExtra("productObj");
         myUserName = intent.getStringExtra("myUserName");
         myUserProfile = (User) intent.getSerializableExtra("myUserProfile");
-        //final myUse = (Product) intent.getSerializableExtra("productObj");
+
 
         receiverUID = myUserProfile.getMyUID();
         //receiverUID = product.getSeller().getUID();
@@ -51,8 +56,7 @@ public class MessageActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle(product.getSeller().getFullname() + "'s Chat" +
-                "");
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -64,6 +68,26 @@ public class MessageActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        myDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("profilePicURL");
+        myDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                profilePicURL = dataSnapshot.getValue().toString();
+                ImageView imageView = findViewById(R.id.profilePicToolbar);
+                Glide.with(getApplicationContext()).load(profilePicURL).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(imageView);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
 
         myDatabase = FirebaseDatabase.getInstance().getReference().child("Chats");
         myDatabase.keepSynced(true);
@@ -199,6 +223,8 @@ public class MessageActivity extends AppCompatActivity {
                     {
                         User user= (User) ds.getValue(User.class);
                         receiverName = user.getFullname();
+                        TextView textView = findViewById(R.id.title);
+                        textView.setText(receiverName);
                     }
 
                 }

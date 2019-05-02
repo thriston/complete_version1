@@ -9,8 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,7 +47,7 @@ public class RequestMessageActivity extends AppCompatActivity {
         //final Product product = (Product) intent.getSerializableExtra("productObj");
         myUserName = intent.getStringExtra("myUserName");
         receiverUID = intent.getStringExtra("receiverUID");
-        //final myUse = (Product) intent.getSerializableExtra("productObj");
+        //PurchaseRequest purchaseRequest = (PurchaseRequest) intent.getSerializableExtra("purchaseRequest");
 
         //receiverUID = myUserProfile.getMyUID();
         //receiverUID = product.getSeller().getUID();
@@ -51,7 +55,31 @@ public class RequestMessageActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle("Chat");
+
+
+        myDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID);
+        myDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                toolbar.setTitle("");
+                TextView toolbarTV = findViewById(R.id.title);
+                toolbarTV.setText(dataSnapshot.child("fullname").getValue().toString()+"'s Chat");
+                ImageView imageView = findViewById(R.id.profilePicToolbar);
+                Glide.with(getApplicationContext()).load(dataSnapshot.child("profilePicURL").getValue().toString()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(imageView);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -9,10 +9,11 @@
         android:layout_width="242dp"
         android:layout_height="67dp"
         android:layout_marginStart="0dp"
-        android:paddingStart="7dp"
+        android:paddingStart="25dp"
+        android:textColor="#000099"
         android:layout_marginEnd="0dp"
         android:layout_toStartOf="@+id/chat_last_activity"
-        android:layout_toEndOf="@+id/chat_image"
+        android:layout_alignParentStart="true"
         android:gravity="left|center_vertical"
         android:text="TextView" />
 
@@ -25,12 +26,14 @@
         android:gravity="center|center_vertical"
         android:text="TextView" />
 
-    <ImageView
-        android:id="@+id/chat_image"
-        android:layout_width="78dp"
-        android:layout_height="67dp"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        app:srcCompat="@drawable/ic_person" />
+    <!--<ImageView-->
+        <!--android:id="@+id/chat_image"-->
+        <!--android:layout_width="78dp"-->
+        <!--android:layout_height="67dp"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_marginStart="0dp"-->
+        <!--app:srcCompat="@drawable/ic_person"-->
+        <!--android:background="@color/grey_font"-->
+        <!--/>-->
 
 </RelativeLayout>

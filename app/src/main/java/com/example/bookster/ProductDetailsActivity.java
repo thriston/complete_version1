@@ -157,7 +157,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         category.setText("Category: "+product.getCategory());
         details.setText(product.getDetails());
         stockQty.setText(product.getQuantity()+" left");
-        User userProfile = product.getSeller();
+        final User userProfile = product.getSeller();
         //System.out.println("SELLER INFO DETAILS: "+product.getDetails());
 
 
@@ -266,7 +266,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
         purchaseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                purchaseRequestDialog.show();
+                user = FirebaseAuth.getInstance().getCurrentUser();
+
+                if(user != null)
+                    safeZoneDisclaimer.show();
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Please Login To Purchase", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -276,10 +283,35 @@ public class ProductDetailsActivity extends AppCompatActivity {
         purchaseRequestDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Send Purchase Request", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //Toast.makeText(ProductDetailsActivity.this, "Sending Purchase Request...", Toast.LENGTH_LONG).show();
+                Toast.makeText(ProductDetailsActivity.this, "Purchase Request Sent", Toast.LENGTH_LONG).show();
                 // TO PURCHASE REQUESTS
-                safeZoneDisclaimer.show();
-                //
+                String requestID = FirebaseDatabase.getInstance().getReference().child("Requests").push().getKey();
+                mDatabase = FirebaseDatabase.getInstance().getReference().child("Requests").child(requestID);
+
+                PurchaseRequest purchaseRequest = new PurchaseRequest(
+                        requestID,
+                        "Purchase Request",
+                        "Campus Security",
+                        "pending",
+                        FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                        myUserName,
+                        product,
+                        System.currentTimeMillis()
+                );
+
+                mDatabase.setValue(purchaseRequest);
+
+                mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .child("Requests").child(requestID);
+                mDatabase.setValue(purchaseRequest);
+
+                mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(product.getSeller().myUID)
+                        .child("Requests").child(requestID);
+                mDatabase.setValue(purchaseRequest);
+
+//                Intent i = new Intent(ProductDetailsActivity.this, MainActivity.class);
+//
+//                startActivity(i);
                 dialog.dismiss();;
             }
         });
@@ -302,7 +334,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                safeZoneDisclaimerBarter.show();
+                user = FirebaseAuth.getInstance().getCurrentUser();
+
+                if(user != null)
+                    safeZoneDisclaimerBarter.show();
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Please Login To Barter", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -312,7 +352,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         barterRequestDialog .setButton(DialogInterface.BUTTON_POSITIVE, "Select Product to Barter", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //Toast.makeText(ProductDetailsActivity.this, "Sending Purchase Request...", Toast.LENGTH_LONG).show();
+                //Toast.makeText(ProductDetailsActivity.this, "Purchase request sent", Toast.LENGTH_LONG).show();
                 // TO PURCHASE REQUESTS
                 //safeZoneDisclaimer.show();
                 //
@@ -338,7 +378,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
 
-
+        //For Purchase Requests
         safeZoneDisclaimer = new AlertDialog.Builder(ProductDetailsActivity.this).create();
         safeZoneDisclaimer.setTitle("Safe Zones");
         safeZoneDisclaimer.setMessage("Your personal safety is important to us at Bookster and as such we have identified places in and around the St Augustine UWI campus which are well known, public and suitable for conducting trade. These areas are called Safe Zones and are there to help you conduct your trades in a safe environment.\n" +
@@ -347,38 +387,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         safeZoneDisclaimer.setButton(DialogInterface.BUTTON_POSITIVE, "I Accept", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(ProductDetailsActivity.this, "Accepted...Purchase Request Sent.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(ProductDetailsActivity.this, "Accepted...Purchase Request Sent.", Toast.LENGTH_LONG).show();
                 // TO PURCHASE REQUESTS
 
-                //Code to send request here
-                String requestID = FirebaseDatabase.getInstance().getReference().child("Requests").child("Purchase").push().getKey();
-                mDatabase = FirebaseDatabase.getInstance().getReference().child("Requests").child("Purchase").child(requestID);
-
-                PurchaseRequest purchaseRequest = new PurchaseRequest(
-                        requestID,
-                        "Purchase Request",
-                        "Campus Security",
-                        "pending",
-                        FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                        myUserName,
-                        product,
-                        System.currentTimeMillis()
-                );
-
-                mDatabase.setValue(purchaseRequest);
-
-                mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .child("Requests").child("Purchase").child("sent").child(requestID);
-                mDatabase.setValue(purchaseRequest);
-
-                mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(product.getSeller().myUID)
-                        .child("Requests").child("Purchase").child("received").child(requestID);
-                mDatabase.setValue(purchaseRequest);
-
                 purchaseRequestDialog.show();
-                Intent i = new Intent(ProductDetailsActivity.this, MainActivity.class);
                 dialog.dismiss();
-                startActivity(i);
             }
         });
         safeZoneDisclaimer.setButton(DialogInterface.BUTTON_NEGATIVE, "Reject", new DialogInterface.OnClickListener() {
@@ -460,8 +473,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
             requestProduct = (Product) data.getSerializableExtra("productObj");
 
 
-            String requestID = FirebaseDatabase.getInstance().getReference().child("Requests").child("Barter").push().getKey();
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("Requests").child("Barter").child(requestID);
+            String requestID = FirebaseDatabase.getInstance().getReference().child("Requests").push().getKey();
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("Requests").child(requestID);
 
             BarterRequest barterRequest = new BarterRequest(
                     requestID,
@@ -480,11 +493,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
             mDatabase.setValue(barterRequest);
 
             mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .child("Requests").child("Barter").child("sent").child(requestID);
+                    .child("Requests").child(requestID);
             mDatabase.setValue(barterRequest);
 
             mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(product.getSeller().myUID)
-                    .child("Requests").child("Barter").child("received").child(requestID);
+                    .child("Requests").child(requestID);
             mDatabase.setValue(barterRequest);
 
             Toast.makeText(ProductDetailsActivity.this, "Barter Request Sent", Toast.LENGTH_LONG).show();

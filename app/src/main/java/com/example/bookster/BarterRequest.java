@@ -1,6 +1,8 @@
 package com.example.bookster;
 
-public class BarterRequest {
+import java.io.Serializable;
+
+public class BarterRequest implements Serializable {
     private String ID;
     private String message;
     private String location;
@@ -10,6 +12,7 @@ public class BarterRequest {
     private Product sellerProduct;
     private Product myProduct;
     private Long date;
+    private String type;
 
     public BarterRequest(String ID, String message, String location, String status, String senderUID, String senderName, Product sellerProduct, Product myProduct , Long date) {
         this.ID = ID;
@@ -21,6 +24,12 @@ public class BarterRequest {
         this.sellerProduct = sellerProduct;
         this.myProduct = myProduct;
         this.date = date;
+        this.type = "Barter";
+    }
+
+    public BarterRequest()
+    {
+
     }
 
 
@@ -97,5 +106,13 @@ public class BarterRequest {
 
     public void setMyProduct(Product myProduct) {
         this.myProduct = myProduct;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

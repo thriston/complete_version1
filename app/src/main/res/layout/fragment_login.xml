@@ -13,7 +13,6 @@
 
         <include
             android:id="@+id/toolbar"
-            android:visibility="invisible"
             layout="@layout/toolbar"/>
 
         <TextView
@@ -71,15 +70,7 @@
             android:layout_marginTop="20dp"
             />
 
-        <TextView
-            android:id="@+id/resetPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:onClick="sendPasswordReset"
-            android:text="FORGOT YOUR PASSWORD? - CLICK HERE"
-            android:layout_below="@+id/loginButton"
-            android:layout_marginTop="20dp"/>
+
 
         <TextView
             android:id="@+id/signUpLinkTextView"
@@ -87,7 +78,7 @@
             android:layout_height="wrap_content"
             android:text="DON'T HAVE AN ACCOUNT - SIGNUP HERE"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/resetPassword"
+            android:layout_below="@+id/loginButton"
             android:layout_marginTop="20dp" />
 
 

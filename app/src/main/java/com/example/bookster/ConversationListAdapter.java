@@ -45,6 +45,7 @@ public class ConversationListAdapter extends ArrayAdapter<Conversation> {
         String conversationID = getItem(position).getConversationID();
         long lastActivityTime = getItem(position).getLastActivityTime();
 
+
         //System.out.println("HERE");
         //System.out.println(fullName);
         //System.out.println(lastActivityTime);

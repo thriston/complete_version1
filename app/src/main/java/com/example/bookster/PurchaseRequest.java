@@ -1,6 +1,8 @@
 package com.example.bookster;
 
-public class PurchaseRequest {
+import java.io.Serializable;
+
+public class PurchaseRequest implements Serializable {
     private String ID;
     private String message;
     private String location;
@@ -11,6 +13,7 @@ public class PurchaseRequest {
     private String receiverName;
     private Product product;
     private Long date;
+    private String type;
 
     public PurchaseRequest(String ID, String message, String location, String status, String senderUID, String senderName, Product product, Long date) {
         this.ID = ID;
@@ -21,8 +24,21 @@ public class PurchaseRequest {
         this.senderName = senderName;
         this.product = product;
         this.date = date;
+        this.type = "Purchase";
     }
 
+    public PurchaseRequest()
+    {
+
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getID() {
         return ID;

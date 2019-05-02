@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int nav_chat = 2;
     private static final int nav_profile = 3;
     private static final int nav_my_products = 4;
-    private static final int nav_notifications = 5;
+    private static final int nav_requests = 5;
     private static final int nav_logout = 6;
 
     //If logged out
@@ -332,9 +332,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(i);
         }
         else
-        if(itemID == nav_notifications)
+        if(itemID == nav_requests)
         {
-            Intent i= new Intent(getApplicationContext(), RequestActivity.class);
+            Intent i= new Intent(getApplicationContext(), RequestActivityPage.class);
             startActivity(i);
         }
 
@@ -388,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             menu.add(R.id.group0, nav_chat, 2 , "Chat").setIcon(R.drawable.chat_icon);
             menu.add(R.id.group0, nav_profile, 3 , "Profile").setIcon(R.drawable.ic_profile);
             menu.add(R.id.group0, nav_my_products, 4 , "My products").setIcon(R.drawable.ic_product);
-            menu.add(R.id.group0, nav_notifications, 5 , "Requests").setIcon(R.drawable.ic_notifications);
+            menu.add(R.id.group0, nav_requests, 5 , "Requests").setIcon(R.drawable.ic_notifications);
             menu.add(R.id.group0, nav_logout, 6 , "Logout").setIcon(R.drawable.ic_logout);
         }
         else

@@ -34,6 +34,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         TextView name;
         TextView details;
         TextView price;
+        TextView sellerName;
         ImageView image;
     }
 
@@ -67,6 +68,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         String details = getItem(position).getDetails();
         String price = getItem(position).getPrice();
         String mainImage = getItem(position).getMainImage();
+        String sellerName = getItem(position).getSeller().fullname;
         //ArrayList<String> images = getItem(position).getImages();
 
         //create the view result for showing the animation
@@ -86,6 +88,8 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             holder.details = (TextView) convertView.findViewById(R.id.product_description);
             holder.price = (TextView) convertView.findViewById(R.id.product_price);
             holder.image = (ImageView) convertView.findViewById(R.id.product_image);
+            holder.sellerName = (TextView) convertView.findViewById(R.id.seller);
+
 
             result = convertView;
 
@@ -106,6 +110,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         holder.name.setText(name);
         holder.details.setText(details);
         holder.price.setText("$"+price);
+        holder.sellerName.setText(sellerName);
 
 
         ImageLoader imageLoader = ImageLoader.getInstance();

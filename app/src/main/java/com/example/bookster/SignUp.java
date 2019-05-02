@@ -45,7 +45,7 @@ public class SignUp extends AppCompatActivity{
     private DatabaseReference mDatabase;
     private int PICK_PROFILE_PICTURE_REQUEST = 300;
     private StorageReference myStorage;
-    private Uri profilePictureUri;
+    private Uri profilePictureUri = null;
     TextView textView;
     Toolbar toolbar;
     private static final int RC_SIGN_IN = 9001;
@@ -118,7 +118,13 @@ public class SignUp extends AppCompatActivity{
         final String email=emailInput.getText().toString();
         final String contact =contactInput.getText().toString();
         final String password=passwordInput.getText().toString();
+        EditText fullNameET = findViewById(R.id.fullNameEditText);
+        //String fullName = fullNameET.getText().toString();
 
+        if(fullname.isEmpty()){
+            Toast.makeText(getApplicationContext(),"Name is required",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if(email.isEmpty()){
             Toast.makeText(getApplicationContext(),"Email Address is required",Toast.LENGTH_SHORT).show();
@@ -147,6 +153,12 @@ public class SignUp extends AppCompatActivity{
 
         if(contact.isEmpty()){
             Toast.makeText(getApplicationContext(),"Contact Number is required",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(profilePictureUri==null)
+        {
+            Toast.makeText(getApplicationContext(),"Select a Profile picture",Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -185,38 +197,6 @@ public class SignUp extends AppCompatActivity{
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-
-//                                    //Store Additionl data in firebase database
-//                                    User user = new User(
-//                                            fullname,
-//                                            email,
-//                                            contact,
-//                                            FirebaseAuth.getInstance().getCurrentUser().getUid()
-//
-//                                    );
-//                                                                );
-//
-//                                    mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user)
-//                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                                @Override
-//                                                public void onComplete(@NonNull Task<Void> task) {
-//                                                    if(task.isSuccessful()){
-//                                                        Toast.makeText(getApplicationContext(),"User Created",Toast.LENGTH_SHORT).show();
-//                                                        mAuth.signInWithEmailAndPassword(email, password);
-//                                                        Toast.makeText(getApplicationContext(),"Logged In",Toast.LENGTH_SHORT).show();
-//                                                        finish();
-//                                                    }
-//                                                    else{
-//                                                        Log.d("Testing Daatabase Stuff", task.toString());
-//                                                        Toast.makeText(getApplicationContext(),"Error!!!... Cannot Create User Account" ,Toast.LENGTH_SHORT).show();
-//                                                    }
-//
-//                                                }
-//                                            });
-
-
-
-
 
                                     final String profileImagePath = "ProfilePictures/"+ UUID.randomUUID();
                                     myStorage = FirebaseStorage.getInstance().getReference();

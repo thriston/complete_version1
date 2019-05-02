@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginFragment extends Fragment {
     EditText emailInput,passwordInput;
-    TextView textView, textView2;
+    TextView textView;
     ViewPager viewPager;
     private Button loginBtn;
     NavigationView navigationView;
@@ -71,21 +72,26 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        textView2=v.findViewById(R.id.resetPassword);
         mAuth = FirebaseAuth.getInstance();
         emailInput=v.findViewById(R.id.emailAddressEditText2);
         passwordInput=v.findViewById(R.id.passwordEditText2);
-        textView2.setTextColor(Color.parseColor("#411FC7"));
-        textView2.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         textView.setTextColor(Color.parseColor("#411FC7"));
         textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-//        toolbar = v.findViewById(R.id.toolbar);
-//        toolbar.setTitleTextColor(Color.WHITE);
-//        toolbar.setTitle("Bookster - Login");
-//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-//
-//        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        toolbar.setTitle("Login");
+        toolbar.setTitleTextColor(Color.WHITE);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.popBackStack();
+            }
+        });
 
 //        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 //        drawer= v.findViewById(R.id.drawer_layout);

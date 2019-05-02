@@ -18,7 +18,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".SentRequestPage"></activity>
+        <activity android:name=".SentRequestActivity"></activity>
+        <activity android:name=".PurchaseRequestPage"></activity>
+        <activity android:name=".RequestActivityPage"></activity>
+        <activity android:name=".ReceivedRequestActivity"></activity>
         <activity android:name=".RequestMessageActivity"></activity>
         <activity android:name=".MyBarterProductListActivity"></activity>
         <activity android:name=".EditProductActivity" />
