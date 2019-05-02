@@ -200,6 +200,22 @@ public class PurchaseRequestPage extends AppCompatActivity {
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    int quantity = Integer.parseInt(purchaseRequest.getProduct().getQuantity());
+                    if(quantity <= 0)
+                    {
+                        Toast.makeText(PurchaseRequestPage.this, "Out of Stock", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+
+                    purchaseRequest.getProduct().addTransaction();
+                    quantity = Integer.parseInt(purchaseRequest.getProduct().getQuantity());
+                    if(quantity == 0)
+                    {
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child("Products").child(purchaseRequest.getProduct().getID()).child("quantity");
+                        mDatabase.setValue("OUT OF STOCK");
+                    }
+
                     mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .child("Requests").child(purchaseRequest.getID()).child("status");
                     mDatabase.setValue("Accepted");
@@ -215,7 +231,7 @@ public class PurchaseRequestPage extends AppCompatActivity {
                     //mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child()
 
 
-                    purchaseRequest.getProduct().addTransaction();
+
                     DatabaseReference db1,db2;
                     db1 = FirebaseDatabase.getInstance().getReference().child("Products").child(purchaseRequest.getProduct().getID()).child("ntransactions");
                     db1.setValue(purchaseRequest.getProduct().getNTransactions());

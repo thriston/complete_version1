@@ -269,7 +269,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 user = FirebaseAuth.getInstance().getCurrentUser();
 
                 if(user != null)
-                    safeZoneDisclaimer.show();
+                {
+                    if(Integer.parseInt(product.getQuantity()) <= 0)
+                    {
+                        Toast.makeText(ProductDetailsActivity.this, "OUT OF STOCK", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        safeZoneDisclaimer.show();
+                    }
+                }
+
                 else
                 {
                     Toast.makeText(getApplicationContext(), "Please Login To Purchase", Toast.LENGTH_SHORT).show();
@@ -336,13 +346,22 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                 user = FirebaseAuth.getInstance().getCurrentUser();
 
+
                 if(user != null)
-                    safeZoneDisclaimerBarter.show();
+                {
+                    if(Integer.parseInt(product.getQuantity()) <= 0)
+                    {
+                        Toast.makeText(ProductDetailsActivity.this, "OUT OF STOCK", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        safeZoneDisclaimerBarter.show();
+                    }
+                }
                 else
                 {
                     Toast.makeText(getApplicationContext(), "Please Login To Barter", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 

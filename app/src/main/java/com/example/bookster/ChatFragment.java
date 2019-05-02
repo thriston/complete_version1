@@ -91,9 +91,6 @@ public class ChatFragment extends Fragment {
                     receiverName =  ds.child("receiverName").getValue().toString();
                     myUserName = ds.child("myUserName").getValue().toString();
 
-//                    System.out.println("RECEIVER NAME: "+receiverName);
-//                    System.out.println("RECEIVER UID: "+receiverUID);
-//                    System.out.println("TIME : "+time);
 
                     Conversation conversation = new Conversation(key,receiverUID, time, receiverName, myUserName);
                     conversationsModel.add(conversation);
