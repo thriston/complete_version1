@@ -53,7 +53,7 @@ public class EditProductActivity extends AppCompatActivity {
     private TextInputLayout textInputDescription;
     private TextInputLayout textInputPrice;
     private TextInputLayout textInputQuantity;
-    private boolean isOkay;
+
 
     Switch allowCalls;
     String productID;
@@ -182,7 +182,6 @@ public class EditProductActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 changesMadeMain = true;
-                isOkay = true;
                 chooseImage(PICK_MAIN_IMAGE_REQUEST);
 
             }
@@ -257,12 +256,8 @@ public class EditProductActivity extends AppCompatActivity {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isOkay)
-                {
-                    Toast.makeText(EditProductActivity.this, "Re-select main product image", Toast.LENGTH_SHORT).show();
-                }
 
-                if(confirmInput() & isOkay)
+                if(confirmInput())
                 {
                     ProgressBar progressBar = findViewById(R.id.progress_bar);
                     progressBar.setVisibility(View.VISIBLE);
@@ -317,7 +312,8 @@ public class EditProductActivity extends AppCompatActivity {
                                         db.child("views").setValue(0);
                                         db.child("dateCreated").setValue(System.currentTimeMillis());
 
-                                        Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(),"Changes saved", Toast.LENGTH_SHORT).show();
+                                        setResult(RESULT_OK);
                                         finish();
                                     }
                                 });
@@ -339,6 +335,7 @@ public class EditProductActivity extends AppCompatActivity {
                                         count++;
                                         if(count == productImages.size()-1)
                                         {
+                                            setResult(RESULT_OK);
                                             secondaryImagesUploaded = true;
                                             if(mainUploaded && secondaryImagesUploaded)
                                                 finish();
@@ -383,7 +380,8 @@ public class EditProductActivity extends AppCompatActivity {
                         db.child("views").setValue(0);
                         db.child("dateCreated").setValue(System.currentTimeMillis());
 
-                        Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Changes made", Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
                         finish();
 
                     }
@@ -427,7 +425,8 @@ public class EditProductActivity extends AppCompatActivity {
                                         db.child("views").setValue(0);
                                         db.child("dateCreated").setValue(System.currentTimeMillis());
 
-                                        Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(),"Changes saved", Toast.LENGTH_SHORT).show();
+                                        setResult(RESULT_OK);
                                         finish();
                                     }
                                 });
@@ -486,6 +485,7 @@ public class EditProductActivity extends AppCompatActivity {
                                             db.child("dateCreated").setValue(System.currentTimeMillis());
 
                                             Toast.makeText(getApplicationContext(),"Changes Saved", Toast.LENGTH_SHORT).show();
+                                            setResult(RESULT_OK);
                                             finish();
                                         }
                                     }
@@ -686,7 +686,6 @@ public class EditProductActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PICK_MAIN_IMAGE_REQUEST && resultCode == RESULT_OK && data != null)
         {
-            isOkay = true;
             Uri mainImageUrl = data.getData();
             productImages.put("0", mainImageUrl);
 
@@ -709,12 +708,6 @@ public class EditProductActivity extends AppCompatActivity {
             addProductSV.fullScroll(View.FOCUS_DOWN);
 
             Toast.makeText(getApplicationContext(), "Image Selected", Toast.LENGTH_SHORT).show();
-        }
-        else
-        if(requestCode == RESULT_CANCELED)
-        {
-            isOkay = false;
-            Toast.makeText(this, "Please re-select product image", Toast.LENGTH_SHORT).show();
         }
         else if(requestCode == PICK_SEC1_IMAGE_REQUEST && resultCode == RESULT_OK && data != null)
         {

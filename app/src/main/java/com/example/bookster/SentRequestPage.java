@@ -4,18 +4,26 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SentRequestPage extends AppCompatActivity {
     private DatabaseReference mDatabase;
@@ -29,6 +37,8 @@ public class SentRequestPage extends AppCompatActivity {
     private ImageButton call, msg;
     private String myUserName;
     private boolean isBarter;
+    private RatingBar ratingBar;
+    private Button ratingBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +80,8 @@ public class SentRequestPage extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-
+        ratingBar = findViewById(R.id.ratingBar);
+        ratingBtn = findViewById(R.id.rateBtn);
         sellerTV = findViewById(R.id.sellerName);
         contactTV = findViewById(R.id.contact);
         productNameView=findViewById(R.id.my_product);
@@ -83,6 +94,16 @@ public class SentRequestPage extends AppCompatActivity {
         productImageV = findViewById(R.id.product_image);
         call = findViewById(R.id.callbtn);
         msg = findViewById(R.id.msgbtn);
+
+
+//        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+//            @Override
+//            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+//                Toast.makeText(SentRequestPage.this, "Stars: "+rating, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+
 
 
 
@@ -102,6 +123,61 @@ public class SentRequestPage extends AppCompatActivity {
 
             Glide.with(getApplicationContext()).load(purchaseRequest.getProduct().getMainImage()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(productImageV);
 
+            final DatabaseReference rateDb;
+            rateDb = FirebaseDatabase.getInstance().getReference().child("users").child(purchaseRequest.getProduct().getSeller().getMyUID())
+                    .child("ratings");
+
+            ratingBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(ratingBar.getRating() > 0)
+                    {
+                        final Rating rating = new Rating(user.getUid(),ratingBar.getRating()+"");
+                        rateDb.child(user.getUid()).setValue(rating);
+
+                        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users").child(purchaseRequest.getProduct().getSeller().getMyUID());
+                        db.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                User user1 = (User) dataSnapshot.getValue(User.class);
+                                Toast.makeText(SentRequestPage.this, "Rated User "+ratingBar.getRating()+" Stars", Toast.LENGTH_SHORT).show();
+                                if(!rating.getHasRated())
+                                {
+                                    //Updated so user can only rate once
+                                    rating.setHasRated(true);
+                                    rateDb.child(user.getUid()).setValue(rating);
+
+                                    int ratingCount = Integer.parseInt(user1.getRatingCount());
+                                    ratingCount++;
+                                    user1.setRatingCount(ratingCount+"");
+
+                                    int ratingSum = Integer.parseInt(user1.getRatingSum());
+                                    ratingSum = ratingSum + ((int)ratingBar.getRating());
+                                    user1.setRatingSum(ratingSum+"");
+
+                                    //Push to firebase
+                                    DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users").child(purchaseRequest.getProduct().getSeller().getMyUID());
+                                    db.child("ratingCount").setValue(user1.getRatingCount());
+                                    db.child("ratingSum").setValue(user1.getRatingSum());
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        //Toast.makeText(SentRequestPage.this, "User rated "+ratingBar.getRating(), Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(SentRequestPage.this, "Rating can't be empty", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
 
 
             if(purchaseRequest.getStatus().equals("Accepted"))
@@ -165,6 +241,64 @@ public class SentRequestPage extends AppCompatActivity {
 
 
             Glide.with(getApplicationContext()).load(barterRequest.getMyProduct().getMainImage()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(productImageV);
+
+
+            final DatabaseReference rateDb;
+            rateDb = FirebaseDatabase.getInstance().getReference().child("users").child(barterRequest.getMyProduct().getSeller().getMyUID())
+                    .child("ratings");
+
+            ratingBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(ratingBar.getRating() > 0)
+                    {
+                        final Rating rating = new Rating(user.getUid(),ratingBar.getRating()+"");
+                        rateDb.child(user.getUid()).setValue(rating);
+
+                        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users").child(barterRequest.getMyProduct().getSeller().getMyUID());
+                        db.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                User user1 = (User) dataSnapshot.getValue(User.class);
+                                Toast.makeText(SentRequestPage.this, "Rated User "+ratingBar.getRating()+" Stars", Toast.LENGTH_SHORT).show();
+                                if(!rating.getHasRated())
+                                {
+                                    //Updated so user can only rate once
+                                    rating.setHasRated(true);
+                                    rateDb.child(user.getUid()).setValue(rating);
+
+                                    int ratingCount = Integer.parseInt(user1.getRatingCount());
+                                    ratingCount++;
+                                    user1.setRatingCount(ratingCount+"");
+
+                                    int ratingSum = Integer.parseInt(user1.getRatingSum());
+                                    ratingSum = ratingSum + ((int)ratingBar.getRating());
+                                    user1.setRatingSum(ratingSum+"");
+
+                                    //Push to firebase
+                                    DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users").child(barterRequest.getMyProduct().getSeller().getMyUID());
+                                    db.child("ratingCount").setValue(user1.getRatingCount());
+                                    db.child("ratingSum").setValue(user1.getRatingSum());
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        //Toast.makeText(SentRequestPage.this, "User rated "+ratingBar.getRating(), Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(SentRequestPage.this, "Rating can't be empty", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+
 
 
 

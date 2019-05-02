@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private ArrayList<String> secondaryImages;
     private int REQUEST_NAME = 150;
     private int REQUEST_PRODUCT = 160;
+    private RatingBar rating;
+    private TextView nRating;
 
 
     android.support.v7.widget.Toolbar toolbar;
@@ -158,6 +161,34 @@ public class ProductDetailsActivity extends AppCompatActivity {
         details.setText(product.getDetails());
         stockQty.setText(product.getQuantity()+" left");
         final User userProfile = product.getSeller();
+
+        rating = findViewById(R.id.rating);
+        nRating = findViewById(R.id.nRating);
+
+        //TO set the ratings on the product page
+        DatabaseReference rateDB = FirebaseDatabase.getInstance().getReference().child("users").child(product.getSeller().getMyUID());
+        rateDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int average = 0;
+                int ratingSum, ratingCount;
+                ratingSum = Integer.parseInt(dataSnapshot.child("ratingSum").getValue().toString());
+                ratingCount = Integer.parseInt(dataSnapshot.child("ratingCount").getValue().toString());
+                if(ratingSum !=0)
+                    average = ratingSum / ratingCount;
+                rating.setRating((float)average);
+                nRating.setText(ratingCount+"");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
         //System.out.println("SELLER INFO DETAILS: "+product.getDetails());
 
 

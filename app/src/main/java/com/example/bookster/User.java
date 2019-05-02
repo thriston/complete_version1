@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class User implements Serializable {
     public String fullname, email, contact, myUID, profilePicURL;
+    public String ratingSum, ratingCount;
 
     public User(){
 
@@ -15,8 +16,26 @@ public class User implements Serializable {
         this.contact = contact;
         this.myUID = myUID;
         this.profilePicURL = profilePicURL;
+        this.ratingSum = ""+0;
+        this.ratingCount = ""+0;
+
     }
 
+    public String getRatingSum() {
+        return ratingSum;
+    }
+
+    public void setRatingSum(String ratingSum) {
+        this.ratingSum = ratingSum;
+    }
+
+    public String getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(String ratingCount) {
+        this.ratingCount = ratingCount;
+    }
 
     public String getFullname() {
         return fullname;

@@ -294,6 +294,41 @@
         </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            >
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:numStars="5"
+                android:rating="0.0"
+                android:stepSize="1.0"
+                />
+
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/rateBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#000099"
+                android:textColor="#ffffff"
+                android:layout_gravity="center"
+                android:text="Rate"
+                />
+
+
+
+        </LinearLayout>
+
+
 
 
 

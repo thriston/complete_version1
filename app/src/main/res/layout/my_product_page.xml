@@ -259,21 +259,21 @@
             android:numStars="5"
             android:stepSize="0.1" />
 
-        <ImageButton
-            android:id="@+id/my_view_info"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:padding="0dp"
+        <!--<ImageButton-->
+            <!--android:id="@+id/my_view_info"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="45dp"-->
+            <!--android:padding="0dp"-->
 
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="15dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/nRating"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:background="@color/fui_transparent"
-            android:backgroundTint="@color/fui_transparent"
-            android:src="@drawable/user_icon" />
+            <!--android:layout_marginTop="25dp"-->
+            <!--android:layout_marginBottom="15dp"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_below="@+id/nRating"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:adjustViewBounds="true"-->
+            <!--android:background="@color/fui_transparent"-->
+            <!--android:backgroundTint="@color/fui_transparent"-->
+            <!--android:src="@drawable/user_icon" />-->
 
 
         <ImageButton

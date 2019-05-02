@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,6 +43,9 @@ public class MyProductDetailsActivity extends AppCompatActivity {
     private int count;
     private FirebaseUser user;
     private ArrayList<String> secondaryImages;
+    private RatingBar rating;
+    private TextView nRating;
+    private int REQUEST_EDIT = 150;
 
     Toolbar toolbar;
 
@@ -49,7 +53,7 @@ public class MyProductDetailsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK )
+        if(resultCode == RESULT_OK && requestCode != REQUEST_EDIT)
         {
             DatabaseReference db;
             db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -64,6 +68,10 @@ public class MyProductDetailsActivity extends AppCompatActivity {
 
                 }
             });
+        }
+        if(resultCode == RESULT_OK && requestCode == REQUEST_EDIT)
+        {
+            finish();
         }
     }
 
@@ -154,6 +162,43 @@ public class MyProductDetailsActivity extends AppCompatActivity {
         TextView nTransactions = findViewById(R.id.nTransactions);
         TextView dateCreated = findViewById(R.id.dateCreated);
 
+
+
+
+
+
+        rating = findViewById(R.id.rating);
+        nRating = findViewById(R.id.nRating);
+
+        //TO set the ratings on the product page
+        DatabaseReference rateDB = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+        rateDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                int average = 0;
+                int ratingSum, ratingCount;
+                ratingSum = Integer.parseInt(dataSnapshot.child("ratingSum").getValue().toString());
+                ratingCount = Integer.parseInt(dataSnapshot.child("ratingCount").getValue().toString());
+                if(ratingSum!=0)
+                    average = ratingSum / ratingCount;
+                rating.setRating((float)average);
+                nRating.setText(ratingCount+" ratings");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
+
         productName.setText(product.getName());
         price.setText("$"+product.getPrice());
         category.setText("Category: "+product.getCategory());
@@ -165,7 +210,7 @@ public class MyProductDetailsActivity extends AppCompatActivity {
 
         ImageButton editProductBtn = findViewById(R.id.editProductInfo);
         ImageButton deleteProductBtn = findViewById(R.id.deleteProduct);
-        ImageButton viewProfileBtn = findViewById(R.id.my_view_info);
+        //ImageButton viewProfileBtn = findViewById(R.id.my_view_info);
 
 
         editProductBtn.setOnClickListener(new View.OnClickListener() {
@@ -173,21 +218,21 @@ public class MyProductDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent myintent = new Intent(getApplication(), EditProductActivity.class);
                 myintent.putExtra("productObj",product);
-                startActivityForResult(myintent, 0);
+                startActivityForResult(myintent, REQUEST_EDIT);
             }
         });
 
-        viewProfileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent i = new Intent(getApplicationContext(), Profile.class);
-                //i.putExtra("receiverUID", receiverUID);
-                //startActivity(i);
-                //finish();
-                Intent i=new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(i);
-            }
-        });
+//        viewProfileBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Intent i = new Intent(getApplicationContext(), Profile.class);
+//                //i.putExtra("receiverUID", receiverUID);
+//                //startActivity(i);
+//                //finish();
+//                Intent i=new Intent(getApplicationContext(),MainActivity.class);
+//                startActivity(i);
+//            }
+//        });
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Products").child(product.getID());
@@ -233,6 +278,9 @@ public class MyProductDetailsActivity extends AppCompatActivity {
     }
 
 
+
+
+
     public void dialogevent(){
 
         AlertDialog.Builder altdial = new AlertDialog.Builder(MyProductDetailsActivity.this);
@@ -261,6 +309,10 @@ public class MyProductDetailsActivity extends AppCompatActivity {
 
 
     }
+
+
+
+
 
 
 
