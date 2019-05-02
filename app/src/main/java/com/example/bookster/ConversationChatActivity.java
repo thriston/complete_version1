@@ -40,13 +40,13 @@ public class ConversationChatActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        /**Organizes The toolbar    **/
 
         DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(myUID);
         myDatabase.keepSynced(true);
@@ -76,9 +76,8 @@ public class ConversationChatActivity extends AppCompatActivity {
                     Conversation conversation = new Conversation(key,receiverUID, time, receiverName, myUserName);
                     conversationsModel.add(conversation);
 
-
-
                 }
+                /**Looks for existing conversation amoungst the users    **/
 
                 ConversationListAdapter adapter = new ConversationListAdapter(ConversationChatActivity.this, R.layout.conversations_view_layout, conversationsModel);
                 mListView.setAdapter(adapter);
@@ -104,6 +103,7 @@ public class ConversationChatActivity extends AppCompatActivity {
                 //}
             }
         });
+        /**Starts the Conversation Message Activity    **/
     }
 
 

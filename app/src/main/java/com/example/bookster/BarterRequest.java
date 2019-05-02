@@ -13,6 +13,7 @@ public class BarterRequest implements Serializable {
     private Product myProduct;
     private Long date;
     private String type;
+    /**Local variables for a Barter Request  **/
 
     public BarterRequest(String ID, String message, String location, String status, String senderUID, String senderName, Product sellerProduct, Product myProduct , Long date) {
         this.ID = ID;
@@ -26,6 +27,7 @@ public class BarterRequest implements Serializable {
         this.date = date;
         this.type = "Barter";
     }
+    /** Barter Request Constructor **/
 
     public BarterRequest()
     {
@@ -82,8 +84,6 @@ public class BarterRequest implements Serializable {
         this.senderName = senderName;
     }
 
-
-
     public Product getSellerProduct() {
         return sellerProduct;
     }
@@ -115,4 +115,7 @@ public class BarterRequest implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
+
+    /** Getters and Setters **/
+
 }

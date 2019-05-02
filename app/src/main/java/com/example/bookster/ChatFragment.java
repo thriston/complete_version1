@@ -36,16 +36,14 @@ public class ChatFragment extends Fragment {
 
 
     public ChatFragment() {
-        // Required empty public constructor
+        /**Required empty public constructor **/
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        /** Inflate the layout for this fragment   **/
         View v = inflater.inflate(R.layout.fragment_chat, container, false);
-
-
 
         mListView = v.findViewById(R.id.chatListView);
         toolbar = (Toolbar) v.findViewById(R.id.toolbar);
@@ -63,6 +61,7 @@ public class ChatFragment extends Fragment {
                 fm.popBackStack();
             }
         });
+        /** Organizes the toolbar   **/
 
         DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(myUID);
         myDatabase.keepSynced(true);
@@ -113,22 +112,17 @@ public class ChatFragment extends Fragment {
 
 
         });
-
+/**Constructs a Chat Model for the user chats    **/
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //if(position==0){
                 Intent myintent = new Intent(view.getContext(), ConversationMessageActivity.class);
                 myintent.putExtra("receiverConvoObj", conversationsModel.get(position));
                 //System.out.println("CATEGORY: "+categoryList.get(position).getName());
                 startActivityForResult(myintent, 0);
-                //}
             }
         });
-
-
-
 
         return v;
     }

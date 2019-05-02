@@ -28,8 +28,8 @@ public class BarterRequestListAdapter extends ArrayAdapter<BarterRequest> {
         super(context, resource, objects);
         this.mContext = context;
         this.mResource = resource;
-
     }
+    /**Constructor for setting the Barter Request View    **/
 
 
     @Override
@@ -43,10 +43,7 @@ public class BarterRequestListAdapter extends ArrayAdapter<BarterRequest> {
         String location = getItem(position).getLocation();
         String status = getItem(position).getStatus();
         final String senderUID = getItem(position).getSenderUID();
-
-
-
-
+        /**Variables for getting all necessary information required for sending a barter request    **/
 
         if(convertView == null)
         {
@@ -69,6 +66,7 @@ public class BarterRequestListAdapter extends ArrayAdapter<BarterRequest> {
             viewHolder.chat = (Button) convertView.findViewById(R.id.chat);
             convertView.setTag(viewHolder);
         }
+        /**Casts all XML Objects to a view holder instance of the Barter Request View    **/
         else
         {
             barterViewHolder = (ViewHolder) convertView.getTag();
@@ -82,7 +80,7 @@ public class BarterRequestListAdapter extends ArrayAdapter<BarterRequest> {
             barterViewHolder.tvTime.setText(DateFormat.format("h:mma dd-MM-yyyy", time));
             barterViewHolder.tvSafeZone.setText(location);
             barterViewHolder.tvStatus.setText(status);
-
+            /** Sets the Barter Request View Holder Objects with the necessary information   **/
             if(status.equals("Accepted"))
             {
                 barterViewHolder.tvStatus.setTextColor(Color.rgb(0, 255, 0));
@@ -95,15 +93,13 @@ public class BarterRequestListAdapter extends ArrayAdapter<BarterRequest> {
                 barterViewHolder.accept.setVisibility(View.GONE);
                 barterViewHolder.reject.setVisibility(View.GONE);
             }
+            /**  Checking to see if the person bartering accepts your request  **/
             else
             {
                 barterViewHolder.tvStatus.setTextColor(Color.rgb(204, 204, 0));
                 barterViewHolder.accept.setVisibility(View.VISIBLE);
                 barterViewHolder.reject.setVisibility(View.VISIBLE);
             }
-
-
-
 
 
             barterViewHolder.accept.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +138,7 @@ public class BarterRequestListAdapter extends ArrayAdapter<BarterRequest> {
 
                 }
             });
+            /** Updating Firebase Realtime Database with the barter transaction if Accepted   **/
 
             barterViewHolder.reject.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -161,6 +158,7 @@ public class BarterRequestListAdapter extends ArrayAdapter<BarterRequest> {
                     mDatabase.keepSynced(true);
                 }
             });
+            /**Updating Firebase Realtime Database with the barter transaction if Accepted    **/
 
             barterViewHolder.chat.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,7 +170,7 @@ public class BarterRequestListAdapter extends ArrayAdapter<BarterRequest> {
                     getContext().startActivity(myintent);
                 }
             });
-
+            /**Opens the Barter's chat when clicked    **/
         }
 
 
@@ -199,5 +197,6 @@ public class BarterRequestListAdapter extends ArrayAdapter<BarterRequest> {
         Button reject;
 
     }
+    /**View Holder Object    **/
 
 }

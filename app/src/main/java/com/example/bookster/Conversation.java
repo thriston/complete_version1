@@ -9,6 +9,7 @@ public class Conversation implements Serializable {
     private String myUserName;
     private String receiverUID;
     private String receiverFullName;
+    /** Local Variables Used for Conversation   **/
 
     public Conversation(String conversationID,String receiverUID, long lastActivityTime, String receiverFullName, String myUserName) {
         this.conversationID = conversationID;
@@ -17,6 +18,7 @@ public class Conversation implements Serializable {
         this.receiverUID = receiverUID;
         this.myUserName = myUserName;
     }
+    /**Conversation Constructor   **/
 
     public Conversation(String conversationID,String receiverUID, long lastActivityTime, String receiverFullName) {
         this.conversationID = conversationID;
@@ -25,6 +27,7 @@ public class Conversation implements Serializable {
         this.receiverUID = receiverUID;
         this.myUserName = myUserName;
     }
+    /** Overloaded Constructor   **/
 
 
 
@@ -76,4 +79,5 @@ public class Conversation implements Serializable {
     public void setMyUserName(String myUserName) {
         this.myUserName = myUserName;
     }
+    /**Getters and setters    **/
 }

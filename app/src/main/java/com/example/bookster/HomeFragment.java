@@ -47,41 +47,12 @@ public class HomeFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        /** Inflate the layout for this fragment  **/
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-
-
-
-
 
 
         FirebaseUser auth;
         mListView  = (ListView) v.findViewById(R.id.listView);
-//        drawer= v.findViewById(R.id.drawer_layout);
-//
-//        navigationView = v.findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
-//        navigationView.setCheckedItem(R.id.home);
-        //navigationView.setNavigationItemSelectedListener(this);
-
-
-//        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
-//        toolbar.setTitleTextColor(Color.WHITE);
-//
-//        toolbar.setTitle("Bookster");
-//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-
-
-
-
-//        fadeIn(toolbar);
-
-        //Options Bar
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-
-
 
         DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("Category");
         myDatabase.keepSynced(true);
@@ -92,8 +63,6 @@ public class HomeFragment extends Fragment  {
                 for(DataSnapshot ds: dataSnapshot.getChildren())
                 {
 
-
-                    //System.out.println("CAT HERE: "+ds.child("").getValue());
                     String description, name, imageUrl;
                     String nItems;
                     description =(String) ds.child("Description").getValue();
@@ -110,8 +79,6 @@ public class HomeFragment extends Fragment  {
                     mListView.setAdapter(adapter);
                 }
 
-
-
             }
 
             @Override
@@ -119,23 +86,16 @@ public class HomeFragment extends Fragment  {
 
             }
         });
-
-
-
-        //LIST ONCLICK LISTENER
-
+/**Constructs a Model for the home design   **/
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //if(position==0){
                 Intent myintent = new Intent(view.getContext(), ProductListActivity.class);
                 myintent.putExtra("category", categoryList.get(position).getName() );
-                //System.out.println("CATEGORY: "+categoryList.get(position).getName());
                 startActivityForResult(myintent, 0);
-                //}
+
             }
         });
-
 
         return v;
 
@@ -143,57 +103,15 @@ public class HomeFragment extends Fragment  {
     }
 
 
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-//        switch (menuItem.getItemId())
-//        {
-//            case R.id.home:
-//                getActivity().getFragmentManager().popBackStack();
-//                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-//                navigationView.setCheckedItem(R.id.home);
-//                break;
-//            case R.id.nav_login:
-//                getActivity().getFragmentManager().popBackStack();
-//                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new LoginFragment()).commit();
-//                navigationView.setCheckedItem(R.id.nav_login);
-//                break;
-//
-//
-//        }
-//
-//        drawer.closeDrawer(GravityCompat.START);
-//        return true;
-//    }
-
-//    @Override
-//    public void onBackPressed() {
-//        if (drawer.isDrawerOpen(GravityCompat.START))
-//        {
-//            drawer.closeDrawer(GravityCompat.START);
-//        }
-//        else{
-//            super.onBackPressed();
-//        }
-//
-//
-//    }
-
-
-
-
     private void fadeIn(View view) {
-        // Create an AlphaAnimation variable
-        // 0.0f makes the view invisible
-        // 1.0f makes the view fully visible
         AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
-        // Set out long you want the animation to be. * Measured in milliseconds *
-        // 1000 milliseconds = 1 second
+        /**Set out long you want the animation to be. * Measured in milliseconds * **/
         anim.setDuration(1500);
-        // Start the animation on our passed in view
+        /**Start the animation on our passed in view**/
         view.startAnimation(anim);
-        /*  After the animation is complete we want to make sure we set the visibility of the view
+        /** After the animation is complete we want to make sure we set the visibility of the view
             to VISIBLE. Otherwise it will go back to being INVISIBLE due to our previous lines
-            that set the view to INVISIBLE */
+            that set the view to INVISIBLE **/
         view.setVisibility(View.VISIBLE);
     }
 

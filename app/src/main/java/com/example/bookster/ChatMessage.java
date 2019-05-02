@@ -10,7 +10,7 @@ public class ChatMessage {
     private long messageTime;
     private String userName;
     private String senderUID;
-
+    /**Local variables for a message    **/
     public ChatMessage(String messageText, String messageUser, String userName, long messageTime) {
         this.messageText = messageText;
         this.messageUser = messageUser;
@@ -18,6 +18,7 @@ public class ChatMessage {
         this.messageTime = new Date().getTime();
         this.senderUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
+    /**Chat Constructor    **/
 
     public ChatMessage() {
     }
@@ -61,4 +62,6 @@ public class ChatMessage {
     public void setSenderUID(String senderUID) {
         this.senderUID = senderUID;
     }
+
+    /**Getters and setters   **/
 }
