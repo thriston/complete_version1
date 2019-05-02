@@ -19,6 +19,7 @@ public class ConversationListAdapter extends ArrayAdapter<Conversation> {
     private String myUID;
     private String receiverUID;
     private String key;
+    /**Local Variables Used    **/
 
     public ConversationListAdapter(Context context, int resource, ArrayList<Conversation> objects){
         super(context, resource, objects);
@@ -27,7 +28,7 @@ public class ConversationListAdapter extends ArrayAdapter<Conversation> {
         this.myUID = myUID;
         this.receiverUID = receiverUID;
     }
-
+    /**Constructor    **/
 
 
     @Override
@@ -45,12 +46,6 @@ public class ConversationListAdapter extends ArrayAdapter<Conversation> {
         String conversationID = getItem(position).getConversationID();
         long lastActivityTime = getItem(position).getLastActivityTime();
 
-
-        //System.out.println("HERE");
-        //System.out.println(fullName);
-        //System.out.println(lastActivityTime);
-
-
         Conversation conversation = new Conversation(conversationID,receiverUID, lastActivityTime, fullName);
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent,false);
@@ -63,6 +58,6 @@ public class ConversationListAdapter extends ArrayAdapter<Conversation> {
 
 
         return convertView;
-
+        /** Casts all XML Objects to an instance of the Conversation List View    **/
     }
 }

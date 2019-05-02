@@ -5,7 +5,6 @@ public class Category {
     private String description;
     private  String numAds;
     private String imgURL;
-    //blah'
     private static int ti;
     private static int numCategory;
 
@@ -15,6 +14,7 @@ public class Category {
         this.numAds = numAds;
         this.imgURL = imgURL;
     }
+    /** Category Constructor **/
 
     public String getImgURL() {
         return imgURL;
@@ -47,4 +47,6 @@ public class Category {
     public void setNumAds(String numAds) {
         this.numAds = numAds;
     }
+
+    /**Getters and Setters  **/
 }

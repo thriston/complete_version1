@@ -64,25 +64,7 @@ public class Login extends AppCompatActivity {
                 finish();
             }
         });
-
-       // setContentView(R.layout.product_page);
-
-//        viewPager = findViewById(R.id.product_img_slider);
-//        adapter = new ProductPictureSlider(this);
-//        viewPager.setAdapter(adapter);
-//
-//        //For Call Button
-//        Button btn = (Button) findViewById(R.id.callbtn);
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(Intent.ACTION_DIAL);
-//
-//                TextView num = findViewById(R.id.sellerContactNumTextView);
-//                intent.setData(Uri.parse("tel:" + num.getText() ));
-//                startActivity(intent);
-//            }
-//        }); Code For PRoduct PAge
+        /** Organizes the toolbar   **/
     }
     public void signIn(View view) {
         String email = emailInput.getText().toString();
@@ -101,16 +83,14 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            /**Sign in success, update UI with the signed-in user's information   **/
                             Toast.makeText(getApplicationContext(), "Logged In", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            //Intent i= new Intent(getApplicationContext(),MainActivity.class);
-                            //startActivity(i);
                             setResult(  RESULT_OK, null);
                             finish();
 
                         } else {
-                            // If sign in fails, display a message to the user.
+                            /**If sign in fails, display a message to the user.   **/
                             Toast.makeText(getApplicationContext(), "Sign in Failed - Username or Password Incorrect", Toast.LENGTH_SHORT).show();
 
                         }
@@ -121,7 +101,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void sendPasswordReset(View view) {
-        // [START send_password_reset]
+        /** [START send_password_reset]  **/
         final String emailAddress = emailInput.getText().toString();
         if(emailAddress.isEmpty()){
             Toast.makeText(getApplicationContext(), "Please enter your email address to being password reset", Toast.LENGTH_SHORT).show();
@@ -139,6 +119,6 @@ public class Login extends AppCompatActivity {
                         }
                     }
                 });
-        // [END send_password_reset]
+        /**[END send_password_reset]   **/
     }
 }

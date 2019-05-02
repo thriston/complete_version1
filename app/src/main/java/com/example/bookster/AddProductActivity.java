@@ -41,11 +41,6 @@ public class AddProductActivity extends AppCompatActivity {
     FloatingActionButton fabAdd;
     FloatingActionButton fabCancel;
     User myUserProfile;
-//    EditText productName;
-//    EditText description;
-//    EditText price;
-//    EditText quantity;
-
     private TextInputLayout textInputProductName;
     private TextInputLayout textInputDescription;
     private TextInputLayout textInputPrice;
@@ -81,8 +76,6 @@ public class AddProductActivity extends AppCompatActivity {
     private String mainImageUrl;
     private boolean mainUploaded = false;
     private TextView cardTV;
-    //private ArrayList<Uri> productImages;
-    //private ArrayList<Uri> productImages = new ArrayList<Uri>();
 
 
     @Override
@@ -95,29 +88,21 @@ public class AddProductActivity extends AppCompatActivity {
         imagesUrl = new ArrayList<>();
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle("Add Product");
+        /**
+         Optimizes the toolbar
+         **/
+
         category = getIntent().getStringExtra("category");
         myUserProfile = (User) getIntent().getSerializableExtra("myUserProfile");
         myStorage = FirebaseStorage.getInstance().getReference();
-
-        System.out.println("USER: "+myUserProfile.getFullname());
-        System.out.println("USER: "+myUserProfile.getEmail());
-        System.out.println("USER: "+myUserProfile.getContact());
-        //System.out.println("USER: "+myUserProfile.getUID());
+        //Gets Firebase Instance of the Category for the Particular Product to be posted
 
         fabAdd = findViewById(R.id.fabAdd);
         fabCancel = findViewById(R.id.fabCancel);
-
-//        productName = findViewById(R.id.productName);
-//        description = findViewById(R.id.description);
-//        price = findViewById(R.id.price);
-//        quantity = findViewById(R.id.quantity);
-
-        //From input form
         textInputProductName = findViewById(R.id.text_input_product_name);
         textInputDescription = findViewById(R.id.text_input_description);
         textInputPrice = findViewById(R.id.text_input_price);
         textInputQuantity = findViewById(R.id.text_input_quantity);
-
         allowCalls = findViewById(R.id.allowCallsSwitch);
         myDatabase = FirebaseDatabase.getInstance().getReference().child("Products");
         CardView cardView = findViewById(R.id.cardView);
@@ -125,12 +110,8 @@ public class AddProductActivity extends AppCompatActivity {
         CardView cardView2 = findViewById(R.id.cardView2);
         CardView cardView3 = findViewById(R.id.cardView3);
         CardView cardView4 = findViewById(R.id.cardView4);
-
-
-
-
-
-        cardView.setOnClickListener(new View.OnClickListener() {
+        /**Retrieves XML Object Icons For Icon on the Layout Screen**/
+cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -174,7 +155,7 @@ public class AddProductActivity extends AppCompatActivity {
 
             }
         });
-
+        /**Runs the Choose Image Method which will open the user's phone gallery directory for the user to select an image for the product**/
 
 
 
@@ -186,13 +167,15 @@ public class AddProductActivity extends AppCompatActivity {
                 {
                     Toast.makeText(AddProductActivity.this, "Please Select a main Image", Toast.LENGTH_SHORT).show();
                 }
+
+                /** Tests to see if the main image was left blank**/
                 if(confirmInput() & productImage!=null)
                 {
                     ProgressBar progressBar = findViewById(R.id.progress_bar);
                     progressBar.setVisibility(View.VISIBLE);
                     productID = FirebaseDatabase.getInstance().getReference().child("Products").push().getKey();
 
-
+                    /**Loads progress bar for submitting **/
                     final String mainImagePath = "ProductImages/"+ UUID.randomUUID();
                     myStorage.child(mainImagePath).putFile(productImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -200,10 +183,10 @@ public class AddProductActivity extends AppCompatActivity {
                             myStorage.child(mainImagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    // initiate a Switch
+                                    /**initiate a Switch  **/
                                     Switch simpleSwitch = (Switch) findViewById(R.id.allowCallsSwitch);
 
-                                    // check current state of a Switch (true or false).
+                                    /** check current state of a Switch (true or false). **/
                                     Boolean switchState = simpleSwitch.isChecked();
                                     if(!switchState)
                                     {
@@ -223,7 +206,6 @@ public class AddProductActivity extends AppCompatActivity {
                                     mainUploaded = true;
                                     catRef = FirebaseDatabase.getInstance().getReference();
                                     catRef = catRef.child("Category");
-                                    System.out.println("THE CATEGORY: "+category);
                                     catRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -238,10 +220,10 @@ public class AddProductActivity extends AppCompatActivity {
                                                 }
                                             }
 
-//                                        System.out.println("NUMBER ITEMS: "+dataSnapshot.child("Description").getValue());
-//
-                                        }
 
+                                        }
+                                        /**  Runs through all the products in the category node on firebase and appends the product
+                                         **/
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -264,7 +246,7 @@ public class AddProductActivity extends AppCompatActivity {
                                     db.child("views").setValue(0);
                                     db.child("active").setValue(true);
                                     db.child("dateCreated").setValue(System.currentTimeMillis());
-
+                                    /**  Sets database value with product information**/
                                     Toast.makeText(getApplicationContext(),"Product Added", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
@@ -307,11 +289,8 @@ public class AddProductActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
     }
+    /**Prepares all the images to be posted and posts them on firebase cloud  **/
 
 
     private synchronized ArrayList<String> getDownloadUrls(final ArrayList<String> secondaryImages)
@@ -331,7 +310,7 @@ public class AddProductActivity extends AppCompatActivity {
 
         return imagesUrl;
     }
-
+    /**Synchronizes the database  **/
 
 
     private void chooseImage(int PICK_REQUEST)
@@ -370,11 +349,6 @@ public class AddProductActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(intent, PICK_SEC4_IMAGE_REQUEST);
         }
-//        else
-//        {
-//            intent.setAction(Intent.ACTION_GET_CONTENT);
-//            startActivityForResult(intent, PICK_MAIN_IMAGE_REQUEST);
-//        }
 
     }
 
@@ -480,7 +454,6 @@ public class AddProductActivity extends AppCompatActivity {
             Uri mainImageUrl = data.getData();
             productImages.put("0", mainImageUrl);
 
-            //productImages.set(0, data.getData());
             ImageView mainImage = findViewById(R.id.mainImage);
             mainImage.setImageURI(mainImageUrl);
             cardTV = findViewById(R.id.cardViewTV);
@@ -540,17 +513,6 @@ public class AddProductActivity extends AppCompatActivity {
             cardTV.setText("");
             Toast.makeText(getApplicationContext(), "Image Selected", Toast.LENGTH_SHORT).show();
         }
-//        else if(requestCode == PICK_MULTIPLE_IMAGE_REQUEST && resultCode == RESULT_OK && data.getClipData() != null)
-//        {
-//            ClipData mClipData = data.getClipData();
-//            for(int i = 0; i < mClipData.getItemCount(); i++)
-//            {
-//                ClipData.Item item = mClipData.getItemAt(i);
-//                productImages.add(item.getUri());
-//            }
-//
-//            Toast.makeText(getApplicationContext(), "Images Selected", Toast.LENGTH_SHORT).show();
-//        }
 
     }
 }

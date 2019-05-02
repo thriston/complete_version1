@@ -54,16 +54,9 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        /**Inflate the layout for this fragment   **/
         View v =inflater.inflate(R.layout.fragment_login, container, false);
-
-       // navigationView = v.findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
-        //navigationView.setCheckedItem(R.id.nav_login);
-
-
         textView=v.findViewById(R.id.signUpLinkTextView);
-
         loginBtn= v.findViewById(R.id.loginButton);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +64,6 @@ public class LoginFragment extends Fragment {
                 signIn(v);
             }
         });
-
         mAuth = FirebaseAuth.getInstance();
         emailInput=v.findViewById(R.id.emailAddressEditText2);
         passwordInput=v.findViewById(R.id.passwordEditText2);
@@ -84,7 +76,7 @@ public class LoginFragment extends Fragment {
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        /**Organizes the toolbar  **/
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,25 +85,14 @@ public class LoginFragment extends Fragment {
             }
         });
 
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer= v.findViewById(R.id.drawer_layout);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-
-
-        //Signup link on login page
+        /**  Signup link on login page **/
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i= new Intent(getContext(),SignUp.class);
                 startActivity(i);
-                //getActivity().finish();
             }
         });
-
-
-
-
 
 
         return v;
@@ -134,19 +115,15 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            /**Sign in success, update UI with the signed-in user's information   **/
                             Toast.makeText(getContext(), "Logged In", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            //Intent i= new Intent(getApplicationContext(),MainActivity.class);
-                            //startActivity(i);
                             getActivity().setResult(getActivity().RESULT_OK, null);
 
                             Fragment fragment = new HomeFragment();
                             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.replace(R.id.fragment_container, fragment);
-                            //fragmentTransaction.addToBackStack();
-
                             fragmentTransaction.commit();
 
                             Intent intent = new Intent(getContext(), MainActivity.class);
@@ -160,16 +137,12 @@ public class LoginFragment extends Fragment {
                             startActivity(intent);
                             startActivity(intent2);
 
-
-                            //getActivity().finish();
-
                         } else {
-                            // If sign in fails, display a message to the user.
+                            /** If sign in fails, display a message to the user.  **/
                             Toast.makeText(getContext(), "Sign in Failed - Username or Password Incorrect", Toast.LENGTH_SHORT).show();
 
                         }
 
-                        // ...
                     }
                 });
     }
@@ -196,11 +169,4 @@ public class LoginFragment extends Fragment {
         // [END send_password_reset]
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//
-//        menu.add(R.id.group0, menu.FIRST, menu.NONE , "TEST").setIcon(R.drawable.ic_login);
-//
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
 }

@@ -44,10 +44,7 @@ public class EditProductActivity extends AppCompatActivity {
     FloatingActionButton fabAdd;
     FloatingActionButton fabCancel;
     User myUserProfile;
-//    EditText productName;
-//    EditText description;
-//    EditText price;
-//    EditText quantity;
+
 
     private TextInputLayout textInputProductName;
     private TextInputLayout textInputDescription;
@@ -87,9 +84,7 @@ public class EditProductActivity extends AppCompatActivity {
     private boolean changesMadeMain = false;
     private boolean changesMadeSec = false;
     private FirebaseUser user;
-    //private ArrayList<Uri> productImages;
-    //private ArrayList<Uri> productImages = new ArrayList<Uri>();
-
+    /**Local variables used     **/
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,20 +96,14 @@ public class EditProductActivity extends AppCompatActivity {
         imagesUrl = new ArrayList<>();
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle("Edit Product");
+        /**Organises the toolbar     **/
 
         product = (Product) getIntent().getSerializableExtra("productObj");
         category = product.getCategory();
         myStorage = FirebaseStorage.getInstance().getReference();
 
-        //System.out.println("USER: "+myUserProfile.getUID());
-
         fabAdd = findViewById(R.id.fabAdd);
         fabCancel = findViewById(R.id.fabCancel);
-
-//        productName = findViewById(R.id.productName);
-//        description = findViewById(R.id.description);
-//        price = findViewById(R.id.price);
-//        quantity = findViewById(R.id.quantity);
 
         textInputProductName = findViewById(R.id.text_input_product_name);
         textInputDescription = findViewById(R.id.text_input_description);
@@ -129,11 +118,6 @@ public class EditProductActivity extends AppCompatActivity {
         CardView cardView3 = findViewById(R.id.cardView3);
         CardView cardView4 = findViewById(R.id.cardView4);
 
-
-//        EditText productNameET = findViewById(R.id.productName);
-//        EditText productDetailsET = findViewById(R.id.description);
-//        EditText priceET = findViewById(R.id.price);
-//        EditText quantityET = findViewById(R.id.quantity);
         ImageView mainImage = findViewById(R.id.mainImage);
 
         textInputProductName.getEditText().setText(product.getName());
@@ -142,8 +126,6 @@ public class EditProductActivity extends AppCompatActivity {
         textInputQuantity.getEditText().setText(product.getQuantity());
         Glide.with(this).load(product.getMainImage()).into(mainImage);
 
-
-
         final ArrayList<Integer> resources = new ArrayList<>();
         resources.add(R.id.secImage1);
         resources.add(R.id.secImage2);
@@ -151,12 +133,11 @@ public class EditProductActivity extends AppCompatActivity {
         resources.add(R.id.secImage4);
 
         count = 0;
-        //secondaryImages.add(product.getMainImage());
         if(product.getSecondaryImages() != null)
         {
             for(String path: product.getSecondaryImages())
             {
-                //System.out.println("URL: "+mStorage.toString()+path);
+
                 pathRef = FirebaseStorage.getInstance().getReference().child(path);
                 pathRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
@@ -171,10 +152,6 @@ public class EditProductActivity extends AppCompatActivity {
                 });
             }
         }
-
-
-
-
 
 
 
@@ -223,14 +200,7 @@ public class EditProductActivity extends AppCompatActivity {
 
             }
         });
-
-
-        //
-        System.out.println("Main Image: "+product.getMainImage()); //url
-        System.out.println("Secondry Images: "+product.getSecondaryImages()); //firebase location - ProductImages/ac7d3bca-5e6a-4871-a97f-576861e10539
-
-
-        //productImage = Uri.parse(product.getMainImage());
+        /**Updates images     **/
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null)
@@ -249,9 +219,7 @@ public class EditProductActivity extends AppCompatActivity {
 
                 }
             });
-        }
-
-
+        }/**Pulls existing info from firebase   **/
 
 
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -268,15 +236,6 @@ public class EditProductActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.VISIBLE);
                     productID = product.getID();
 
-
-
-
-                    //System.out.println("MAP SIZE: "+productImages.size());
-//                for(int i=0; i < productImages.size(); i++)
-//                {
-//
-//                    System.out.println("IMAGE: "+productImages.get(""+i));
-//                }
                     final String mainImg = product.getMainImage();
                     final ArrayList<String> secImg = product.getSecondaryImages();
 
@@ -323,8 +282,7 @@ public class EditProductActivity extends AppCompatActivity {
                                 });
                             }
                         });
-
-
+                        /**Updates New Info on Firebase     **/
 
                         for(Map.Entry<String, Uri> entry : productImages.entrySet()) {
                             String path = "ProductImages/"+ UUID.randomUUID();
@@ -349,11 +307,10 @@ public class EditProductActivity extends AppCompatActivity {
                         }
 
                     }
+                    /**Stores new photos on Firebase     **/
 
 
-
-
-                    //Main Image and Secondary image is unchanged
+                    /** Main Image and Secondary image is unchanged    **/
                     else if(!changesMadeMain && !changesMadeSec)
                     {
                         Product product = new Product(
@@ -389,7 +346,7 @@ public class EditProductActivity extends AppCompatActivity {
                     }
 
 
-                    //If MainImage Changed Alone
+                    /**  If MainImage Changed Alone   **/
                     else if(changesMadeMain && !changesMadeSec)
                     {
                         productImage = productImages.get("0");
@@ -439,7 +396,7 @@ public class EditProductActivity extends AppCompatActivity {
 
 
 
-                    //If Secondary Images Changed ALone
+                    /**If Secondary Images Changed ALone     **/
                     else if(changesMadeSec && !changesMadeMain)
                     {
 
@@ -493,12 +450,6 @@ public class EditProductActivity extends AppCompatActivity {
                             }
                         }
 
-
-
-
-
-
-
                         //end if
                     }
                 }
@@ -513,9 +464,6 @@ public class EditProductActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
 
 
     }
@@ -540,7 +488,7 @@ public class EditProductActivity extends AppCompatActivity {
     }
 
 
-
+    /**All methods are the same as the Add Product Activity**/
     private void chooseImage(int PICK_REQUEST)
     {
 
@@ -577,11 +525,6 @@ public class EditProductActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(intent, PICK_SEC4_IMAGE_REQUEST);
         }
-//        else
-//        {
-//            intent.setAction(Intent.ACTION_GET_CONTENT);
-//            startActivityForResult(intent, PICK_MAIN_IMAGE_REQUEST);
-//        }
 
     }
 

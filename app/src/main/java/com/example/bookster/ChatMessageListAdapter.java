@@ -31,12 +31,7 @@ public class ChatMessageListAdapter extends ArrayAdapter<ChatMessage> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         String message = getItem(position).getMessageText();
-        //String userName = getItem(position).getUserName();
         long messageTime = getItem(position).getMessageTime();
-        //String messageUser = getItem(position).getMessageUser();
-
-        //ChatMessage chatMessage = new ChatMessage(message, messageUser, userName, messageTime);
-
 
         if(convertView == null)
         {
@@ -54,16 +49,11 @@ public class ChatMessageListAdapter extends ArrayAdapter<ChatMessage> {
         }
 
 
-
-
         TextView tvMessage = (TextView) convertView.findViewById(R.id.message);
         TextView tvTime = (TextView) convertView.findViewById(R.id.time);
-        //TextView tvDisplayName = (TextView) convertView.findViewById(R.id.display_name);
-
         tvMessage.setText(message);
         tvTime.setText(DateFormat.format("h:mma   dd/MM/yyyy", messageTime));
-        //tvDisplayName.setText(userName);
-
+        /**Casts XML Objects to Chat Message with Chat View **/
         return convertView;
 
     }
@@ -85,8 +75,6 @@ public class ChatMessageListAdapter extends ArrayAdapter<ChatMessage> {
         {
             return BY_RECEIVER;
         }
-
-
 
     }
 }

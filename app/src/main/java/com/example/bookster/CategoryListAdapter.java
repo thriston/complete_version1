@@ -42,12 +42,6 @@ public class CategoryListAdapter extends ArrayAdapter<Category> {
         ImageView image;
     }
 
-    /**
-     * Default constructor for the PersonListAdapter
-     * @param context
-     * @param resource
-     * @param objects
-     */
     public CategoryListAdapter(Context context, int resource, ArrayList<Category> objects) {
         super(context, resource, objects);
         mContext = context;
@@ -58,19 +52,19 @@ public class CategoryListAdapter extends ArrayAdapter<Category> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        //sets up the image loader library
+        /** sets up the image loader library **/
         setupImageLoader();
 
-        //get the persons information
+        /**get the persons information  **/
         String name = getItem(position).getName();
         String description = getItem(position).getDescription();
         String numAds = getItem(position).getNumAds();
         String imgUrl = getItem(position).getImgURL();
 
-        //create the view result for showing the animation
+        /**create the view result for showing the animation  **/
         final View result;
 
-        //ViewHolder object
+        /** View Holder Object **/
         ViewHolder holder;
 
 
@@ -102,19 +96,19 @@ public class CategoryListAdapter extends ArrayAdapter<Category> {
         holder.description.setText(description);
         holder.numAds.setText(numAds+" items");
 
-        //create the imageloader object
+        /**Create the imageloader object  **/
         ImageLoader imageLoader = ImageLoader.getInstance();
-        ;
+
         int defaultImage = mContext.getResources().getIdentifier("@drawable/image_failed",null,mContext.getPackageName());
 
-        //create display options
+        /**Create display options  **/
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
                 .cacheOnDisc(true).resetViewBeforeLoading(true)
                 .showImageForEmptyUri(defaultImage)
                 .showImageOnFail(defaultImage)
                 .showImageOnLoading(defaultImage).build();
 
-        //download and display image from url
+        /**download and display image from url  **/
         imageLoader.displayImage(imgUrl, holder.image, options);
 
         return convertView;
@@ -137,7 +131,7 @@ public class CategoryListAdapter extends ArrayAdapter<Category> {
                 .discCacheSize(100 * 1024 * 1024).build();
 
         ImageLoader.getInstance().init(config);
-        // END - UNIVERSAL IMAGE LOADER SETUP
+        /**END - UNIVERSAL IMAGE LOADER SETUP  **/
     }
 }
 

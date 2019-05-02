@@ -33,36 +33,29 @@ public class ConversationMessageActivity extends AppCompatActivity {
     private String key;
     private String myUID;
     private String myUserName;
-    //private User myUserProfile;
     private String receiverName;
     private Conversation receiverConvo;
     private String profilePicURL;
     Toolbar toolbar;
+    /**Local Variables Used     **/
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main1);
-
         Intent intent = getIntent();
-
         receiverConvo = (Conversation) intent.getSerializableExtra("receiverConvoObj");
         myUserName = receiverConvo.getMyUserName();
-        //myUserProfile = (User) intent.getSerializableExtra("myUserProfile");
-        //final myUse = (Product) intent.getSerializableExtra("productObj");
-
         receiverUID = receiverConvo.getReceiverUID();
-        //receiverUID = product.getSeller().getUID();
         myUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle("");
         TextView textView = findViewById(R.id.title);
         textView.setText(receiverConvo.getReceiverFullName());
         setSupportActionBar(toolbar);
-
+        /**Organizes the toolbar     **/
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -89,19 +82,11 @@ public class ConversationMessageActivity extends AppCompatActivity {
 
             }
         });
-
-
-
+        /**Pulls and sets user profile picture     **/
 
 
         myDatabase = FirebaseDatabase.getInstance().getReference().child("Chats");
         myDatabase.keepSynced(true);
-
-
-        //FirebaseDatabase.getInstance().getReference().child()
-
-
-
 
         sendBtn = findViewById(R.id.sendBtn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -110,11 +95,6 @@ public class ConversationMessageActivity extends AppCompatActivity {
                 sendMessage();
             }
         });
-        //System.out.println("USER PROFILE: "+value);
-
-
-
-
 
 
         myDatabase.addValueEventListener(new ValueEventListener() {
@@ -207,6 +187,7 @@ public class ConversationMessageActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+        /**Looks for existing messages sent, pulls it, sets the chat interface, and transmit messages     **/
 
 
         DatabaseReference myDatabase1 = FirebaseDatabase.getInstance().getReference().child("users");
@@ -266,6 +247,5 @@ public class ConversationMessageActivity extends AppCompatActivity {
         myDatabase.child(key).push().setValue(chatMessage);
         editText.setText("");
     }
-
-
+    /**Sends all messages i.e updates firebase database     **/
 }

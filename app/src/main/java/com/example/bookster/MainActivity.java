@@ -48,45 +48,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DatabaseReference myDatabase;
     private TextView tvName, tvEmail;
     private ImageView imageView;
-
-    //If logged in
-    //private static final int nav_chat = 941;
     private static final int nav_chat = 2;
     private static final int nav_profile = 3;
     private static final int nav_my_products = 4;
     private static final int nav_requests = 5;
     private static final int nav_logout = 6;
-
-    //If logged out
     private static final int nav_login = 7;
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       // FirebaseUser auth;
-       // mListView  = (ListView) findViewById(R.id.listView);
-
-
-
-
-
         drawer= findViewById(R.id.drawer_layout);
-//
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        /**Organizes Navigation Drawer   **/
 
         View headerLayout = navigationView.getHeaderView(0);
         tvName = headerLayout.findViewById(R.id.name);
         tvEmail = headerLayout.findViewById(R.id.email);
         imageView = headerLayout.findViewById(R.id.profilePictureImage);
-        //tvEmail.setText("EMAIL@GMAIL.COM");
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null)
         {
@@ -94,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             db.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    //System.out.println("INFORMATION: "+dataSnapshot.child("fullname").getValue().toString());
                     tvName.setText(dataSnapshot.child("fullname").getValue().toString());
                     tvEmail.setText(dataSnapshot.child("email").getValue().toString());
                     Glide.with(getApplicationContext()).load(dataSnapshot.child("profilePicURL").getValue().toString()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(imageView);
@@ -108,26 +88,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
 
         }
+        /** Pulls and sets user info to the nav drawer  **/
         else
         {
             tvName.setText("Login to access full functionality");
             tvEmail.setVisibility(View.GONE);
 
-            //Glide.with(ctx).load(images.get(position)).into(imageView);
-
-
         }
 
-
-
-        //navigationView.setCheckedItem(R.id.nav_home);
         addMenuItems();
 
-//        Menu menu = navigationView.getMenu();
-//        menu.add(R.id.group0, menu.FIRST, menu.NONE , "TEST").setIcon(R.drawable.ic_login);
-
-////
-////
         toolbar =  findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setLogo(R.mipmap.ic_launcher);
@@ -137,9 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-//
-//
-//
+
         if (savedInstanceState == null)
         {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -147,64 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.home);
         }
 
-//
-//        DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("Category");
-//        myDatabase.keepSynced(true);
-//        myDatabase.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                categoryList.clear();
-//                for(DataSnapshot ds: dataSnapshot.getChildren())
-//                {
-//
-//
-//                    //System.out.println("CAT HERE: "+ds.child("").getValue());
-//                    String description, name, imageUrl;
-//                    String nItems;
-//                    description =(String) ds.child("Description").getValue();
-//                    name =(String) ds.child("Name").getValue();
-//                    imageUrl = (String) ds.child("imageUrl").getValue();
-//                    nItems =(String) ds.child("nItems").getValue();
-//
-//                    Category category = new Category(name, description, ""+nItems, imageUrl);//"drawable://" + R.drawable.book
-//                    categoryList.add(category);
-//
-//                }
-//                adapter = new CategoryListAdapter(MainActivity.this, R.layout.adapter_view_layout, categoryList);
-//                mListView.setAdapter(adapter);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//
-//     //LIST ONCLICK LISTENER
-//
-//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                //if(position==0){
-//                    Intent myintent = new Intent(view.getContext(), ProductListActivity.class);
-//                    myintent.putExtra("category", categoryList.get(position).getName() );
-//                    //System.out.println("CATEGORY: "+categoryList.get(position).getName());
-//                    startActivityForResult(myintent, 0);
-//                //}
-//            }
-//        });
-
     }
-
-//    // Menu icons are inflated just as they were with actionbar
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        menu.clear();
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-
 
     public void checkCurrentUser() {
         // [START check_current_user]
@@ -220,51 +131,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    // Respond to menu item clicks
+    /**  Respond to menu item clicks **/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        if(id == R.id.miProfile)
-//        {
-//
-//            if (user != null) {
-//                //Uri photoUrl = user.getPhotoUrl();
-//
-//                // Check if user's email is verified
-//                boolean emailVerified = user.isEmailVerified();
-//                System.out.println("USER: " + user.getEmail());
-//                String uid = user.getUid();
-//                //Toast.makeText(getApplicationContext(),email+" Signed in",Toast.LENGTH_SHORT).show();
-//                Intent i = new Intent(getApplicationContext(), Profile.class);
-//                //i.putExtra("receiverUID", receiverUID);
-//                startActivity(i);
-//
-//            }
-//            else {
-//                Intent i = new Intent(getApplicationContext(), Login.class);
-//                startActivity(i);
-//            }
-//            return true;
-//        }
-
-
-//        if(user != null && id == R.id.chat)
-//        {
-//            //Toast.makeText(MainActivity.this, "Chat clicked", Toast.LENGTH_LONG).show();
-//            Intent i = new Intent(getApplicationContext(), ConversationChatActivity.class);
-//            startActivity(i);
-//            return true;
-//        }
-//        else{
-//            Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
-//            Intent i = new Intent(getApplicationContext(), Login.class);
-//            startActivity(i);
-//        }
         return super.onOptionsItemSelected(item);
     }
-
-
 
 
     @Override
@@ -321,9 +194,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             alert.show();
 
 
-
-
-
         }
         else
         if(itemID == nav_my_products)
@@ -344,20 +214,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    /**Actions done when icons is clicked**/
 
     private void fadeIn(View view) {
-        // Create an AlphaAnimation variable
-        // 0.0f makes the view invisible
-        // 1.0f makes the view fully visible
+
         AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
-        // Set out long you want the animation to be. * Measured in milliseconds *
-        // 1000 milliseconds = 1 second
+
         anim.setDuration(1500);
-        // Start the animation on our passed in view
         view.startAnimation(anim);
-        /*  After the animation is complete we want to make sure we set the visibility of the view
-            to VISIBLE. Otherwise it will go back to being INVISIBLE due to our previous lines
-            that set the view to INVISIBLE */
+
         view.setVisibility(View.VISIBLE);
     }
 
@@ -371,7 +236,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
         if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            //Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_LONG).show();
             Fragment frag = getSupportFragmentManager().findFragmentByTag("fragBack");
             FragmentTransaction transac = getSupportFragmentManager().beginTransaction().remove(frag);
             transac.commit();
