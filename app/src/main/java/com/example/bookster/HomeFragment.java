@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment  {
         mListView  = (ListView) v.findViewById(R.id.listView);
 
         DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("Category");
-        myDatabase.keepSynced(true);
+        myDatabase.keepSynced(false);
         myDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

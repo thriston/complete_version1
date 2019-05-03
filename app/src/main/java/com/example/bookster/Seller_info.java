@@ -43,7 +43,7 @@ public class Seller_info extends AppCompatActivity {
         //get database reference to be used later
         mDatabase = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(user.getUid());
-        mDatabase.keepSynced(true);
+        mDatabase.keepSynced(false);
 
         //Configure toolbar
         toolbar = findViewById(R.id.toolbar);

@@ -69,7 +69,7 @@ public class ProfileFragment extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(user.getUid());
-        mDatabase.keepSynced(true);
+        mDatabase.keepSynced(false);
 
         ValueEventListener userListener = new ValueEventListener() {
             @Override

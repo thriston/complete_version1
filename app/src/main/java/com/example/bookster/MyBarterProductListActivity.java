@@ -60,7 +60,7 @@ public class MyBarterProductListActivity extends AppCompatActivity {
 
         //receives and add all of the user's products to a list from firebase
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Products");
-        mDatabase.keepSynced(true);
+        mDatabase.keepSynced(false);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

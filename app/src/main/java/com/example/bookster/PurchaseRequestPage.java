@@ -96,7 +96,7 @@ public class PurchaseRequestPage extends AppCompatActivity {
         {
             mDatabase = FirebaseDatabase.getInstance().getReference()
                     .child("users").child(purchaseRequest.getSenderUID());
-            mDatabase.keepSynced(true);
+            mDatabase.keepSynced(false);
 
             mDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -229,7 +229,7 @@ public class PurchaseRequestPage extends AppCompatActivity {
                     db2 = FirebaseDatabase.getInstance().getReference().child("users").child(purchaseRequest.getProduct().getSeller().myUID).child("Products").child(purchaseRequest.getProduct().getID()).child("quantity");
                     db2.setValue(purchaseRequest.getProduct().getQuantity());
 
-                    mDatabase.keepSynced(true);
+                    mDatabase.keepSynced(false);
                     accept.setVisibility(View.GONE);
                     reject.setVisibility(View.GONE);
                     statusView.setText("Accepted");
@@ -252,7 +252,7 @@ public class PurchaseRequestPage extends AppCompatActivity {
                             .child(purchaseRequest.getID()).child("status");
                     mDatabase.setValue("Rejected");
 
-                    mDatabase.keepSynced(true);
+                    mDatabase.keepSynced(false);
 
                     accept.setVisibility(View.GONE);
                     reject.setVisibility(View.GONE);
@@ -265,7 +265,7 @@ public class PurchaseRequestPage extends AppCompatActivity {
         {
             mDatabase = FirebaseDatabase.getInstance().getReference()
                     .child("users").child(barterRequest.getSenderUID());
-            mDatabase.keepSynced(true);
+            mDatabase.keepSynced(false);
 
             mDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -420,7 +420,7 @@ public class PurchaseRequestPage extends AppCompatActivity {
                     db2.setValue(barterRequest.getSellerProduct().getQuantity());
 
 
-                    mDatabase.keepSynced(true);
+                    mDatabase.keepSynced(false);
 
                     accept.setVisibility(View.GONE);
                     reject.setVisibility(View.GONE);
@@ -447,7 +447,7 @@ public class PurchaseRequestPage extends AppCompatActivity {
                             .child(barterRequest.getID()).child("status");
                     mDatabase.setValue("Rejected");
 
-                    mDatabase.keepSynced(true);
+                    mDatabase.keepSynced(false);
 
                     accept.setVisibility(View.GONE);
                     reject.setVisibility(View.GONE);

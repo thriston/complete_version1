@@ -185,7 +185,7 @@ public class MessageActivity extends AppCompatActivity {
 
         //Uses the receiver User ID to find the receiver's full name on firebase
         DatabaseReference myDatabase1 = FirebaseDatabase.getInstance().getReference().child("users");
-        myDatabase1.keepSynced(true);
+        myDatabase1.keepSynced(false);
         myDatabase1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -211,31 +211,35 @@ public class MessageActivity extends AppCompatActivity {
     //Called when the user clicks the send message floating action button
     public void sendMessage()
     {
-        Date date = new Date();
-        //store a copy of message/chat information to the current user's profile
-        FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("lastActivity").setValue(date.getTime());
-        FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("receiverUID").setValue(receiverUID);
-        FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("receiverName").setValue(receiverName);
-        FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("myUID").setValue(myUID);
-        FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("myUserName").setValue(myUserName);
-
-        //store a copy of message/chat information to the current receiver's profile
-        FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("lastActivity").setValue(date.getTime());
-        FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("receiverUID").setValue(myUID);
-        FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("receiverName").setValue(myUserName);
-        FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("myUID").setValue(receiverUID);
-        FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("myUserName").setValue(receiverName);
-
-        //store the main copy of message/chat information to the "Chats" node on firebase
         EditText editText = findViewById(R.id.editText);
-        ChatMessage chatMessage = new ChatMessage(
-                editText.getText().toString(),
-                FirebaseAuth.getInstance().getCurrentUser().getEmail(),
-                myUserName,
-                new Date().getTime()
-        );
-        myDatabase.child(key).push().setValue(chatMessage);
-        editText.setText("");
+        String message = editText.getText().toString();
+        if(!message.equals("")) {
+            Date date = new Date();
+            //store a copy of message/chat information to the current user's profile
+            FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("lastActivity").setValue(date.getTime());
+            FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("receiverUID").setValue(receiverUID);
+            FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("receiverName").setValue(receiverName);
+            FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("myUID").setValue(myUID);
+            FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("myUserName").setValue(myUserName);
+
+            //store a copy of message/chat information to the current receiver's profile
+            FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("lastActivity").setValue(date.getTime());
+            FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("receiverUID").setValue(myUID);
+            FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("receiverName").setValue(myUserName);
+            FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("myUID").setValue(receiverUID);
+            FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("myUserName").setValue(receiverName);
+
+            //store the main copy of message/chat information to the "Chats" node on firebase
+            //EditText editText = findViewById(R.id.editText);
+            ChatMessage chatMessage = new ChatMessage(
+                    message,
+                    FirebaseAuth.getInstance().getCurrentUser().getEmail(),
+                    myUserName,
+                    new Date().getTime()
+            );
+            myDatabase.child(key).push().setValue(chatMessage);
+            editText.setText("");
+        }
     }
 
 }

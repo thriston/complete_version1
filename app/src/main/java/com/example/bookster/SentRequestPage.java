@@ -114,6 +114,11 @@ public class SentRequestPage extends AppCompatActivity {
             ratingBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(purchaseRequest.getStatus().equals("pending") || purchaseRequest.getStatus().equals("Rejected"))
+                    {
+                        Toast.makeText(SentRequestPage.this, "Can only rate 'Accepted' requests.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     if(ratingBar.getRating() > 0)
                     {
                         final Rating rating = new Rating(user.getUid(),ratingBar.getRating()+"");
@@ -227,6 +232,11 @@ public class SentRequestPage extends AppCompatActivity {
             ratingBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(barterRequest.getStatus().equals("pending") || barterRequest.getStatus().equals("Rejected"))
+                    {
+                        Toast.makeText(SentRequestPage.this, "Can only rate 'Accepted' requests.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     if(ratingBar.getRating() > 0)
                     {
                         final Rating rating = new Rating(user.getUid(),ratingBar.getRating()+"");

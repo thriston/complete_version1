@@ -91,7 +91,7 @@ public class RequestMessageActivity extends AppCompatActivity {
 
         //Checks for an existing conversation and returns messages
         myDatabase = FirebaseDatabase.getInstance().getReference().child("Chats");
-        myDatabase.keepSynced(true);
+        myDatabase.keepSynced(false);
         myDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -181,7 +181,7 @@ public class RequestMessageActivity extends AppCompatActivity {
 
         //To get message receivers name from firebase
         DatabaseReference myDatabase1 = FirebaseDatabase.getInstance().getReference().child("users");
-        myDatabase1.keepSynced(true);
+        myDatabase1.keepSynced(false);
         myDatabase1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -206,32 +206,35 @@ public class RequestMessageActivity extends AppCompatActivity {
 
     public void sendMessage()
     {
-        //Save copies of message data on firebase
-        Date date = new Date();
-        FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("lastActivity").setValue(date.getTime());
-        FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("receiverUID").setValue(receiverUID);
-        FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("receiverName").setValue(receiverName);
-        FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("myUID").setValue(myUID);
-        FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("myUserName").setValue(myUserName);
-
-        FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("lastActivity").setValue(date.getTime());
-        FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("receiverUID").setValue(myUID);
-        FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("receiverName").setValue(myUserName);
-        FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("myUID").setValue(receiverUID);
-        FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("myUserName").setValue(receiverName);
-
         EditText editText = findViewById(R.id.editText);
+        String message = editText.getText().toString();
 
-        ChatMessage chatMessage = new ChatMessage(
-                editText.getText().toString(),
-                FirebaseAuth.getInstance().getCurrentUser().getEmail(),
-                myUserName,
-                new Date().getTime()
-        );
+        //Save copies of message data on firebase
+        if(!message.equals("")) {
+            Date date = new Date();
+            FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("lastActivity").setValue(date.getTime());
+            FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("receiverUID").setValue(receiverUID);
+            FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("receiverName").setValue(receiverName);
+            FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("myUID").setValue(myUID);
+            FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("myUserName").setValue(myUserName);
 
-        //Empties the EDITTEXT if the message is sent
-        myDatabase.child(key).push().setValue(chatMessage);
-        editText.setText("");
+            FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("lastActivity").setValue(date.getTime());
+            FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("receiverUID").setValue(myUID);
+            FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("receiverName").setValue(myUserName);
+            FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("myUID").setValue(receiverUID);
+            FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID).child("Conversations").child(key).child("myUserName").setValue(receiverName);
+
+            ChatMessage chatMessage = new ChatMessage(
+                    message,
+                    FirebaseAuth.getInstance().getCurrentUser().getEmail(),
+                    myUserName,
+                    new Date().getTime()
+            );
+
+            //Empties the EDITTEXT if the message is sent
+            myDatabase.child(key).push().setValue(chatMessage);
+            editText.setText("");
+        }
     }
 
 }

@@ -62,7 +62,7 @@ public class MyProductListActivity extends AppCompatActivity {
         //Gets the user's products from firebase and inflate the list
         mListView = findViewById(R.id.my_product_list_view);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Products");
-        mDatabase.keepSynced(true);
+        mDatabase.keepSynced(false);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

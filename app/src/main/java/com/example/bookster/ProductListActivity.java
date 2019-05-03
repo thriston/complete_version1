@@ -107,7 +107,7 @@ public class ProductListActivity extends AppCompatActivity {
         //Display products that are active. i.e. Not deleted etc.
         mListView = findViewById(R.id.product_list_view);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Products");
-        mDatabase.keepSynced(true);
+        mDatabase.keepSynced(false);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -155,7 +155,7 @@ public class ProductListActivity extends AppCompatActivity {
         {
             DatabaseReference db;
             db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            db.keepSynced(true);
+            db.keepSynced(false);
             db.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

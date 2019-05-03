@@ -124,6 +124,15 @@ public class EditProductActivity extends AppCompatActivity {
         textInputDescription.getEditText().setText(product.getDetails());
         textInputPrice.getEditText().setText(product.getPrice());
         textInputQuantity.getEditText().setText(product.getQuantity());
+
+        if(product.getSeller().getContact().equals("Hidden"))
+        {
+            allowCalls.setChecked(false);
+        }
+        else {
+            allowCalls.setChecked(true);
+        }
+
         Glide.with(this).load(product.getMainImage()).into(mainImage);
 
         final ArrayList<Integer> resources = new ArrayList<>();
@@ -206,7 +215,7 @@ public class EditProductActivity extends AppCompatActivity {
         {
             DatabaseReference db;
             db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            db.keepSynced(true);
+            db.keepSynced(false);
             db.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -230,6 +239,14 @@ public class EditProductActivity extends AppCompatActivity {
                     ProgressBar progressBar = findViewById(R.id.progress_bar);
                     progressBar.setVisibility(View.VISIBLE);
                     productID = product.getID();
+                    Switch simpleSwitch = (Switch) findViewById(R.id.allowCallsSwitch);
+
+                    /** check current state of a Switch (true or false). **/
+                    Boolean switchState = simpleSwitch.isChecked();
+                    if(!switchState)
+                    {
+                        myUserProfile.setContact("Hidden");
+                    }
 
                     final String mainImg = product.getMainImage();
                     final ArrayList<String> secImg = product.getSecondaryImages();

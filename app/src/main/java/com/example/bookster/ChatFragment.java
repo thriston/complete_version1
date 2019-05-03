@@ -64,7 +64,7 @@ public class ChatFragment extends Fragment {
         /** Organizes the toolbar   **/
 
         DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(myUID);
-        myDatabase.keepSynced(true);
+        myDatabase.keepSynced(false);
         myDatabase.child("Conversations").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

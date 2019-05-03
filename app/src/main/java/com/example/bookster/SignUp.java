@@ -64,7 +64,7 @@ public class SignUp extends AppCompatActivity{
         passwordInput=findViewById(R.id.passwordEditText);
         retypePassword=findViewById(R.id.retypePasswordEditText);
         mDatabase = FirebaseDatabase.getInstance().getReference("users");
-        mDatabase.keepSynced(true);
+        mDatabase.keepSynced(false);
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
@@ -219,7 +219,7 @@ public class SignUp extends AppCompatActivity{
                                                                 public void onComplete(@NonNull Task<Void> task) {
                                                                     if(task.isSuccessful()){
                                                                         Toast.makeText(getApplicationContext(),"User Created",Toast.LENGTH_SHORT).show();
-                                                                        mAuth.signInWithEmailAndPassword(email, password);
+                                                                        //mAuth.signInWithEmailAndPassword(email, password);
                                                                         finish();
                                                                     }
                                                                     else{

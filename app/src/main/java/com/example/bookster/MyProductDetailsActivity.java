@@ -44,7 +44,7 @@ public class MyProductDetailsActivity extends AppCompatActivity {
     private FirebaseUser user;
     private ArrayList<String> secondaryImages;
     private RatingBar rating;
-    private TextView nRating;
+    private TextView nRatingC;
     private int REQUEST_EDIT = 150;
 
     Toolbar toolbar;
@@ -147,22 +147,38 @@ public class MyProductDetailsActivity extends AppCompatActivity {
         TextView nTransactions = findViewById(R.id.nTransactions);
         TextView dateCreated = findViewById(R.id.dateCreated);
         rating = findViewById(R.id.rating);
-        nRating = findViewById(R.id.nRating);
+        nRatingC = findViewById(R.id.nRating);
 
         //To set the ratings on the owner's product page
         DatabaseReference rateDB = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+        rateDB.keepSynced(false);
         rateDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                int average = 0;
-                int ratingSum, ratingCount;
-                ratingSum = Integer.parseInt(dataSnapshot.child("ratingSum").getValue().toString());
+                int  ratingCount, nRating;
+                nRating = 0;
+                float sumRating = 0;
                 ratingCount = Integer.parseInt(dataSnapshot.child("ratingCount").getValue().toString());
-                if(ratingSum!=0)
-                    average = ratingSum / ratingCount;
-                rating.setRating((float)average);
-                nRating.setText(ratingCount+" ratings");
+                if(ratingCount > 0)
+                {
+                    float average;
+                    for(DataSnapshot ds: dataSnapshot.child("ratings").getChildren())
+                    {
+                        nRating++;
+                        Rating rating = (Rating) ds.getValue(Rating.class);
+                        sumRating = sumRating + Float.parseFloat(rating.getRating());
+                    }
+                    average = sumRating / nRating;
+                    rating.setRating(average);
+                    nRatingC.setText(nRating+"");
+                }
+                else
+                if(ratingCount == 0)
+                {
+                    rating.setRating(0);
+                    nRatingC.setText("none");
+                }
             }
 
             @Override

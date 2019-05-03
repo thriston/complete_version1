@@ -68,16 +68,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tvName = headerLayout.findViewById(R.id.name);
         tvEmail = headerLayout.findViewById(R.id.email);
         imageView = headerLayout.findViewById(R.id.profilePictureImage);
+        addMenuItems();
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null)
         {
             DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+            db.keepSynced(false);
             db.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    tvName.setText(dataSnapshot.child("fullname").getValue().toString());
-                    tvEmail.setText(dataSnapshot.child("email").getValue().toString());
-                    Glide.with(getApplicationContext()).load(dataSnapshot.child("profilePicURL").getValue().toString()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(imageView);
+                    String name = dataSnapshot.child("fullname").getValue().toString();
+                    String email = dataSnapshot.child("email").getValue().toString();
+                    String profilePicURL = dataSnapshot.child("profilePicURL").getValue().toString();
+                    tvName.setText(name);
+                    tvEmail.setText(email);
+                    Glide.with(getApplicationContext()).load(profilePicURL).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(imageView);
 
                 }
 
@@ -96,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
-        addMenuItems();
 
         toolbar =  findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
@@ -232,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
         else {
+            super.onBackPressed();
             super.onBackPressed();
             return;
         }

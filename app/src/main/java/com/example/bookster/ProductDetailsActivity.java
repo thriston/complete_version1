@@ -47,7 +47,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private int REQUEST_NAME = 150;
     private int REQUEST_PRODUCT = 160;
     private RatingBar rating;
-    private TextView nRating;
+    private TextView nRatingC;
     private android.support.v7.widget.Toolbar toolbar;
 
 
@@ -139,7 +139,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         TextView sellerContact = findViewById(R.id.sellerContactNumTextView);
         TextView sellerEmail = findViewById(R.id.sellerEmailTextView);
         rating = findViewById(R.id.rating);
-        nRating = findViewById(R.id.nRating);
+        nRatingC = findViewById(R.id.nRating);
         productName.setText(product.getName());
         price.setText("$"+product.getPrice());
         category.setText("Category: "+product.getCategory());
@@ -150,19 +150,33 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         //To set the ratings on the product page
         DatabaseReference rateDB = FirebaseDatabase.getInstance().getReference().child("users").child(product.getSeller().getMyUID());
+        rateDB.keepSynced(false);
         rateDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(this == null)
-                    return;
-                int average = 0;
-                int ratingSum, ratingCount;
-                ratingSum = Integer.parseInt(dataSnapshot.child("ratingSum").getValue().toString());
+                int  ratingCount, nRating;
+                nRating = 0;
+                float sumRating = 0;
                 ratingCount = Integer.parseInt(dataSnapshot.child("ratingCount").getValue().toString());
-                if(ratingSum !=0)
-                    average = ratingSum / ratingCount;
-                rating.setRating((float)average);
-                nRating.setText(ratingCount+"");
+                if(ratingCount > 0)
+                {
+                    float average;
+                    for(DataSnapshot ds: dataSnapshot.child("ratings").getChildren())
+                    {
+                        nRating++;
+                        Rating rating = (Rating) ds.getValue(Rating.class);
+                        sumRating = sumRating + Float.parseFloat(rating.getRating());
+                    }
+                    average = sumRating / nRating;
+                    rating.setRating(average);
+                    nRatingC.setText(nRating+"");
+                }
+                else
+                if(ratingCount == 0)
+                {
+                    rating.setRating(0);
+                    nRatingC.setText("none");
+                }
             }
 
             @Override
