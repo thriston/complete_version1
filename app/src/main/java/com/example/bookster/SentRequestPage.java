@@ -120,7 +120,7 @@ public class SentRequestPage extends AppCompatActivity {
                         rateDb.child(user.getUid()).setValue(rating);
 
                         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users").child(purchaseRequest.getProduct().getSeller().getMyUID());
-                        db.addValueEventListener(new ValueEventListener() {
+                        db.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 User user1 = (User) dataSnapshot.getValue(User.class);
