@@ -4,6 +4,7 @@ package com.example.bookster;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+//Product blueprint class
 public class Product implements Serializable {
     private String ID;
     private String name;
@@ -35,13 +36,12 @@ public class Product implements Serializable {
         this.isActive = true;
     }
 
-
-
     public Product()
     {
 
     }
 
+    //Getters and setters
     public String getID() {
         return ID;
     }
@@ -120,12 +120,12 @@ public class Product implements Serializable {
         this.views = this.views + 1;
     }
 
+    //Called when a purchase/barter transaction occur
     public void addTransaction()
     {
         this.nTransactions = this.nTransactions + 1;
         this.quantity = ""+(Integer.parseInt(quantity) - 1);
     }
-
 
     public String getMainImage() {
         return mainImage;

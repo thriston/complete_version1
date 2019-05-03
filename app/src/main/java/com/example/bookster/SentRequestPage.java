@@ -26,26 +26,24 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class SentRequestPage extends AppCompatActivity {
-    private DatabaseReference mDatabase;
-    private FirebaseAuth mAuth;
-    private ImageView profileImageV, productImageV;
-    android.support.v7.widget.Toolbar toolbar;
-    private TextView fullNameView, emailView, contactView, productNameView, priceView, statusView, dateView, locationView, sellerTV, contactTV;
+    private ImageView productImageV;
+    private android.support.v7.widget.Toolbar toolbar;
+    private TextView productNameView, priceView, statusView, dateView, locationView, sellerTV, contactTV;
     private FirebaseUser user;
     private PurchaseRequest purchaseRequest = null;
     private BarterRequest barterRequest = null;
     private ImageButton call, msg;
-    private String myUserName;
     private boolean isBarter;
     private RatingBar ratingBar;
     private Button ratingBtn;
+    private TextView my_productTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sent_page_screen);
 
-
+        //receive data from parent activity
         Intent intent = getIntent();
         purchaseRequest = (PurchaseRequest) intent.getSerializableExtra("purchaseRequest");
         barterRequest = (BarterRequest) intent.getSerializableExtra("barterRequest");
@@ -60,13 +58,11 @@ public class SentRequestPage extends AppCompatActivity {
             isBarter = false;
         }
 
-
+        //Configure toolbar
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle("Request");
-
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -77,9 +73,8 @@ public class SentRequestPage extends AppCompatActivity {
             }
         });
 
-
+        //Get views for displaying sent request information
         user = FirebaseAuth.getInstance().getCurrentUser();
-
         ratingBar = findViewById(R.id.ratingBar);
         ratingBtn = findViewById(R.id.rateBtn);
         sellerTV = findViewById(R.id.sellerName);
@@ -89,28 +84,14 @@ public class SentRequestPage extends AppCompatActivity {
         statusView=findViewById(R.id.status);
         dateView=findViewById(R.id.date);
         locationView=findViewById(R.id.location);
-
-
         productImageV = findViewById(R.id.product_image);
         call = findViewById(R.id.callbtn);
         msg = findViewById(R.id.msgbtn);
 
-
-//        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-//            @Override
-//            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-//                Toast.makeText(SentRequestPage.this, "Stars: "+rating, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
-
-
-
-
+        //If it is a purchase request then sent the views accordingly
         if(!isBarter)
         {
-            TextView my_productTV = findViewById(R.id.my_productTV);
+            my_productTV = findViewById(R.id.my_productTV);
             my_productTV.setText("Product: ");
             contactTV.setText(purchaseRequest.getProduct().getSeller().getContact());
             sellerTV.setText(purchaseRequest.getProduct().getSeller().getFullname());
@@ -120,13 +101,16 @@ public class SentRequestPage extends AppCompatActivity {
             dateView.setText(DateFormat.format("h:mma   dd/MM/yyyy", purchaseRequest.getDate()));
             locationView.setText(purchaseRequest.getLocation());
 
+            //Use Glide to set image views
+            Glide.with(getApplicationContext()).load(purchaseRequest.getProduct()
+                    .getMainImage())
+                    .apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder)
+                    .fitCenter().into(productImageV);
 
-            Glide.with(getApplicationContext()).load(purchaseRequest.getProduct().getMainImage()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(productImageV);
-
+            //To allow users who sent barter/purchase requests to rate the seller
             final DatabaseReference rateDb;
             rateDb = FirebaseDatabase.getInstance().getReference().child("users").child(purchaseRequest.getProduct().getSeller().getMyUID())
                     .child("ratings");
-
             ratingBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -169,7 +153,6 @@ public class SentRequestPage extends AppCompatActivity {
                             }
                         });
 
-                        //Toast.makeText(SentRequestPage.this, "User rated "+ratingBar.getRating(), Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
@@ -179,7 +162,7 @@ public class SentRequestPage extends AppCompatActivity {
                 }
             });
 
-
+            //Sets textView colour depending on the status of the request
             if(purchaseRequest.getStatus().equals("Accepted"))
             {
                 statusView.setTextColor(Color.rgb(0, 255, 0));
@@ -207,7 +190,6 @@ public class SentRequestPage extends AppCompatActivity {
             msg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     Intent myintent = new Intent(getApplicationContext(), RequestMessageActivity.class);
                     //myintent.putExtra("productObj", barterProduct);
                     myintent.putExtra("myUserName", purchaseRequest.getSenderName());
@@ -215,12 +197,10 @@ public class SentRequestPage extends AppCompatActivity {
                     startActivity(myintent);
                 }
             });
-
-
-        }
-        else //If it is a Barter Request then set the text view fields
+        } //end if
+        else
         {
-
+            //If it is a Barter Request then set the text view fields
             TextView myProductTV, barterProductTV, requestTV;
             myProductTV = findViewById(R.id.my_productTV);
             barterProductTV = findViewById(R.id.barter_productTV);
@@ -230,7 +210,6 @@ public class SentRequestPage extends AppCompatActivity {
             myProductTV.setText("My product:");
             barterProductTV.setText("Barter product:");
 
-
             contactTV.setText(barterRequest.getMyProduct().getSeller().getContact());
             sellerTV.setText(barterRequest.getMyProduct().getSeller().getFullname());
             productNameView.setText(barterRequest.getSellerProduct().getName());
@@ -239,14 +218,12 @@ public class SentRequestPage extends AppCompatActivity {
             dateView.setText(DateFormat.format("h:mma   dd/MM/yyyy", barterRequest.getDate()));
             locationView.setText(barterRequest.getLocation());
 
-
             Glide.with(getApplicationContext()).load(barterRequest.getMyProduct().getMainImage()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(productImageV);
-
 
             final DatabaseReference rateDb;
             rateDb = FirebaseDatabase.getInstance().getReference().child("users").child(barterRequest.getMyProduct().getSeller().getMyUID())
                     .child("ratings");
-
+            //Send profile ratings to firebase
             ratingBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -260,10 +237,10 @@ public class SentRequestPage extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 User user1 = (User) dataSnapshot.getValue(User.class);
-                                Toast.makeText(SentRequestPage.this, "Rated User "+ratingBar.getRating()+" Stars", Toast.LENGTH_SHORT).show();
                                 if(!rating.getHasRated())
                                 {
-                                    //Updated so user can only rate once
+                                    //Toast.makeText(SentRequestPage.this, "Rated User "+ratingBar.getRating()+" Stars", Toast.LENGTH_SHORT).show();
+
                                     rating.setHasRated(true);
                                     rateDb.child(user.getUid()).setValue(rating);
 
@@ -289,7 +266,6 @@ public class SentRequestPage extends AppCompatActivity {
                             }
                         });
 
-                        //Toast.makeText(SentRequestPage.this, "User rated "+ratingBar.getRating(), Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
@@ -300,14 +276,12 @@ public class SentRequestPage extends AppCompatActivity {
             });
 
 
-
-
-            //If request is already accepted, then cant click
+            //If request is already accepted, then can't click
             if(barterRequest.getStatus().equals("Accepted"))
             {
                 statusView.setTextColor(Color.rgb(0, 255, 0));
             }
-            //If request is already rejected, then cant click
+            //If request is already rejected, then can't click
             else if(barterRequest.getStatus().equals("Rejected"))
             {
                 statusView.setTextColor(Color.rgb(255, 0, 0));
@@ -317,9 +291,6 @@ public class SentRequestPage extends AppCompatActivity {
             {
                 statusView.setTextColor(Color.rgb(204, 204, 0));
             }
-
-
-
 
             //Open dialer if clicked
             call.setOnClickListener(new View.OnClickListener() {

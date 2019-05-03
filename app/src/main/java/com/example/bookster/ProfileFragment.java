@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +27,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
+//This class is the fragment that is accessible from the navigation view
 public class ProfileFragment extends Fragment {
-
-
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
-    Toolbar toolbar;
+    private Toolbar toolbar;
     private TextView fullNameView, emailView, contactView;
     private ImageView profileImageV;
 
@@ -42,33 +39,26 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
-
-
-
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String email = user.getEmail();
+
         fullNameView= v.findViewById(R.id.fullNameField);
         emailView= v.findViewById(R.id.emailField);
         contactView= v.findViewById(R.id.contactField);
         profileImageV = v.findViewById(R.id.profilePicture);
 
+        // Configure toolbar
         toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         toolbar.setTitle("Your Profile");
         toolbar.setTitleTextColor(Color.WHITE);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +66,6 @@ public class ProfileFragment extends Fragment {
                 fm.popBackStack();
             }
         });
-
 
         mDatabase = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(user.getUid());
@@ -90,28 +79,22 @@ public class ProfileFragment extends Fragment {
                     return;
                 }
                 User currUser = dataSnapshot.getValue(User.class);
-                // [START_EXCLUDE]
                 fullNameView.setText(currUser.fullname);
                 emailView.setText(currUser.email);
                 contactView.setText(currUser.contact);
-                Glide.with(getContext()).load(currUser.profilePicURL).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(profileImageV);
-
-
-                // [END_EXCLUDE]
+                Glide.with(getContext()).load(currUser.profilePicURL)
+                        .apply(new RequestOptions().placeholder(R.drawable.img_placeholder))
+                        .error(R.drawable.image_placeholder)
+                        .fitCenter().into(profileImageV);
             }
-
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.d("loadPost:onCancelled", String.valueOf(databaseError.toException()));
-                // [START_EXCLUDE]
                 Toast.makeText(getContext(), "Email Address field is Empty", Toast.LENGTH_SHORT).show();
-                // [END_EXCLUDE]
             }
         };
         mDatabase.addValueEventListener(userListener);
 
+        //If logout button is clicked, allow the user to confirm
         Button logOutBtn = v.findViewById(R.id.logOutBtn);
         logOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,14 +117,11 @@ public class ProfileFragment extends Fragment {
                                 dialog.cancel();
                             }
                         });
-
                 AlertDialog alert = altdial.create();
                 alert.setTitle("Log Out");
                 alert.show();
             }
         });
-
-
         return v;
     }
 

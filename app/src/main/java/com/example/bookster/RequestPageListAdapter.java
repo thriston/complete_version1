@@ -17,11 +17,11 @@ import java.util.ArrayList;
 
 public class RequestPageListAdapter extends ArrayAdapter<Object> {
     private Context mContext;
-    int mResource;
-    ArrayList<Object> requestList = null;
+    private int mResource;
+    private ArrayList<Object> requestList = null;
     public static final int BARTER = 1;
     public static final int PURCHASE = 0;
-
+    private boolean isBarter;
 
     public RequestPageListAdapter(Context context, int resource, ArrayList<Object> objects) {
         super(context, resource, objects);
@@ -32,15 +32,14 @@ public class RequestPageListAdapter extends ArrayAdapter<Object> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        boolean isBarter;
 
-        //ChatMessage chatMessage = new ChatMessage(message, messageUser, userName, messageTime);
-
+        //to determine if its a purchase or barter request item
         if(requestList.get(position) instanceof BarterRequest)
             isBarter = true;
         else
             isBarter = false;
 
+        //Selects the correct layout based on the data received
         if(convertView == null)
         {
             if(getItemViewType(position) == BARTER)
@@ -69,7 +68,6 @@ public class RequestPageListAdapter extends ArrayAdapter<Object> {
             TextView tvStatus = convertView.findViewById(R.id.status);
 
             //Set TextViews
-           //System.out.println("WHY CANT? "+requestList.get(position));
             BarterRequest barterRequest = (BarterRequest) requestList.get(position);
 
             tvType.setText(barterRequest.getType());
@@ -91,10 +89,9 @@ public class RequestPageListAdapter extends ArrayAdapter<Object> {
                 tvStatus.setTextColor(Color.rgb(204, 204, 0));
             }
             Glide.with(getContext()).load(barterRequest.getSellerProduct().getMainImage()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(imageView);
+        }//end if
 
-
-        }
-        else
+        else //If it is a purchase request
         {
             //Get TextViews
             ImageView imageView = convertView.findViewById(R.id.image);
@@ -129,17 +126,16 @@ public class RequestPageListAdapter extends ArrayAdapter<Object> {
             Glide.with(getContext()).load(purchaseRequest.getProduct().getMainImage()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(imageView);
 
         }
-
-
         return convertView;
-
     }
 
+    //Returns the number of layouts, one for barter one for purchase, therefore 2 items
     @Override
     public int getViewTypeCount() {
         return 2;
     }
 
+    //Used to determine which type of layout to use
     @Override
     public int getItemViewType(int position) {
         Object object = requestList.get(position);
@@ -151,8 +147,5 @@ public class RequestPageListAdapter extends ArrayAdapter<Object> {
         {
             return PURCHASE;
         }
-
-
-
     }
 }

@@ -2,6 +2,7 @@ package com.example.bookster;
 
 import java.io.Serializable;
 
+//Class blueprint that stores a user's profile information
 public class User implements Serializable {
     public String fullname, email, contact, myUID, profilePicURL;
     public String ratingSum, ratingCount;
@@ -20,6 +21,8 @@ public class User implements Serializable {
         this.ratingCount = ""+0;
 
     }
+
+    //Getters and setters
 
     public String getRatingSum() {
         return ratingSum;

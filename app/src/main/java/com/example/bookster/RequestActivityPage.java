@@ -17,15 +17,13 @@ public class RequestActivityPage extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_page);
-        //listView = findViewById(R.id.request_page_list_view);
 
+        //Configure toolbar
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Requests");
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,12 +31,7 @@ public class RequestActivityPage extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
+        //If received request is clicked
         LinearLayout receivedLayout = findViewById(R.id.receivedLayout);
         receivedLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +41,7 @@ public class RequestActivityPage extends AppCompatActivity {
             }
         });
 
+        //If sent requests is clicked
         LinearLayout sentLayout = findViewById(R.id.sentLayout);
         sentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,15 +50,5 @@ public class RequestActivityPage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//
-//        LinearLayout ARLayout = findViewById(R.id.arLayout);
-//        ARLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                System.out.println("ACCEPT/REJECT CLICKED");
-//            }
-//        });
-
-
     }
 }

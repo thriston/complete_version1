@@ -17,10 +17,12 @@ import java.util.ArrayList;
 
 public class SentRequestPageListAdapter extends ArrayAdapter<Object> {
     private Context mContext;
-    int mResource;
-    ArrayList<Object> requestList = null;
-    public static final int BARTER = 1;
-    public static final int PURCHASE = 0;
+    private int mResource;
+    private boolean isBarter;
+    private ArrayList<Object> requestList = null;
+    private static final int BARTER = 1;
+    private static final int PURCHASE = 0;
+    private TextView fromTV;
 
 
     public SentRequestPageListAdapter(Context context, int resource, ArrayList<Object> objects) {
@@ -32,16 +34,14 @@ public class SentRequestPageListAdapter extends ArrayAdapter<Object> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        boolean isBarter;
 
-        //ChatMessage chatMessage = new ChatMessage(message, messageUser, userName, messageTime);
-
+        //Determines if the type of list item is a barter request or a purchase request
         if(requestList.get(position) instanceof BarterRequest)
             isBarter = true;
         else
             isBarter = false;
 
-
+        //To choose which layout to use. Either one for a barter request or one for a purchase request
         if(convertView == null)
         {
             if(getItemViewType(position) == BARTER)
@@ -57,9 +57,9 @@ public class SentRequestPageListAdapter extends ArrayAdapter<Object> {
             }
         }
 
-
-        TextView fromTV = convertView.findViewById(R.id.fromTV);
+        fromTV = convertView.findViewById(R.id.fromTV);
         fromTV.setText("To: ");
+
         if(isBarter)
         {
             //Get TextViews
@@ -72,15 +72,15 @@ public class SentRequestPageListAdapter extends ArrayAdapter<Object> {
             TextView tvStatus = convertView.findViewById(R.id.status);
 
             //Set TextViews
-           //System.out.println("WHY CANT? "+requestList.get(position));
             BarterRequest barterRequest = (BarterRequest) requestList.get(position);
-
             tvType.setText(barterRequest.getType());
             tvFrom.setText(barterRequest.getMyProduct().getSeller().getFullname());
             tvMyProduct.setText(barterRequest.getSellerProduct().getName());
             tvBarterProduct.setText(barterRequest.getMyProduct().getName());
             tvDate.setText(DateFormat.format("h:mma   dd/MM/yyyy", barterRequest.getDate()));
             tvStatus.setText(barterRequest.getStatus());
+
+            //Change text colour depending on the status of the request
             if(barterRequest.getStatus().equals("Accepted"))
             {
                 tvStatus.setTextColor(Color.rgb(0, 255, 0));
@@ -93,9 +93,8 @@ public class SentRequestPageListAdapter extends ArrayAdapter<Object> {
             {
                 tvStatus.setTextColor(Color.rgb(204, 204, 0));
             }
+            //set barter product image
             Glide.with(getContext()).load(barterRequest.getMyProduct().getMainImage()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(imageView);
-
-
         }
         else
         {
@@ -130,19 +129,17 @@ public class SentRequestPageListAdapter extends ArrayAdapter<Object> {
                 tvStatus.setTextColor(Color.rgb(204, 204, 0));
             }
             Glide.with(getContext()).load(purchaseRequest.getProduct().getMainImage()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(imageView);
-
         }
-
-
         return convertView;
-
     }
 
+    //Returns the number of different layouts. There is two in total, one for a barter request and one for a purchase request
     @Override
     public int getViewTypeCount() {
         return 2;
     }
 
+    //Is used to help determine which layout to use
     @Override
     public int getItemViewType(int position) {
         Object object = requestList.get(position);

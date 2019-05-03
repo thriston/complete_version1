@@ -27,7 +27,7 @@ public class PurchaseRequestPage extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private ImageView profileImageV, productImageV;
-    android.support.v7.widget.Toolbar toolbar;
+    private android.support.v7.widget.Toolbar toolbar;
     private TextView fullNameView, emailView, contactView, productNameView, priceView, statusView, dateView, locationView;
     private FirebaseUser user;
     private PurchaseRequest purchaseRequest = null;
@@ -41,7 +41,6 @@ public class PurchaseRequestPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.purchase_page_screen);
-
 
         Intent intent = getIntent();
         purchaseRequest = (PurchaseRequest) intent.getSerializableExtra("purchaseRequest");
@@ -57,16 +56,12 @@ public class PurchaseRequestPage extends AppCompatActivity {
             isBarter = false;
         }
 
-
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle("Request");
-
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,9 +69,10 @@ public class PurchaseRequestPage extends AppCompatActivity {
             }
         });
 
-
+        //Current user
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        //Get text views and buttons
         fullNameView=findViewById(R.id.fullNameField);
         emailView=findViewById(R.id.emailField);
         contactView=findViewById(R.id.contactField);
@@ -87,7 +83,6 @@ public class PurchaseRequestPage extends AppCompatActivity {
         dateView=findViewById(R.id.date);
         locationView=findViewById(R.id.location);
 
-
         profileImageV = findViewById(R.id.profilePicture);
         productImageV = findViewById(R.id.product_image);
 
@@ -96,8 +91,7 @@ public class PurchaseRequestPage extends AppCompatActivity {
         call = findViewById(R.id.callbtn);
         msg = findViewById(R.id.msgbtn);
 
-
-
+        //If is a PURCHASE REQUEST
         if(!isBarter)
         {
             mDatabase = FirebaseDatabase.getInstance().getReference()
@@ -112,21 +106,24 @@ public class PurchaseRequestPage extends AppCompatActivity {
                     contact = dataSnapshot.child("contact").getValue().toString();
                     profilePicURL = dataSnapshot.child("profilePicURL").getValue().toString();
 
-
+                    //Set text fields
                     fullNameView.setText(fullname);
                     emailView.setText(email);
                     contactView.setText(contact);
-
                     productNameView.setText(purchaseRequest.getProduct().getName());
                     priceView.setText(purchaseRequest.getProduct().getPrice());
                     statusView.setText(purchaseRequest.getStatus());
                     dateView.setText(DateFormat.format("h:mma   dd/MM/yyyy", purchaseRequest.getDate()));
                     locationView.setText(purchaseRequest.getLocation());
 
-
-                    Glide.with(getApplicationContext()).load(profilePicURL).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(profileImageV);
-                    Glide.with(getApplicationContext()).load(purchaseRequest.getProduct().getMainImage()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(productImageV);
-
+                    //Set Profile and product pictures
+                    Glide.with(getApplicationContext()).load(profilePicURL)
+                            .apply(new RequestOptions().placeholder(R.drawable.img_placeholder))
+                            .error(R.drawable.image_placeholder).fitCenter().into(profileImageV);
+                    Glide.with(getApplicationContext()).load(purchaseRequest.getProduct().getMainImage())
+                            .apply(new RequestOptions().placeholder(R.drawable.img_placeholder))
+                            .error(R.drawable.image_placeholder)
+                            .fitCenter().into(productImageV);
                 }
 
                 @Override
@@ -135,7 +132,7 @@ public class PurchaseRequestPage extends AppCompatActivity {
                 }
             });
 
-
+            //If request has already been accepted or rejected, then the accept/reject button will no longer be available
             if(purchaseRequest.getStatus().equals("Accepted"))
             {
                 statusView.setTextColor(Color.rgb(0, 255, 0));
@@ -171,8 +168,6 @@ public class PurchaseRequestPage extends AppCompatActivity {
                 }
             });
 
-
-
             //For Call Button
             call.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -196,7 +191,7 @@ public class PurchaseRequestPage extends AppCompatActivity {
                 }
             });
 
-
+            //If accept button is clicked, update status of product, the quantity and the number of transactions for that product
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -206,8 +201,6 @@ public class PurchaseRequestPage extends AppCompatActivity {
                         Toast.makeText(PurchaseRequestPage.this, "Out of Stock", Toast.LENGTH_SHORT).show();
                         return;
                     }
-
-
                     purchaseRequest.getProduct().addTransaction();
                     quantity = Integer.parseInt(purchaseRequest.getProduct().getQuantity());
                     if(quantity == 0)
@@ -215,22 +208,15 @@ public class PurchaseRequestPage extends AppCompatActivity {
                         mDatabase = FirebaseDatabase.getInstance().getReference().child("Products").child(purchaseRequest.getProduct().getID()).child("quantity");
                         mDatabase.setValue("OUT OF STOCK");
                     }
-
                     mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .child("Requests").child(purchaseRequest.getID()).child("status");
                     mDatabase.setValue("Accepted");
-
                     mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(purchaseRequest.getSenderUID())
                             .child("Requests").child(purchaseRequest.getID()).child("status");
                     mDatabase.setValue("Accepted");
-
                     mDatabase = FirebaseDatabase.getInstance().getReference().child("Requests")
                             .child(purchaseRequest.getID()).child("status");
                     mDatabase.setValue("Accepted");
-
-                    //mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child()
-
-
 
                     DatabaseReference db1,db2;
                     db1 = FirebaseDatabase.getInstance().getReference().child("Products").child(purchaseRequest.getProduct().getID()).child("ntransactions");
@@ -244,13 +230,10 @@ public class PurchaseRequestPage extends AppCompatActivity {
                     db2.setValue(purchaseRequest.getProduct().getQuantity());
 
                     mDatabase.keepSynced(true);
-
                     accept.setVisibility(View.GONE);
                     reject.setVisibility(View.GONE);
-
                     statusView.setText("Accepted");
                     Toast.makeText(getApplicationContext(), "Accepted Purchase", Toast.LENGTH_SHORT).show();
-
                 }
             });
 
@@ -278,7 +261,7 @@ public class PurchaseRequestPage extends AppCompatActivity {
                 }
             });
         }
-        else //If it is a Barter Request then set the text view fields
+        else //If it is a BARTER REQUEST then set the text view fields
         {
             mDatabase = FirebaseDatabase.getInstance().getReference()
                     .child("users").child(barterRequest.getSenderUID());

@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -71,10 +70,8 @@ public class SignUp extends AppCompatActivity{
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle("Bookster - SignUp");
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +79,7 @@ public class SignUp extends AppCompatActivity{
             }
         });
 
-
+        //to return to the previous activity (login activity) by finishing this activity
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,8 +87,8 @@ public class SignUp extends AppCompatActivity{
             }
         });
 
+        //Cardview button to select or pick a profile picture
         CardView cardView = findViewById(R.id.cardView);
-
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,8 +116,8 @@ public class SignUp extends AppCompatActivity{
         final String contact =contactInput.getText().toString();
         final String password=passwordInput.getText().toString();
         EditText fullNameET = findViewById(R.id.fullNameEditText);
-        //String fullName = fullNameET.getText().toString();
 
+        //To verify signup fields
         if(fullname.isEmpty()){
             Toast.makeText(getApplicationContext(),"Name is required",Toast.LENGTH_SHORT).show();
             return;
@@ -183,6 +180,7 @@ public class SignUp extends AppCompatActivity{
                 "\nBookster accepts no liability in any event whether conducting trades in or out of Safe Zones.\n\n" +
                 "In order to create an account and fully use Bookster you must agree to the preceding terms and conditions.\n");
 
+        //If the user accept the "terms and conditions", then attempt to create the account and store the info on firebase
         termsAndConditions.setButton(DialogInterface.BUTTON_POSITIVE, "I Accept", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -206,8 +204,7 @@ public class SignUp extends AppCompatActivity{
                                             myStorage.child(profileImagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                 @Override
                                                 public void onSuccess(Uri uri) {
-
-                                                    //Store Additionl data in firebase database
+                                                    //If profile picture has successfully been uploaded, then add the other data to firebase
                                                     User user = new User(
                                                             fullname,
                                                             email,
@@ -216,8 +213,6 @@ public class SignUp extends AppCompatActivity{
                                                             uri.toString()
 
                                                     );
-
-
                                                     mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user)
                                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
@@ -225,37 +220,32 @@ public class SignUp extends AppCompatActivity{
                                                                     if(task.isSuccessful()){
                                                                         Toast.makeText(getApplicationContext(),"User Created",Toast.LENGTH_SHORT).show();
                                                                         mAuth.signInWithEmailAndPassword(email, password);
-                                                                        Toast.makeText(getApplicationContext(),"Logged In",Toast.LENGTH_SHORT).show();
                                                                         finish();
                                                                     }
                                                                     else{
-                                                                        Log.d("Testing Daatabase Stuff", task.toString());
                                                                         Toast.makeText(getApplicationContext(),"Error!!!... Cannot Create User Account" ,Toast.LENGTH_SHORT).show();
                                                                     }
 
                                                                 }
                                                             });
-
                                                 }
                                             });
                                         }
                                     });
 
-                                    //FirebaseUser user = mAuth.getCurrentUser();
                                 } else {
-                                    // If sign in fails, display a message to the user.
+                                    // If sign up fails, display a message to the user.
                                     progressBar.setVisibility(View.INVISIBLE);
                                     signUpBtn.setVisibility(View.VISIBLE);
                                     Toast.makeText(getApplicationContext(),"An account already exists with that email",Toast.LENGTH_SHORT).show();
-
                                 }
-
-                                // ...
                             }
                         });
                 dialog.dismiss();
             }
         });
+
+        //If rejected the "terms and conditions"
         termsAndConditions.setButton(DialogInterface.BUTTON_NEGATIVE, "Reject", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -267,14 +257,14 @@ public class SignUp extends AppCompatActivity{
 
     }
 
+    //To check if email is valid
     private static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-
+    //To start an activity to select or pick a profile picture
     private void chooseImage(int PICK_REQUEST)
     {
-
         Intent intent = new Intent();
         intent.setType("image/*");
         if(PICK_REQUEST == PICK_PROFILE_PICTURE_REQUEST)
@@ -282,11 +272,9 @@ public class SignUp extends AppCompatActivity{
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(intent, PICK_PROFILE_PICTURE_REQUEST);
         }
-
-
-
     }
 
+    //To receive the profile picture URI from the activity that selected it
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -294,28 +282,15 @@ public class SignUp extends AppCompatActivity{
         {
             Uri mainImageUrl = data.getData();
             profilePictureUri = mainImageUrl;
-
-
-            //productImages.set(0, data.getData());
             ImageView mainImage = findViewById(R.id.profilePicture);
             mainImage.setImageURI(mainImageUrl);
-
             TextView cardTV;
             cardTV = findViewById(R.id.cardViewTV);
             cardTV.setText("");
-
-
-
             ScrollView signUpScrollView = findViewById(R.id.signUpScrollV);
             signUpScrollView.fullScroll(View.FOCUS_DOWN);
-
             Toast.makeText(getApplicationContext(), "Profile Picture Selected", Toast.LENGTH_SHORT).show();
         }
-
-
-
     }
-
-
 }
 

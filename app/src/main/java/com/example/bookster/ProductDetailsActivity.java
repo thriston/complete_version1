@@ -33,12 +33,12 @@ import java.util.ArrayList;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
-    AlertDialog safeZoneDisclaimer, safeZoneDisclaimerBarter, purchaseRequestDialog, barterRequestDialog ;
-    ViewPager viewPager;
-    ProductPictureSlider adapter;
+    private AlertDialog safeZoneDisclaimer, safeZoneDisclaimerBarter, purchaseRequestDialog, barterRequestDialog ;
+    private ViewPager viewPager;
+    private ProductPictureSlider adapter;
     private  int REQUEST_CODE =1;
-    User myUserProfile;
-    String myUserName;
+    private User myUserProfile;
+    private String myUserName;
     private DatabaseReference mDatabase;
     private Product product, requestProduct;
     private int count;
@@ -48,9 +48,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private int REQUEST_PRODUCT = 160;
     private RatingBar rating;
     private TextView nRating;
-
-
-    android.support.v7.widget.Toolbar toolbar;
+    private android.support.v7.widget.Toolbar toolbar;
 
 
 
@@ -64,19 +62,32 @@ public class ProductDetailsActivity extends AppCompatActivity {
         StorageReference mStorage = FirebaseStorage.getInstance().getReference();
         StorageReference pathRef;
 
-
-
-
+        //Receive data from parent activity
         Intent intent = getIntent();
         product = (Product) intent.getSerializableExtra("productObj");
+        myUserProfile = (User) intent.getSerializableExtra("myUserProfile");
 
+        //Configure toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle("Bookster - "+product.getName());
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        //Adds secondary images to image slider
         count = 0;
         secondaryImages.add(product.getMainImage());
         if(product.getSecondaryImages() != null)
         {
             for(String path: product.getSecondaryImages())
             {
-                //System.out.println("URL: "+mStorage.toString()+path);
                 pathRef = mStorage.child(path);
                 pathRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
@@ -92,8 +103,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                             adapter = new ProductPictureSlider(getApplication(), secondaryImages);
                             viewPager.setAdapter(adapter);
                         }
-
-
                     }
                 });
             }
@@ -105,11 +114,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
             viewPager.setAdapter(adapter);
         }
 
-        //System.out.println("MAIN URL: "+product.getMainImage());
-
-
-
-
         //if viewer is not the owner, add to number of views
         if(user!=null)
         {
@@ -119,31 +123,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 updateViews();
             }
         }
-
         if(user!=null){
             if(user.getUid().equals(product.getSeller().getMyUID())) {
             hideButton();
             }
         }
-
-
-        myUserProfile = (User) intent.getSerializableExtra("myUserProfile");
-
-        //System.out.println("PRODUCT NAME: "+narnia.getName());
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle("Bookster - "+product.getName());
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         //set Texts
         TextView productName = findViewById(R.id.productNameTextView);
@@ -154,22 +138,23 @@ public class ProductDetailsActivity extends AppCompatActivity {
         TextView stockQty = findViewById(R.id.stockQuantity);
         TextView sellerContact = findViewById(R.id.sellerContactNumTextView);
         TextView sellerEmail = findViewById(R.id.sellerEmailTextView);
-
+        rating = findViewById(R.id.rating);
+        nRating = findViewById(R.id.nRating);
         productName.setText(product.getName());
         price.setText("$"+product.getPrice());
         category.setText("Category: "+product.getCategory());
         details.setText(product.getDetails());
         stockQty.setText(product.getQuantity()+" left");
+
         final User userProfile = product.getSeller();
 
-        rating = findViewById(R.id.rating);
-        nRating = findViewById(R.id.nRating);
-
-        //TO set the ratings on the product page
+        //To set the ratings on the product page
         DatabaseReference rateDB = FirebaseDatabase.getInstance().getReference().child("users").child(product.getSeller().getMyUID());
         rateDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(this == null)
+                    return;
                 int average = 0;
                 int ratingSum, ratingCount;
                 ratingSum = Integer.parseInt(dataSnapshot.child("ratingSum").getValue().toString());
@@ -185,13 +170,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-        //System.out.println("SELLER INFO DETAILS: "+product.getDetails());
-
-
 
         //If User is logged in, get username
         if(user != null)
@@ -211,6 +189,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             });
         }
 
+        //If the profile info button is clicked on product page
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,22 +201,20 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                 }
                 else{
-//                    Intent myintent = new Intent(ProductDetailsActivity.this, Login.class);
                     Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
-//                    startActivityForResult(myintent, REQUEST_CODE);
                 }
 
             }
         });
 
 
-
+        //Set texts
         sellerName.setText(product.getSeller().getFullname());
         sellerContact.setText(product.getSeller().getContact());
         sellerEmail.setText(product.getSeller().getEmail());
 
 
-        //For Call Button
+        //If call button is clicked then open dialer
         ImageButton btn = (ImageButton) findViewById(R.id.callbtn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -275,24 +252,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     myintent.putExtra("productObj", product);
                     myintent.putExtra("myUserName", myUserName);
                     myintent.putExtra("myUserProfile",product.getSeller());
-                    //System.out.println("CATEGORY: "+categoryList.get(position).getName());
                     startActivityForResult(myintent, REQUEST_NAME);
                 }
                 else
                 {
-//                    Intent myintent = new Intent(ProductDetailsActivity.this, Login.class);
                     Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
-//                    startActivityForResult(myintent, REQUEST_CODE);
                 }
-
             }
         });
 
 
-
-
-        //Purchase Button Clicked
-
+        //Display confirmations if purchase button is clicked
         Button purchaseBtn = findViewById(R.id.purchaseRequestBtn);
         purchaseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -310,7 +280,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         safeZoneDisclaimer.show();
                     }
                 }
-
                 else
                 {
                     Toast.makeText(getApplicationContext(), "Please Login To Purchase", Toast.LENGTH_SHORT).show();
@@ -318,6 +287,28 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
+        //For Purchase request disclaimer
+        safeZoneDisclaimer = new AlertDialog.Builder(ProductDetailsActivity.this).create();
+        safeZoneDisclaimer.setTitle("Safe Zones");
+        safeZoneDisclaimer.setMessage("Your personal safety is important to us at Bookster and as such we have identified places in and around the St Augustine UWI campus which are well known, public and suitable for conducting trade. These areas are called Safe Zones and are there to help you conduct your trades in a safe environment.\n" +
+                "\nDisclaimer\n" +
+                "While we are careful in identifying Safe Zones, they are merely suggestions, therefore you must always take care to ensure personal safety. Bookster accepts no liability in any event whether or not conducting trades in or out of Safe Zones.\n");
+        safeZoneDisclaimer.setButton(DialogInterface.BUTTON_POSITIVE, "I Accept", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                purchaseRequestDialog.show();
+                dialog.dismiss();
+            }
+        });
+        safeZoneDisclaimer.setButton(DialogInterface.BUTTON_NEGATIVE, "Reject", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(ProductDetailsActivity.this, "You must accept to continue.", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+
+        //If accepts purchase request disclaimer then show purchaseRequestDialog and add the request to firebase
         purchaseRequestDialog = new AlertDialog.Builder(ProductDetailsActivity.this).create();
         purchaseRequestDialog.setTitle("Purchase Request");
         purchaseRequestDialog.setMessage("Do you want to buy this product?");
@@ -325,10 +316,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(ProductDetailsActivity.this, "Purchase Request Sent", Toast.LENGTH_LONG).show();
-                // TO PURCHASE REQUESTS
                 String requestID = FirebaseDatabase.getInstance().getReference().child("Requests").push().getKey();
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("Requests").child(requestID);
-
                 PurchaseRequest purchaseRequest = new PurchaseRequest(
                         requestID,
                         "Purchase Request",
@@ -339,20 +328,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         product,
                         System.currentTimeMillis()
                 );
-
                 mDatabase.setValue(purchaseRequest);
-
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child("Requests").child(requestID);
                 mDatabase.setValue(purchaseRequest);
-
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(product.getSeller().myUID)
                         .child("Requests").child(requestID);
                 mDatabase.setValue(purchaseRequest);
-
-//                Intent i = new Intent(ProductDetailsActivity.this, MainActivity.class);
-//
-//                startActivity(i);
                 dialog.dismiss();;
             }
         });
@@ -365,19 +347,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
 
-
-
-
-        //Barter Button CLicked
-
+        //IF barter Button CLicked then basically do the same as the purchase button above with the exception of choosing a product to barter for
         Button barterBtn = findViewById(R.id.barterRequestBtn);
         barterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 user = FirebaseAuth.getInstance().getCurrentUser();
-
-
                 if(user != null)
                 {
                     if(Integer.parseInt(product.getQuantity()) <= 0)
@@ -396,65 +371,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
-        barterRequestDialog = new AlertDialog.Builder(ProductDetailsActivity.this).create();
-        barterRequestDialog .setTitle("Barter Request");
-        barterRequestDialog .setMessage("Do you want to barter this product?");
-        barterRequestDialog .setButton(DialogInterface.BUTTON_POSITIVE, "Select Product to Barter", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //Toast.makeText(ProductDetailsActivity.this, "Purchase request sent", Toast.LENGTH_LONG).show();
-                // TO PURCHASE REQUESTS
-                //safeZoneDisclaimer.show();
-                //
-
-                Intent myintent = new Intent(getApplicationContext(), MyBarterProductListActivity.class);
-                startActivityForResult(myintent, REQUEST_PRODUCT);
-
-
-                dialog.dismiss();;
-            }
-        });
-        barterRequestDialog .setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(ProductDetailsActivity.this, "Canceled", Toast.LENGTH_LONG).show();
-                dialog.dismiss();
-            }
-        });
-
-
-
-
-
-
-
-        //For Purchase Requests
-        safeZoneDisclaimer = new AlertDialog.Builder(ProductDetailsActivity.this).create();
-        safeZoneDisclaimer.setTitle("Safe Zones");
-        safeZoneDisclaimer.setMessage("Your personal safety is important to us at Bookster and as such we have identified places in and around the St Augustine UWI campus which are well known, public and suitable for conducting trade. These areas are called Safe Zones and are there to help you conduct your trades in a safe environment.\n" +
-                "\nDisclaimer\n" +
-                "While we are careful in identifying Safe Zones, they are merely suggestions, therefore you must always take care to ensure personal safety. Bookster accepts no liability in any event whether or not conducting trades in or out of Safe Zones.\n");
-        safeZoneDisclaimer.setButton(DialogInterface.BUTTON_POSITIVE, "I Accept", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //Toast.makeText(ProductDetailsActivity.this, "Accepted...Purchase Request Sent.", Toast.LENGTH_LONG).show();
-                // TO PURCHASE REQUESTS
-
-                purchaseRequestDialog.show();
-                dialog.dismiss();
-            }
-        });
-        safeZoneDisclaimer.setButton(DialogInterface.BUTTON_NEGATIVE, "Reject", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(ProductDetailsActivity.this, "You must accept to continue.", Toast.LENGTH_LONG).show();
-                dialog.dismiss();
-            }
-        });
-
-
-
-
+        //Shown when the user clicks the accept button
         safeZoneDisclaimerBarter = new AlertDialog.Builder(ProductDetailsActivity.this).create();
         safeZoneDisclaimerBarter.setTitle("Safe Zones");
         safeZoneDisclaimerBarter.setMessage("Your personal safety is important to us at Bookster and as such we have identified places in and around the St Augustine UWI campus which are well known, public and suitable for conducting trade. These areas are called Safe Zones and are there to help you conduct your trades in a safe environment.\n" +
@@ -463,10 +380,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         safeZoneDisclaimerBarter.setButton(DialogInterface.BUTTON_POSITIVE, "I Accept", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-
                 barterRequestDialog.show();
-
                 dialog.dismiss();
             }
         });
@@ -478,8 +392,29 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
+        //If safe zone disclaimer is accepted then allow the user to choose a product that they own
+        barterRequestDialog = new AlertDialog.Builder(ProductDetailsActivity.this).create();
+        barterRequestDialog .setTitle("Barter Request");
+        barterRequestDialog .setMessage("Do you want to barter this product?");
+        barterRequestDialog .setButton(DialogInterface.BUTTON_POSITIVE, "Select Product to Barter", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent myintent = new Intent(getApplicationContext(), MyBarterProductListActivity.class);
+                startActivityForResult(myintent, REQUEST_PRODUCT);
+                dialog.dismiss();;
+            }
+        });
+        barterRequestDialog .setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(ProductDetailsActivity.this, "Canceled", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+
     }
 
+    //Add a "view" to the product if the the viewer is not the owner him/herself
     public void updateViews()
     {
         DatabaseReference db1,db2;
@@ -489,6 +424,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         db2.setValue(product.getViews());
     }
 
+    //Hide the Image buttons if its the owner of the product
     public void hideButton(){
         final ImageButton messageBtn = findViewById(R.id.msgbtn);
         final ImageButton callBtn = findViewById(R.id.callbtn);
@@ -498,7 +434,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         viewBtn.setVisibility(View.INVISIBLE);
     }
 
-
+    //Returns the selected barter product if the barter request button is clicked and also returns the current user's username
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -511,7 +447,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     myUserName =  dataSnapshot.child("fullname").getValue().toString();
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -521,11 +456,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
         else if(resultCode == RESULT_OK && requestCode == REQUEST_PRODUCT)
         {
             requestProduct = (Product) data.getSerializableExtra("productObj");
-
-
             String requestID = FirebaseDatabase.getInstance().getReference().child("Requests").push().getKey();
             mDatabase = FirebaseDatabase.getInstance().getReference().child("Requests").child(requestID);
-
             BarterRequest barterRequest = new BarterRequest(
                     requestID,
                     "Purchase Request",
@@ -537,32 +469,18 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     product,
                     System.currentTimeMillis()
             );
-
-
-
             mDatabase.setValue(barterRequest);
-
             mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .child("Requests").child(requestID);
             mDatabase.setValue(barterRequest);
-
             mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(product.getSeller().myUID)
                     .child("Requests").child(requestID);
             mDatabase.setValue(barterRequest);
-
             Toast.makeText(ProductDetailsActivity.this, "Barter Request Sent", Toast.LENGTH_LONG).show();
-
-
-
-
         }
         else
         {
             System.out.println("Activity Canceled");
         }
     }
-
-
-
-
 }

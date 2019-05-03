@@ -18,13 +18,13 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.ArrayList;
-
+//This class is the same as "Product List Adapter" but just receives different input
 public class MyProductListAdapter extends ArrayAdapter<Product> {
     private Context mContext;
     int mResource;
     private int lastPosition = -1;
 
-
+    //ViewHolder for displaying the product in a list
     private static class ViewHolder {
         TextView name;
         TextView details;
@@ -34,34 +34,21 @@ public class MyProductListAdapter extends ArrayAdapter<Product> {
         ImageView image;
     }
 
-
     public MyProductListAdapter(Context context, int resource, ArrayList<Product> objects) {
         super(context, resource, objects);
         this.mContext = context;
         this.mResource = resource;
     }
 
-
+    //Inflates an individual product item
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         String name = getItem(position).getName();
         String details = getItem(position).getDetails();
         int views = getItem(position).getViews();
         int transactions = getItem(position).getNTransactions();
         String quantity = getItem(position).getQuantity();
         String mainImage = getItem(position).getMainImage();
-
-//        System.out.println("NAME: "+name);
-//        System.out.println("Details: "+details);
-//        System.out.println("Views: "+views);
-//        System.out.println("Bids: "+transactions);
-//        System.out.println("Quantity: "+quantity);
-//        System.out.println("MainImage: "+mainImage);
-
-
-        //ArrayList<String> images = getItem(position).getImages();
-
         final View result;
 
         //ViewHolder object
@@ -72,7 +59,6 @@ public class MyProductListAdapter extends ArrayAdapter<Product> {
         {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(mResource, parent,false);
-
             holder= new MyProductListAdapter.ViewHolder();
             holder.name = (TextView) convertView.findViewById(R.id.my_product_name);
             holder.details = (TextView) convertView.findViewById(R.id.my_product_description);
@@ -80,9 +66,7 @@ public class MyProductListAdapter extends ArrayAdapter<Product> {
             holder.bids = (TextView) convertView.findViewById(R.id.nSold);
             holder.quantity = (TextView) convertView.findViewById(R.id.my_product_quantity);
             holder.image = (ImageView) convertView.findViewById(R.id.my_product_image);
-
             result = convertView;
-
             convertView.setTag(holder);
 
         }
@@ -90,7 +74,6 @@ public class MyProductListAdapter extends ArrayAdapter<Product> {
             holder = (MyProductListAdapter.ViewHolder) convertView.getTag();
             result = convertView;
         }
-
         Animation animation = AnimationUtils.loadAnimation(mContext,
                 (position > lastPosition) ? R.anim.load_down_anim : R.anim.load_up_anim);
         result.startAnimation(animation);
@@ -101,7 +84,6 @@ public class MyProductListAdapter extends ArrayAdapter<Product> {
         holder.views.setText(views+" Views");
         holder.bids.setText(transactions+" Transactions");
         holder.quantity.setText(quantity+" in stock");
-
 
         ImageLoader imageLoader = ImageLoader.getInstance();
         int defaultImage = mContext.getResources().getIdentifier("@drawable/image_failed",null,mContext.getPackageName());
@@ -117,38 +99,6 @@ public class MyProductListAdapter extends ArrayAdapter<Product> {
         imageLoader.displayImage(mainImage, holder.image, options);
 
         return convertView;
-
-
-
-
-
-
-//        LayoutInflater inflater = LayoutInflater.from(mContext);
-//        convertView = inflater.inflate(mResource, parent,false);
-//
-//        TextView product_name = (TextView) convertView.findViewById(R.id.my_product_name);
-//        TextView product_details = (TextView) convertView.findViewById(R.id.my_product_description);
-//        TextView product_views = (TextView) convertView.findViewById(R.id.my_views);
-//        TextView product_bids = (TextView) convertView.findViewById(R.id.my_bids);
-//        TextView product_quantity = (TextView) convertView.findViewById(R.id.my_quantity);
-//        //TextView product_price = (TextView) convertView.findViewById(R.id.product_price);
-//
-//        product_name.setText(name);
-//        product_details.setText(details);
-////        product_views.setText(views);
-////        product_bids.setText(bids);
-////        product_quantity.setText(quantity);
-//        product_views.setText("102 Views");
-//        product_bids.setText("10 Bids");
-//        product_quantity.setText("4 in Stock");
-//
-//
-//
-//
-//
-//
-//
-//        return convertView;
     }
     private void setupImageLoader(){
         // UNIVERSAL IMAGE LOADER SETUP

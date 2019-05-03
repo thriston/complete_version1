@@ -31,6 +31,7 @@ public class MyProductListActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private int REQUEST_CODE = 1;
     private FirebaseAuth mAuth;
+    private String myUID;
     Toolbar toolbar;
     FloatingActionButton fab;
 
@@ -39,13 +40,14 @@ public class MyProductListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_product_list_layout);
+
+        //Toolbar configurations
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("My items");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,15 +55,14 @@ public class MyProductListActivity extends AppCompatActivity {
             }
         });
 
-        String myUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
-
+        //Gets current user User ID
+        myUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         productList = new ArrayList<>();
+
+        //Gets the user's products from firebase and inflate the list
         mListView = findViewById(R.id.my_product_list_view);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Products");
         mDatabase.keepSynced(true);
-
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -72,8 +73,6 @@ public class MyProductListActivity extends AppCompatActivity {
                     if(product.isActive())
                         productList.add(product);
                 }
-
-
                 MyProductListAdapter adapter = new MyProductListAdapter(MyProductListActivity.this, R.layout.my_product_list_item_layout, productList);
                 mListView.setAdapter(adapter);
             }
@@ -84,25 +83,16 @@ public class MyProductListActivity extends AppCompatActivity {
             }
         });
 
-
         //Add on click listener to list iteams
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //if(position==0){
                 Intent myintent = new Intent(view.getContext(), MyProductDetailsActivity.class);
                 myintent.putExtra("productObj", productList.get(position));
-                //System.out.println("CATEGORY: "+categoryList.get(position).getName());
                 startActivityForResult(myintent, 0);
-                //}
             }
         });
 
-
     }
-
-
-
-
 
 }

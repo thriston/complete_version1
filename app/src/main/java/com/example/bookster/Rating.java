@@ -3,8 +3,6 @@ package com.example.bookster;
 import java.io.Serializable;
 
 //This class is used as a blueprint to add product/item ratings on Firebase
-
-
 public class Rating implements Serializable {
 
     private String UID;

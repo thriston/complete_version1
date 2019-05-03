@@ -242,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    //If the user is logged in then display these menu items
     public void addMenuItems()
     {
         FirebaseUser user;

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class ProductListAdapter extends ArrayAdapter<Product> {
     private Context mContext;
-    int mResource;
+    private int mResource;
     private int lastPosition = -1;
     private ArrayList<Product> originalList;
     private ArrayList<Product> productList;
@@ -69,14 +69,12 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         String price = getItem(position).getPrice();
         String mainImage = getItem(position).getMainImage();
         String sellerName = getItem(position).getSeller().fullname;
-        //ArrayList<String> images = getItem(position).getImages();
 
         //create the view result for showing the animation
         final View result;
 
         //ViewHolder object
         ProductListAdapter.ViewHolder holder;
-
 
         if(convertView == null)
         {
@@ -89,18 +87,13 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
             holder.price = (TextView) convertView.findViewById(R.id.product_price);
             holder.image = (ImageView) convertView.findViewById(R.id.product_image);
             holder.sellerName = (TextView) convertView.findViewById(R.id.seller);
-
-
             result = convertView;
-
             convertView.setTag(holder);
-
         }
         else{
             holder = (ProductListAdapter.ViewHolder) convertView.getTag();
             result = convertView;
         }
-
 
         Animation animation = AnimationUtils.loadAnimation(mContext,
                 (position > lastPosition) ? R.anim.load_down_anim : R.anim.load_up_anim);
@@ -125,12 +118,11 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
 
         //download and display image from url
         imageLoader.displayImage(mainImage, holder.image, options);
-
         return convertView;
-
 
     }
 
+    //Filter for searching for products
     private class ProductFilter extends Filter
     {
 

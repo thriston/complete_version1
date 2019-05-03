@@ -2,6 +2,8 @@ package com.example.bookster;
 
 import java.io.Serializable;
 
+
+//Purchase request model/blueprint class
 public class PurchaseRequest implements Serializable {
     private String ID;
     private String message;
@@ -32,6 +34,7 @@ public class PurchaseRequest implements Serializable {
 
     }
 
+    //Getters and setters
     public String getType() {
         return type;
     }

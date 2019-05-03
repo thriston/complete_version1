@@ -35,28 +35,35 @@ public class RequestMessageActivity extends AppCompatActivity {
     private String myUserName;
     private User myUserProfile;
     private String receiverName;
-    Toolbar toolbar;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main1);
 
+        //Receive data from parent activity
         Intent intent = getIntent();
-
-        //final Product product = (Product) intent.getSerializableExtra("productObj");
         myUserName = intent.getStringExtra("myUserName");
         receiverUID = intent.getStringExtra("receiverUID");
-        //PurchaseRequest purchaseRequest = (PurchaseRequest) intent.getSerializableExtra("purchaseRequest");
 
-        //receiverUID = myUserProfile.getMyUID();
-        //receiverUID = product.getSeller().getUID();
+        //Get logged in current user
         myUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        //Configure toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-
+        //Set toolbar image and text by pulling the information from firebase
         myDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(receiverUID);
         myDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -67,40 +74,13 @@ public class RequestMessageActivity extends AppCompatActivity {
                 ImageView imageView = findViewById(R.id.profilePicToolbar);
                 Glide.with(getApplicationContext()).load(dataSnapshot.child("profilePicURL").getValue().toString()).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(imageView);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
 
-
-
-
-
-
-
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        myDatabase = FirebaseDatabase.getInstance().getReference().child("Chats");
-        myDatabase.keepSynced(true);
-
-
-        //FirebaseDatabase.getInstance().getReference().child()
-
-
-
-
+        //If send button is clicked call the sendMessage method
         sendBtn = findViewById(R.id.sendBtn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,13 +88,10 @@ public class RequestMessageActivity extends AppCompatActivity {
                 sendMessage();
             }
         });
-        //System.out.println("USER PROFILE: "+value);
 
-
-
-
-
-        //Checks for a conversation and returns messages
+        //Checks for an existing conversation and returns messages
+        myDatabase = FirebaseDatabase.getInstance().getReference().child("Chats");
+        myDatabase.keepSynced(true);
         myDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -127,11 +104,11 @@ public class RequestMessageActivity extends AppCompatActivity {
                     chatIDs.add(ds.getKey());
                 }
 
+                //can have two possble conversation ID, v1 or v2, so checks for both
                 final String v1, v2, myUID;
                 myUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 v1 = receiverUID+"_"+myUID;
                 v2 = myUID+"_"+receiverUID;
-
 
                 if(chatIDs.contains(v1) || chatIDs.contains(v2))
                 {
@@ -147,27 +124,16 @@ public class RequestMessageActivity extends AppCompatActivity {
                                     ChatMessage chatMessage = ds.getValue(ChatMessage.class);
                                     chatModelList.add(chatMessage);
                                 }
-                                System.out.println("HERE-HE...IN 1");
-                                System.out.println("HERE-HE: "+chatModelList.get(0).getUserName());
-
-                                //Adds items (chat messages) to the listView
-
-                                //if()
-
                                 ChatMessageListAdapter adapter = new ChatMessageListAdapter(RequestMessageActivity.this, R.layout.adapter_view_layout1, chatModelList);
                                 mListView.setAdapter(adapter);
                             }
-
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
-
                             }
                         });
-
+                        //Conversation ID v1 was used in existing conversation
                         key = v1;
                     }
-
 
 
                     if(chatIDs.contains(v2))
@@ -194,7 +160,7 @@ public class RequestMessageActivity extends AppCompatActivity {
 
                             }
                         });
-
+                        //Conversation ID v2 was used in existing conversation
                         key = v2;
                     }
 
@@ -206,7 +172,6 @@ public class RequestMessageActivity extends AppCompatActivity {
                     key = v1;
 
                 }
-
             }
 
             @Override
@@ -214,7 +179,7 @@ public class RequestMessageActivity extends AppCompatActivity {
             }
         });
 
-
+        //To get message receivers name from firebase
         DatabaseReference myDatabase1 = FirebaseDatabase.getInstance().getReference().child("users");
         myDatabase1.keepSynced(true);
         myDatabase1.addValueEventListener(new ValueEventListener() {
@@ -227,27 +192,21 @@ public class RequestMessageActivity extends AppCompatActivity {
                         User user= (User) ds.getValue(User.class);
                         receiverName = user.getFullname();
                     }
-
                 }
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError)
             {
             }
-
-
         });
 
 
     }
 
-
-
     public void sendMessage()
     {
-        //saves last message time
+        //Save copies of message data on firebase
         Date date = new Date();
         FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("lastActivity").setValue(date.getTime());
         FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Conversations").child(key).child("receiverUID").setValue(receiverUID);
@@ -270,6 +229,7 @@ public class RequestMessageActivity extends AppCompatActivity {
                 new Date().getTime()
         );
 
+        //Empties the EDITTEXT if the message is sent
         myDatabase.child(key).push().setValue(chatMessage);
         editText.setText("");
     }

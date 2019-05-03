@@ -28,9 +28,6 @@ public class ReceivedRequestActivity extends AppCompatActivity {
     private ArrayList<BarterRequest> barterList;
     private ArrayList<PurchaseRequest> purchaseList;
     private RequestPageListAdapter adapter;
-
-
-
     private DatabaseReference db;
 
     @Override
@@ -39,15 +36,11 @@ public class ReceivedRequestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_received);
         listView = findViewById(R.id.receivedListView);
 
+        //Configure toolbar
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Requests Received");
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +48,7 @@ public class ReceivedRequestActivity extends AppCompatActivity {
             }
         });
 
+        //To receive purchase and barter requests from firebase and populate list view
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("Requests");
         db.addValueEventListener(new ValueEventListener() {
@@ -81,17 +75,13 @@ public class ReceivedRequestActivity extends AppCompatActivity {
                 requestList.addAll(barterList);
                 requestList.addAll(purchaseList);
 
-
+                //Populate list view with received requests
                 adapter = new RequestPageListAdapter(getApplicationContext(), R.layout.barter_request_item, requestList);
                 listView.setAdapter(adapter);
-
-
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
@@ -100,8 +90,7 @@ public class ReceivedRequestActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
+                //If list item clicked is a barter request
                 if(requestList.get(position) instanceof BarterRequest)
                 {
                     BarterRequest barterRequest = (BarterRequest) requestList.get(position);
@@ -109,6 +98,7 @@ public class ReceivedRequestActivity extends AppCompatActivity {
                     intent.putExtra("barterRequest", barterRequest);
                     startActivity(intent);
                 }
+                //If list item clicked is a purchase request
                 else
                 if(requestList.get(position) instanceof PurchaseRequest)
                 {
@@ -116,15 +106,8 @@ public class ReceivedRequestActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), PurchaseRequestPage.class);
                     intent.putExtra("purchaseRequest", purchaseRequest);
                     startActivity(intent);
-
                 }
-
-
             }
         });
-
-
-
-
     }
 }

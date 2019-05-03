@@ -32,37 +32,35 @@ public class MyBarterProductListActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private int REQUEST_CODE = 1;
     private FirebaseAuth mAuth;
-    Toolbar toolbar;
-    FloatingActionButton fab;
+    private Toolbar toolbar;
+    private FloatingActionButton fab;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_product_list_layout);
+
+        //Configure toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Select product to Barter");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
         String myUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
-
         productList = new ArrayList<>();
         mListView = findViewById(R.id.my_product_list_view);
+
+        //receives and add all of the user's products to a list from firebase
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(myUID).child("Products");
         mDatabase.keepSynced(true);
-
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -73,8 +71,6 @@ public class MyBarterProductListActivity extends AppCompatActivity {
                     if(product.isActive())
                         productList.add(product);
                 }
-
-
                 MyProductListAdapter adapter = new MyProductListAdapter(MyBarterProductListActivity.this, R.layout.my_product_list_item_layout, productList);
                 mListView.setAdapter(adapter);
             }
@@ -85,27 +81,16 @@ public class MyBarterProductListActivity extends AppCompatActivity {
             }
         });
 
-
-        //Add on click listener to list iteams
+        //Returns the selected product to parent activity
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //if(position==0){
                 Intent myintent = new Intent();
                 myintent.putExtra("productObj", productList.get(position));
-                //System.out.println("CATEGORY: "+categoryList.get(position).getName());
                 setResult(Activity.RESULT_OK, myintent);
                 finish();
-                //startActivityForResult(myintent, 0);
-                //}
             }
         });
 
-
     }
-
-
-
-
-
 }

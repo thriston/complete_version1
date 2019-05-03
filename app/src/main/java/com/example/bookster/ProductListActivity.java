@@ -33,13 +33,10 @@ public class ProductListActivity extends AppCompatActivity {
     private String category;
     private User myUserProfile;
     private ArrayList<Product> productList;
-
     private ListView mListView;
     private FirebaseUser user;
     private ProductListAdapter adapter;
     private EditText searchEdit;
-
-
     private Product product;
     private Intent myintent;
     private DatabaseReference mDatabase;
@@ -50,8 +47,8 @@ public class ProductListActivity extends AppCompatActivity {
     private int REQUEST_CODE = 1;
     private int count;
     private FirebaseAuth mAuth;
-    Toolbar toolbar;
-    FloatingActionButton fab;
+    private Toolbar toolbar;
+    private FloatingActionButton fab;
 
 
     @Override
@@ -59,9 +56,6 @@ public class ProductListActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK )
         {
-//            Intent refresh = new Intent(this, ProductListActivity.class);
-//            startActivity(refresh);
-//            this.finish();
             DatabaseReference db;
             db = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             db.keepSynced(true);
@@ -83,43 +77,37 @@ public class ProductListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_list_layout);
+
+        //To stop keyboard from auto-opening
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         productImages = new ArrayList<>();
         mStorage = FirebaseStorage.getInstance().getReference();
         searchEdit = findViewById(R.id.search_edit);
+        productList = new ArrayList<>();
+        fab = findViewById(R.id.fab);
 
-
-
-
-
+        //Configure toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Products");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-
-
-
-
-
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        fab = findViewById(R.id.fab);
+
+        //Get data from parent activity
         Intent intent = getIntent();
         category = intent.getStringExtra("category");
-        //System.out.println("CATEGORY IN LIST"+category);
-        productList = new ArrayList<>();
+
+        //Display products that are active. i.e. Not deleted etc.
         mListView = findViewById(R.id.product_list_view);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Products");
         mDatabase.keepSynced(true);
-
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -161,7 +149,6 @@ public class ProductListActivity extends AppCompatActivity {
             }
         });
 
-
         //If user is logged in, copy User information to variable
         user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null)
@@ -182,9 +169,7 @@ public class ProductListActivity extends AppCompatActivity {
             });
         }
 
-
-
-        //Click on product list item
+        //Opens a product page for prospect user to view or a product page for the owner of the product to view nd make changes
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -205,8 +190,7 @@ public class ProductListActivity extends AppCompatActivity {
             }
         });
 
-
-        //to Add product
+        //Start add product activity if clicked
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,14 +204,7 @@ public class ProductListActivity extends AppCompatActivity {
                 }
                 else
                 {
-//                    Intent myintent = new Intent(getApplicationContext(), MainActivity.class);
-//
-//                    //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LoginFragment()).commit();
-//                    startActivity(myintent);
                     Toast.makeText(ProductListActivity.this, "Please login to add product", Toast.LENGTH_SHORT).show();
-                //                    startActivityForResult(myintent, REQUEST_CODE);
-
-                    //navigationView.setCheckedItem(nav_login);
                 }
 
             }
@@ -235,11 +212,5 @@ public class ProductListActivity extends AppCompatActivity {
 
 
     }
-
-
-
-
-
-
 
 }

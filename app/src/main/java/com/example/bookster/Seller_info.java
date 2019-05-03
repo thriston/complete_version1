@@ -22,7 +22,7 @@ public class Seller_info extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private ImageView profileImageV;
-    android.support.v7.widget.Toolbar toolbar;
+    private android.support.v7.widget.Toolbar toolbar;
     private TextView fullNameView, emailView, contactView;
     private FirebaseUser user;
 
@@ -30,38 +30,28 @@ public class Seller_info extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seller_info);
-        user = FirebaseAuth.getInstance().getCurrentUser();
 
-        fullNameView=findViewById(R.id.fullNameField);
-        emailView=findViewById(R.id.emailField);
-        contactView=findViewById(R.id.contactField);
-        profileImageV = findViewById(R.id.profilePicture);
-
-        mDatabase = FirebaseDatabase.getInstance().getReference()
-                .child("users").child(user.getUid());
-        mDatabase.keepSynced(true);
+        //Get data from parent activity
         Intent intent = getIntent();
         final Product product = (Product) intent.getSerializableExtra("productObj");
         final String myUserName = intent.getStringExtra("myUserName");
+
+        //Gets currently logged in firebase user
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        //get database reference to be used later
+        mDatabase = FirebaseDatabase.getInstance().getReference()
+                .child("users").child(user.getUid());
+        mDatabase.keepSynced(true);
+
+        //Configure toolbar
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setTitle(product.getSeller().getFullname());
-
-
-
-        System.out.println("THIS IS THE PRODUCT NAME: " + product.getName());
-        fullNameView.setText(product.getSeller().getFullname());
-        contactView.setText(product.getSeller().getContact());
-        emailView.setText(product.getSeller().getEmail());
-        Glide.with(getApplicationContext()).load(product.getSeller().profilePicURL).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(profileImageV);
-
-
-
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,9 +59,20 @@ public class Seller_info extends AppCompatActivity {
             }
         });
 
+        //Gets text views
+        fullNameView=findViewById(R.id.fullNameField);
+        emailView=findViewById(R.id.emailField);
+        contactView=findViewById(R.id.contactField);
+        profileImageV = findViewById(R.id.profilePicture);
+
+        //Set text views and profile picture
+        fullNameView.setText(product.getSeller().getFullname());
+        contactView.setText(product.getSeller().getContact());
+        emailView.setText(product.getSeller().getEmail());
+        Glide.with(getApplicationContext()).load(product.getSeller().profilePicURL).apply(new RequestOptions().placeholder(R.drawable.img_placeholder)).error(R.drawable.image_placeholder).fitCenter().into(profileImageV);
 
 
-        //For Call Button
+        //Open dialer if call button is clicked and call s enabled by the seller
         ImageButton btn = (ImageButton) findViewById(R.id.callbtn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +98,7 @@ public class Seller_info extends AppCompatActivity {
             }
         });
 
-        //Gets Current User's name if logged in that will be used to sent to other activity
+        //If message button is clicked then open message activity
         ImageButton messageBtn = findViewById(R.id.msgbtn);
         messageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,14 +110,11 @@ public class Seller_info extends AppCompatActivity {
                     myintent.putExtra("productObj", product);
                     myintent.putExtra("myUserName", myUserName);
                     myintent.putExtra("myUserProfile",product.getSeller());
-                    //System.out.println("CATEGORY: "+categoryList.get(position).getName());
                     startActivityForResult(myintent, 0);
                 }
                 else
                 {
-//                    Intent myintent = new Intent(ProductDetailsActivity.this, Login.class);
                     Toast.makeText(getApplicationContext(), "Please Login To Continue", Toast.LENGTH_SHORT).show();
-//                    startActivityForResult(myintent, REQUEST_CODE);
                 }
 
             }

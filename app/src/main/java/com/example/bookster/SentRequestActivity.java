@@ -28,9 +28,6 @@ public class SentRequestActivity extends AppCompatActivity {
     private ArrayList<BarterRequest> barterList;
     private ArrayList<PurchaseRequest> purchaseList;
     private SentRequestPageListAdapter adapter;
-
-
-
     private DatabaseReference db;
 
     @Override
@@ -39,15 +36,11 @@ public class SentRequestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_received);
         listView = findViewById(R.id.receivedListView);
 
+        //Configure toolbar
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Requests Sent");
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +48,7 @@ public class SentRequestActivity extends AppCompatActivity {
             }
         });
 
+        //TO get purchase and barter requests from firebase
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("Requests");
         db.addValueEventListener(new ValueEventListener() {
@@ -66,6 +60,7 @@ public class SentRequestActivity extends AppCompatActivity {
                 purchaseList = new ArrayList<>();
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+                //gets all purchase and barter requests that has been sent by the current user
                 for(DataSnapshot ds: dataSnapshot.getChildren())
                 {
                     if(ds.child("type").getValue().toString().equals("Barter") && ds.child("senderUID").getValue().toString().equals(user.getUid()))
@@ -78,15 +73,13 @@ public class SentRequestActivity extends AppCompatActivity {
                         purchaseList.add(ds.getValue(PurchaseRequest.class));
                     }
                 }
+                //adds all purchase and barter requests to the Object list
                 requestList.addAll(barterList);
                 requestList.addAll(purchaseList);
 
-
+                //Populate list with sent purchase and barter requests
                 adapter = new SentRequestPageListAdapter(getApplicationContext(), R.layout.barter_request_item, requestList);
                 listView.setAdapter(adapter);
-
-
-
             }
 
             @Override
@@ -100,8 +93,7 @@ public class SentRequestActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
+                //uses same activity for both types of request if the user clicks on a request
                 if(requestList.get(position) instanceof BarterRequest)
                 {
                     BarterRequest barterRequest = (BarterRequest) requestList.get(position);
@@ -118,13 +110,8 @@ public class SentRequestActivity extends AppCompatActivity {
                     startActivity(intent);
 
                 }
-
-
             }
         });
-
-
-
 
     }
 }

@@ -82,41 +82,49 @@ public class MyProductDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_product_page);
         secondaryImages = new ArrayList<>();
-        ImageButton button = (ImageButton) findViewById(R.id.viewinfo);
         user = FirebaseAuth.getInstance().getCurrentUser();
         StorageReference mStorage = FirebaseStorage.getInstance().getReference();
         StorageReference pathRef;
 
+        //Configure toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+        //toolbar.setTitle("Bookster - "+product.getName());
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-
-
+        //Get data from parent activity
         Intent intent = getIntent();
         product = (Product) intent.getSerializableExtra("productObj");
+        myUserProfile = (User) intent.getSerializableExtra("myUserProfile");
 
+        //Loads image slider with images from product
         count = 0;
         secondaryImages.add(product.getMainImage());
         if(product.getSecondaryImages() != null)
         {
             for(String path: product.getSecondaryImages())
             {
-                //System.out.println("URL: "+mStorage.toString()+path);
                 pathRef = mStorage.child(path);
                 pathRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri)
                     {
                         count++;
-                        System.out.println("URL: "+uri.toString());
                         secondaryImages.add(uri.toString());
-
                         if(count == product.getSecondaryImages().size())
                         {
                             viewPager = findViewById(R.id.product_img_slider);
                             adapter = new ProductPictureSlider(getApplication(), secondaryImages);
                             viewPager.setAdapter(adapter);
                         }
-
-
                     }
                 });
             }
@@ -128,29 +136,6 @@ public class MyProductDetailsActivity extends AppCompatActivity {
             viewPager.setAdapter(adapter);
         }
 
-        //System.out.println("MAIN URL: "+product.getMainImage());
-
-
-
-
-
-        myUserProfile = (User) intent.getSerializableExtra("myUserProfile");
-
-        //System.out.println("PRODUCT NAME: "+narnia.getName());
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle("Bookster - "+product.getName());
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         //set Texts
         TextView productName = findViewById(R.id.productNameTextView);
@@ -161,18 +146,12 @@ public class MyProductDetailsActivity extends AppCompatActivity {
         TextView views = findViewById(R.id.nViews);
         TextView nTransactions = findViewById(R.id.nTransactions);
         TextView dateCreated = findViewById(R.id.dateCreated);
-
-
-
-
-
-
         rating = findViewById(R.id.rating);
         nRating = findViewById(R.id.nRating);
 
-        //TO set the ratings on the product page
+        //To set the ratings on the owner's product page
         DatabaseReference rateDB = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
-        rateDB.addValueEventListener(new ValueEventListener() {
+        rateDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -193,12 +172,7 @@ public class MyProductDetailsActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
-
+        //Set texts
         productName.setText(product.getName());
         price.setText("$"+product.getPrice());
         category.setText("Category: "+product.getCategory());
@@ -208,11 +182,11 @@ public class MyProductDetailsActivity extends AppCompatActivity {
         nTransactions.setText(product.getNTransactions()+"");
         dateCreated.setText(DateFormat.format("d-M-yyyy", product.getDateCreated())+" (dd-mm-yyyyy)");
 
+        //Get button references
         ImageButton editProductBtn = findViewById(R.id.editProductInfo);
         ImageButton deleteProductBtn = findViewById(R.id.deleteProduct);
-        //ImageButton viewProfileBtn = findViewById(R.id.my_view_info);
 
-
+        //Opens activity to edit product if the user clicks on the editProduct button
         editProductBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,23 +195,10 @@ public class MyProductDetailsActivity extends AppCompatActivity {
                 startActivityForResult(myintent, REQUEST_EDIT);
             }
         });
-
-//        viewProfileBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //Intent i = new Intent(getApplicationContext(), Profile.class);
-//                //i.putExtra("receiverUID", receiverUID);
-//                //startActivity(i);
-//                //finish();
-//                Intent i=new Intent(getApplicationContext(),MainActivity.class);
-//                startActivity(i);
-//            }
-//        });
-
-
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Products").child(product.getID());
-        //mDatabase.keepSynced(true);
 
+
+        //Updates the number of items if the product is deleted and makes that product inactive
         deleteProductBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,35 +215,20 @@ public class MyProductDetailsActivity extends AppCompatActivity {
                                 String val = ds.child("nItems").getValue().toString();
                                 int valInt = Integer.parseInt(val);
                                 FirebaseDatabase.getInstance().getReference().child("Category").child(product.getCategory()).child("nItems").setValue((valInt-1)+"");
-
                             }
                         }
-
-//                                        System.out.println("NUMBER ITEMS: "+dataSnapshot.child("Description").getValue());
-//
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
                     }
                 });
             }
         });
-
-
-
-
-
-
     }
 
-
-
-
-
+    //called if the user clicks the delete button
     public void dialogevent(){
-
         AlertDialog.Builder altdial = new AlertDialog.Builder(MyProductDetailsActivity.this);
         altdial.setMessage("Are you sure you want to delete this product?").setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -305,16 +251,5 @@ public class MyProductDetailsActivity extends AppCompatActivity {
         AlertDialog alert = altdial.create();
         alert.setTitle("Delete");
         alert.show();
-
-
-
     }
-
-
-
-
-
-
-
-
 }

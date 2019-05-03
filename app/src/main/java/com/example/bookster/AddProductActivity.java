@@ -111,7 +111,7 @@ public class AddProductActivity extends AppCompatActivity {
         CardView cardView3 = findViewById(R.id.cardView3);
         CardView cardView4 = findViewById(R.id.cardView4);
         /**Retrieves XML Object Icons For Icon on the Layout Screen**/
-cardView.setOnClickListener(new View.OnClickListener() {
+        cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
